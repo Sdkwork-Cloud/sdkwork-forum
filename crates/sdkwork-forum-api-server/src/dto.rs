@@ -32,4 +32,12 @@ impl<T: Serialize> ApiResponse<T> {
             error: None,
         }
     }
+
+    pub fn err(msg: String) -> Self {
+        Self {
+            success: false,
+            data: None,
+            error: Some(msg),
+        }
+    }
 }

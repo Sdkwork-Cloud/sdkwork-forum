@@ -1,7 +1,8 @@
 use super::models::*;
+use serde::{Serialize, Deserialize};
 use serde_json;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CursorPage<T> {
     pub items: Vec<T>,
     pub next_cursor: Option<String>,
@@ -22,7 +23,7 @@ impl<T> CursorPage<T> {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CommandResult {
     pub success: bool,
     pub id: Option<i64>,
@@ -80,7 +81,7 @@ pub type TopicPrefixPageResult = CursorPage<ForumTopicPrefix>;
 pub type AuditActionPageResult = CursorPage<ForumAuditAction>;
 pub type SubscriptionPageResult = CursorPage<ForumSubscription>;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumReputationRule {
     pub id: i64,
     pub uuid: String,
@@ -95,7 +96,7 @@ pub struct ForumReputationRule {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumReputationLedger {
     pub id: i64,
     pub uuid: String,
@@ -110,7 +111,7 @@ pub struct ForumReputationLedger {
     pub created_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumTrustLevel {
     pub id: i64,
     pub uuid: String,
@@ -125,7 +126,7 @@ pub struct ForumTrustLevel {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumBadge {
     pub id: i64,
     pub uuid: String,
@@ -141,7 +142,7 @@ pub struct ForumBadge {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTopicPrefix {
     pub id: i64,
     pub uuid: String,
@@ -157,7 +158,7 @@ pub struct ForumTopicPrefix {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumAuditAction {
     pub id: i64,
     pub uuid: String,

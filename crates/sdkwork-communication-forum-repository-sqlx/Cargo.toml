@@ -7,7 +7,7 @@ publish.workspace = true
 
 [dependencies]
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
-sqlx = { workspace = true, features = ["runtime-tokio", "postgres"] }
+sqlx = { workspace = true, features = ["runtime-tokio", "postgres", "json"] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 uuid = { workspace = true }
@@ -16,6 +16,7 @@ anyhow = { workspace = true }
 tracing = { workspace = true }
 md-5 = "0.10"
 digest = "0.10"
+tokio = { workspace = true }
 
 [lib]
 path = "src/lib.rs"

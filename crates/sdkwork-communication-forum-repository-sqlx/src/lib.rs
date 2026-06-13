@@ -1,15 +1,26 @@
 pub mod schema;
 pub mod repo_impl;
 
+use sqlx::PgPool;
+
 #[derive(Debug, Clone)]
 pub struct SqlxForumRepository {
-    pub database_url_name: &'static str,
+    pool: PgPool,
 }
 
 impl SqlxForumRepository {
+    pub fn new(pool: PgPool) -> Self {
+        Self { pool }
+    }
+
+    pub fn pool(&self) -> &PgPool {
+        &self.pool
+    }
+
     pub fn new_placeholder() -> Self {
         Self {
-            database_url_name: "SDKWORK_FORUM_DATABASE_URL",
+            pool: PgPool::connect_lazy("postgres://localhost:5432/forum")
+                .expect("Failed to create placeholder pool"),
         }
     }
 }

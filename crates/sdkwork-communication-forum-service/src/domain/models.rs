@@ -1,7 +1,8 @@
 use std::fmt;
+use serde::{Serialize, Deserialize};
 use serde_json;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumNode {
     pub id: i64,
     pub uuid: String,
@@ -26,7 +27,7 @@ pub struct ForumNode {
     pub deleted_by: Option<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumBoard {
     pub id: i64,
     pub uuid: String,
@@ -36,7 +37,7 @@ pub struct ForumBoard {
     pub status: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTag {
     pub id: i64,
     pub uuid: String,
@@ -55,7 +56,7 @@ pub struct ForumTag {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTopic {
     pub id: i64,
     pub uuid: String,
@@ -106,7 +107,7 @@ impl ForumTopic {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumReply {
     pub id: i64,
     pub uuid: String,
@@ -135,7 +136,7 @@ pub struct ForumReply {
     pub deleted_by: Option<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTopicRevision {
     pub id: i64,
     pub uuid: String,
@@ -155,7 +156,7 @@ pub struct ForumTopicRevision {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumReplyRevision {
     pub id: i64,
     pub uuid: String,
@@ -175,7 +176,7 @@ pub struct ForumReplyRevision {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumTopicStats {
     pub id: i64,
     pub uuid: String,
@@ -195,7 +196,7 @@ pub struct ForumTopicStats {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumBoardStats {
     pub id: i64,
     pub uuid: String,
@@ -215,7 +216,7 @@ pub struct ForumBoardStats {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumModerationCase {
     pub id: i64,
     pub uuid: String,
@@ -239,7 +240,7 @@ pub struct ForumModerationCase {
     pub deleted_by: Option<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumModerationDecision {
     pub id: i64,
     pub uuid: String,
@@ -261,7 +262,7 @@ pub struct ForumModerationDecision {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumReport {
     pub id: i64,
     pub uuid: String,
@@ -282,7 +283,7 @@ pub struct ForumReport {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumFeedItem {
     pub id: i64,
     pub uuid: String,
@@ -302,7 +303,7 @@ pub struct ForumFeedItem {
     pub version: i64,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumOutboxEvent {
     pub id: i64,
     pub uuid: String,
@@ -324,7 +325,7 @@ pub struct ForumOutboxEvent {
     pub version: i64,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumSearchDocument {
     pub id: i64,
     pub uuid: String,
@@ -348,7 +349,7 @@ pub struct ForumSearchDocument {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumMemberProfile {
     pub id: i64,
     pub uuid: String,
@@ -369,7 +370,7 @@ pub struct ForumMemberProfile {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumSanction {
     pub id: i64,
     pub uuid: String,
@@ -405,7 +406,7 @@ impl fmt::Display for ForumReply {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumSpace {
     pub id: i64,
     pub uuid: String,
@@ -427,7 +428,7 @@ pub struct ForumSpace {
     pub deleted_by: Option<i64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumAttachment {
     pub id: i64,
     pub uuid: String,
@@ -450,7 +451,7 @@ pub struct ForumAttachment {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumSubscription {
     pub id: i64,
     pub uuid: String,
@@ -468,7 +469,7 @@ pub struct ForumSubscription {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumIdempotencyRecord {
     pub id: i64,
     pub uuid: String,
@@ -487,7 +488,7 @@ pub struct ForumIdempotencyRecord {
     pub organization_id: i64,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumNotificationPreference {
     pub id: i64,
     pub uuid: String,
@@ -504,7 +505,7 @@ pub struct ForumNotificationPreference {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ForumMemberStats {
     pub id: i64,
     pub uuid: String,

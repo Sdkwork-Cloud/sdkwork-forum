@@ -1,0 +1,11 @@
+{
+  "name": "sdkwork-forum",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:static": "node tests/static/forum-contract-boundary.test.mjs",
+    "validate:contracts": "node tools/validators/validate_forum_contracts.mjs",
+    "materialize:openapi": "node tools/generators/materialize_forum_openapi.mjs"
+  }
+}

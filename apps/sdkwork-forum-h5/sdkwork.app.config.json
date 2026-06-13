@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 3,
+  "kind": "sdkwork.app",
+  "app": {
+    "key": "sdkwork-forum-h5",
+    "name": "sdkwork-forum-h5",
+    "displayName": "SDKWork Forum H5",
+    "appType": "H5",
+    "description": "Forum H5 mobile application for SDKWork communication capabilities."
+  },
+  "backend": {
+    "domain": "communication",
+    "capabilities": ["forum"],
+    "apiSurfaces": [
+      {
+        "surface": "app-api",
+        "authority": "sdkwork-forum-app-api",
+        "prefix": "/app/v3/api"
+      }
+    ]
+  },
+  "runtime": {
+    "modes": ["h5", "h5-weixin", "capacitor-ios", "capacitor-android"],
+    "rootDirectories": [
+      "config",
+      "docs",
+      "packages",
+      "public",
+      "scripts",
+      "sdks",
+      "specs",
+      "src",
+      "tests"
+    ]
+  },
+  "release": {
+    "version": "0.1.0",
+    "channel": "dev"
+  },
+  "metadata": {
+    "standardVersion": "2026-06-12",
+    "architectureStandard": "APP_H5_ARCHITECTURE_SPEC.md"
+  }
+}

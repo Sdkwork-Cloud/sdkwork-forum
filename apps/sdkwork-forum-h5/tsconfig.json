@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@sdkwork/forum-h5-core": ["./packages/sdkwork-forum-h5-core/src"],
+      "@sdkwork/forum-h5-commons": ["./packages/sdkwork-forum-h5-commons/src"],
+      "@sdkwork/forum-h5-shell": ["./packages/sdkwork-forum-h5-shell/src"],
+      "@sdkwork/forum-h5-discussion": ["./packages/sdkwork-forum-h5-discussion/src"]
+    }
+  },
+  "include": ["src", "packages/*/src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

@@ -1,0 +1,8 @@
+{
+  "sdkOwner": "sdkwork-forum",
+  "apiAuthority": "sdkwork-forum-open-api",
+  "sdkFamily": "sdkwork-forum-sdk",
+  "sdkName": "sdkwork-forum-sdk",
+  "generationInputSpec": "openapi/sdkwork-forum-open-api.sdkgen.yaml",
+  "sdkDependencies": []
+}

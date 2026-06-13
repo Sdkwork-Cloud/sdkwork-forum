@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-forum-h5",
+    "displayName": "SDKWork Forum H5",
+    "version": "0.1.0",
+    "type": "h5-app",
+    "root": "apps/sdkwork-forum-h5",
+    "domain": "communication",
+    "capability": "forum",
+    "surface": "app",
+    "languages": ["typescript"],
+    "generated": false,
+    "private": false,
+    "manifests": ["package.json", "sdkwork.app.config.json"]
+  },
+  "canonicalSpecs": [
+    {
+      "file": "APP_H5_ARCHITECTURE_SPEC.md",
+      "path": "../../../sdkwork-specs/APP_H5_ARCHITECTURE_SPEC.md",
+      "purpose": "H5 application root architecture."
+    },
+    {
+      "file": "APP_MOBILE_REACT_UI_SPEC.md",
+      "path": "../../../sdkwork-specs/APP_MOBILE_REACT_UI_SPEC.md",
+      "purpose": "Mobile React UI package rules."
+    },
+    {
+      "file": "APP_CLIENT_ARCHITECTURE_ALIGNMENT_SPEC.md",
+      "path": "../../../sdkwork-specs/APP_CLIENT_ARCHITECTURE_ALIGNMENT_SPEC.md",
+      "purpose": "Cross-client architecture alignment."
+    },
+    {
+      "file": "TYPESCRIPT_CODE_SPEC.md",
+      "path": "../../../sdkwork-specs/TYPESCRIPT_CODE_SPEC.md",
+      "purpose": "TypeScript code style."
+    },
+    {
+      "file": "FRONTEND_SPEC.md",
+      "path": "../../../sdkwork-specs/FRONTEND_SPEC.md",
+      "purpose": "Frontend layering and SDK integration."
+    },
+    {
+      "file": "UI_ARCHITECTURE_SPEC.md",
+      "path": "../../../sdkwork-specs/UI_ARCHITECTURE_SPEC.md",
+      "purpose": "UI architecture selection."
+    },
+    {
+      "file": "SDK_SPEC.md",
+      "path": "../../../sdkwork-specs/SDK_SPEC.md",
+      "purpose": "SDK integration rules."
+    },
+    {
+      "file": "CONFIG_SPEC.md",
+      "path": "../../../sdkwork-specs/CONFIG_SPEC.md",
+      "purpose": "Runtime config."
+    },
+    {
+      "file": "APPLICATION_SPEC.md",
+      "path": "../../../sdkwork-specs/APPLICATION_SPEC.md",
+      "purpose": "Application module composition."
+    },
+    {
+      "file": "APP_MANIFEST_SPEC.md",
+      "path": "../../../sdkwork-specs/APP_MANIFEST_SPEC.md",
+      "purpose": "App manifest."
+    }
+  ],
+  "contracts": {
+    "publicExports": ["packages/sdkwork-forum-h5-core", "packages/sdkwork-forum-h5-discussion"],
+    "sdkClients": ["sdks/sdkwork-forum-app-sdk"],
+    "sdkDependencies": [],
+    "dependencyApiExports": []
+  },
+  "verification": {
+    "commands": ["cd apps/sdkwork-forum-h5 && npx tsc --noEmit"]
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 3,
+  "kind": "sdkwork.app",
+  "app": {
+    "key": "sdkwork-forum",
+    "name": "sdkwork-forum",
+    "displayName": "SDKWork Forum",
+    "appType": "SDK",
+    "officialWebsiteUrl": "https://sdkwork.example/forum",
+    "description": "Forum domain foundation for SDKWork communication capabilities."
+  },
+  "backend": {
+    "domain": "communication",
+    "capabilities": [
+      "forum"
+    ],
+    "apiSurfaces": [
+      {
+        "surface": "app-api",
+        "authority": "sdkwork-forum-app-api",
+        "prefix": "/app/v3/api"
+      },
+      {
+        "surface": "backend-api",
+        "authority": "sdkwork-forum-backend-api",
+        "prefix": "/backend/v3/api"
+      },
+      {
+        "surface": "open-api",
+        "authority": "sdkwork-forum-open-api",
+        "prefix": "/forum/v3/api"
+      }
+    ]
+  },
+  "runtime": {
+    "modes": [
+      "saas",
+      "private",
+      "local"
+    ],
+    "rootDirectories": [
+      "apis",
+      "apps",
+      "crates",
+      "sdks",
+      "jobs",
+      "tools",
+      "plugins",
+      "examples",
+      "configs",
+      "deployments",
+      "scripts",
+      "docs",
+      "tests"
+    ]
+  },
+  "media": {
+    "policy": "Forum attachments use Drive-owned stable media resources; forum tables store references only."
+  },
+  "publish": {
+    "channels": [
+      "dev"
+    ]
+  },
+  "environments": {
+    "local": {
+      "apiBaseUrl": "http://localhost:8080"
+    }
+  },
+  "artifacts": {
+    "packages": []
+  },
+  "release": {
+    "version": "0.1.0",
+    "channel": "dev"
+  },
+  "security": {
+    "secretsPolicy": "No credentials, tokens, or private keys are stored in this manifest."
+  },
+  "devApp": {
+    "enabled": true,
+    "entrypoint": "crates/sdkwork-forum-api-server"
+  },
+  "metadata": {
+    "standardVersion": "2026-06-12",
+    "canonicalSpecs": "../sdkwork-specs/README.md"
+  }
+}

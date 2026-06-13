@@ -1,0 +1,10 @@
+schemaVersion: 1
+kind: sdkwork.job.batch
+owner: sdkwork-forum
+domain: communication
+capability: forum
+name: forum-reindex
+description: "Rebuild forum_search_document from visible topic/reply source tables and push to Search SDK. Scans visible topics and replies, regenerates search document projections, and indexes through ForumSearchPort."
+job: RebuildSearchProjection
+timeout: 3600
+batchSize: 500

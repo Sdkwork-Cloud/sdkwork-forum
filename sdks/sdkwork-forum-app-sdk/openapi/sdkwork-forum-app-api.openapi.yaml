@@ -1,0 +1,989 @@
+openapi: 3.1.2
+info:
+  title: SDKWork Forum App API
+  version: 0.1.0
+  summary: Authenticated app/client forum API.
+  description: >
+    App API for user-facing forum clients. Protected operations use SDKWork
+    dual-token security through generated SDK TokenManager integration.
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+servers:
+  - url: /app/v3/api
+tags:
+  - name: forum.nodes
+  - name: forum.topics
+  - name: forum.replies
+  - name: forum.engagement
+  - name: forum.feed
+  - name: forum.search
+  - name: forum.moderation
+paths:
+  /forum/nodes/tree:
+    get:
+      tags: [forum.nodes]
+      summary: List forum node tree.
+      operationId: nodes.tree.list
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_node
+      x-sdkwork-permission: forum.nodes.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      responses:
+        "200":
+          description: Forum node tree.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ForumNode"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/boards/{boardId}/topics:
+    get:
+      tags: [forum.topics]
+      summary: List topics in a board.
+      operationId: topics.list
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic
+      x-sdkwork-permission: forum.topics.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/BoardId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - $ref: "#/components/parameters/Sort"
+        - name: tag_slug
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Topic page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopicPage"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/topics:
+    post:
+      tags: [forum.topics]
+      summary: Create topic.
+      operationId: topics.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic
+      x-sdkwork-permission: forum.topics.create
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      x-sdkwork-idempotent: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumTopicCreateCommand"
+      responses:
+        "201":
+          description: Created topic.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopic"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/topics/{topicId}:
+    get:
+      tags: [forum.topics]
+      summary: Retrieve topic.
+      operationId: topics.retrieve
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic
+      x-sdkwork-permission: forum.topics.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      responses:
+        "200":
+          description: Topic detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopic"
+        default:
+          $ref: "#/components/responses/Problem"
+    patch:
+      tags: [forum.topics]
+      summary: Update topic.
+      operationId: topics.update
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic
+      x-sdkwork-permission: forum.topics.update
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumTopicUpdateCommand"
+      responses:
+        "200":
+          description: Updated topic.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopic"
+        default:
+          $ref: "#/components/responses/Problem"
+    delete:
+      tags: [forum.topics]
+      summary: Delete topic.
+      operationId: topics.delete
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic
+      x-sdkwork-permission: forum.topics.delete
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      responses:
+        "204":
+          description: Topic deleted.
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/topics/{topicId}/replies:
+    get:
+      tags: [forum.replies]
+      summary: List replies for a topic.
+      operationId: topics.replies.list
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic_reply
+      x-sdkwork-permission: forum.replies.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: Reply page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReplyPage"
+        default:
+          $ref: "#/components/responses/Problem"
+    post:
+      tags: [forum.replies]
+      summary: Create reply.
+      operationId: topics.replies.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic_reply
+      x-sdkwork-permission: forum.replies.create
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      x-sdkwork-idempotent: true
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumReplyCreateCommand"
+      responses:
+        "201":
+          description: Created reply.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReply"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/replies/{replyId}:
+    patch:
+      tags: [forum.replies]
+      summary: Update reply.
+      operationId: replies.update
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic_reply
+      x-sdkwork-permission: forum.replies.update
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/ReplyId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumReplyUpdateCommand"
+      responses:
+        "200":
+          description: Updated reply.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReply"
+        default:
+          $ref: "#/components/responses/Problem"
+    delete:
+      tags: [forum.replies]
+      summary: Delete reply.
+      operationId: replies.delete
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic_reply
+      x-sdkwork-permission: forum.replies.delete
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/ReplyId"
+      responses:
+        "204":
+          description: Reply deleted.
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/topics/{topicId}/revisions:
+    get:
+      tags: [forum.topics]
+      summary: List topic revisions.
+      operationId: topics.revisions.list
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_topic_revision
+      x-sdkwork-permission: forum.topics.revisions.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      responses:
+        "200":
+          description: Topic revisions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumRevisionPage"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/replies/{replyId}/revisions:
+    get:
+      tags: [forum.replies]
+      summary: List reply revisions.
+      operationId: replies.revisions.list
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_reply_revision
+      x-sdkwork-permission: forum.replies.revisions.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/ReplyId"
+      responses:
+        "200":
+          description: Reply revisions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumRevisionPage"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/questions/{topicId}/accepted_reply:
+    put:
+      tags: [forum.topics]
+      summary: Accept a reply for a question topic.
+      operationId: questions.acceptedReply.update
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_question_profile
+      x-sdkwork-permission: forum.questions.accept
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reply_id]
+              properties:
+                reply_id: { type: string }
+      responses:
+        "200":
+          description: Updated topic.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopic"
+        default:
+          $ref: "#/components/responses/Problem"
+    delete:
+      tags: [forum.topics]
+      summary: Clear accepted reply for a question topic.
+      operationId: questions.acceptedReply.delete
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_question_profile
+      x-sdkwork-permission: forum.questions.accept
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      responses:
+        "204":
+          description: Accepted reply cleared.
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/polls/{pollId}/votes:
+    post:
+      tags: [forum.engagement]
+      summary: Vote in a poll.
+      operationId: polls.votes.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_poll_vote
+      x-sdkwork-permission: forum.polls.vote
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/PollId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [option_ids]
+              properties:
+                option_ids:
+                  type: array
+                  items: { type: string }
+      responses:
+        "200":
+          description: Poll vote accepted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/reactions:
+    post:
+      tags: [forum.engagement]
+      summary: Create or replace a reaction.
+      operationId: reactions.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_reaction
+      x-sdkwork-permission: forum.reactions.create
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumReactionCommand"
+      responses:
+        "200":
+          description: Reaction recorded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/votes:
+    post:
+      tags: [forum.engagement]
+      summary: Create or replace a vote.
+      operationId: votes.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_vote
+      x-sdkwork-permission: forum.votes.create
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumVoteCommand"
+      responses:
+        "200":
+          description: Vote recorded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/bookmarks:
+    post:
+      tags: [forum.engagement]
+      summary: Create or update a bookmark.
+      operationId: bookmarks.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_bookmark
+      x-sdkwork-permission: forum.bookmarks.update
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumBookmarkCommand"
+      responses:
+        "200":
+          description: Bookmark state updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/read_state/topics/{topicId}:
+    patch:
+      tags: [forum.engagement]
+      summary: Mark topic read state.
+      operationId: readState.topics.update
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_read_state
+      x-sdkwork-permission: forum.readState.update
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/TopicId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                last_read_reply_id: { type: string }
+                last_read_at: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Read state updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/reports:
+    post:
+      tags: [forum.moderation]
+      summary: Create a report.
+      operationId: reports.create
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_report
+      x-sdkwork-permission: forum.reports.create
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumReportCommand"
+      responses:
+        "201":
+          description: Report created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommandResult"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/feed:
+    get:
+      tags: [forum.feed]
+      summary: List personalized forum feed.
+      operationId: feed.list
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_feed_item
+      x-sdkwork-permission: forum.feed.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - name: feed_type
+          in: query
+          schema: { type: string, enum: [home, board, tag, member] }
+      responses:
+        "200":
+          description: Feed page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumFeedPage"
+        default:
+          $ref: "#/components/responses/Problem"
+  /forum/search:
+    get:
+      tags: [forum.search]
+      summary: Search forum content.
+      operationId: search.query
+      security:
+        - AuthToken: []
+          AccessToken: []
+      x-sdkwork-owner: sdkwork-forum
+      x-sdkwork-api-authority: sdkwork-forum-app-api
+      x-sdkwork-domain: communication
+      x-sdkwork-resource: forum_search_document
+      x-sdkwork-permission: forum.search.read
+      x-sdkwork-tenant-scope: tenant
+      x-sdkwork-auth-mode: dual-token
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 200 }
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+      responses:
+        "200":
+          description: Search results.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopicPage"
+        default:
+          $ref: "#/components/responses/Problem"
+components:
+  securitySchemes:
+    AuthToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    AccessToken:
+      type: apiKey
+      in: header
+      name: Access-Token
+  parameters:
+    BoardId:
+      name: boardId
+      in: path
+      required: true
+      schema: { type: string }
+    TopicId:
+      name: topicId
+      in: path
+      required: true
+      schema: { type: string }
+    ReplyId:
+      name: replyId
+      in: path
+      required: true
+      schema: { type: string }
+    PollId:
+      name: pollId
+      in: path
+      required: true
+      schema: { type: string }
+    Cursor:
+      name: cursor
+      in: query
+      schema: { type: string }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+    Sort:
+      name: sort
+      in: query
+      schema: { type: string, enum: [latest, top, featured, created] }
+  responses:
+    Problem:
+      description: Problem detail.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetail"
+  schemas:
+    ProblemDetail:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+        code: { type: string }
+    CursorPage:
+      type: object
+      required: [items, next_cursor, has_more]
+      properties:
+        items: { type: array, items: true }
+        next_cursor: { type: [string, "null"] }
+        has_more: { type: boolean }
+    MediaResource:
+      type: object
+      required: [id, kind]
+      properties:
+        id: { type: string }
+        kind: { type: string }
+        file_name: { type: string }
+        mime_type: { type: string }
+        byte_size: { type: string }
+        width: { type: integer }
+        height: { type: integer }
+    ForumNode:
+      type: object
+      required: [id, node_type, slug, name, children]
+      properties:
+        id: { type: string }
+        parent_id: { type: [string, "null"] }
+        node_type: { type: string, enum: [category, board] }
+        slug: { type: string }
+        name: { type: string }
+        description: { type: string }
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumNode"
+    ForumBoard:
+      type: object
+      required: [id, slug, name, visibility]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        description: { type: string }
+        visibility: { type: string }
+        stats:
+          type: object
+          additionalProperties: true
+    ForumTag:
+      type: object
+      required: [id, slug, name]
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        color: { type: string }
+        usage_count: { type: string }
+    ForumTopicPrefix:
+      type: object
+      required: [id, code, label]
+      properties:
+        id: { type: string }
+        code: { type: string }
+        label: { type: string }
+        color: { type: string }
+    ForumTopic:
+      type: object
+      required: [id, board_id, title, body_format, body, topic_type, moderation_status, created_at, updated_at]
+      properties:
+        id: { type: string }
+        board_id: { type: string }
+        author_user_id: { type: string }
+        prefix:
+          $ref: "#/components/schemas/ForumTopicPrefix"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumTag"
+        slug: { type: string }
+        title: { type: string }
+        body_format: { type: string }
+        body: { type: string }
+        body_excerpt: { type: string }
+        topic_type: { type: string }
+        moderation_status: { type: string }
+        accepted_reply_id: { type: [string, "null"] }
+        stats:
+          type: object
+          additionalProperties: true
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaResource"
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    ForumReply:
+      type: object
+      required: [id, topic_id, body_format, body, moderation_status, created_at, updated_at]
+      properties:
+        id: { type: string }
+        topic_id: { type: string }
+        parent_reply_id: { type: [string, "null"] }
+        author_user_id: { type: string }
+        reply_no: { type: integer }
+        body_format: { type: string }
+        body: { type: string }
+        body_excerpt: { type: string }
+        moderation_status: { type: string }
+        accepted_at: { type: [string, "null"], format: date-time }
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaResource"
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    ForumFeedItem:
+      type: object
+      required: [id, topic, activity_at]
+      properties:
+        id: { type: string }
+        topic:
+          $ref: "#/components/schemas/ForumTopic"
+        latest_reply:
+          $ref: "#/components/schemas/ForumReply"
+        activity_at: { type: string, format: date-time }
+    ForumPublicTopic:
+      type: object
+      required: [id, title, excerpt]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        excerpt: { type: string }
+    ForumTopicCreateCommand:
+      type: object
+      required: [board_id, title, body_format, body]
+      properties:
+        board_id: { type: string }
+        prefix_id: { type: string }
+        title: { type: string, minLength: 1, maxLength: 240 }
+        body_format: { type: string, enum: [markdown, html_sanitized, rich_text_json] }
+        body: { type: string, minLength: 1 }
+        topic_type: { type: string, enum: [discussion, question, poll, announcement, article], default: discussion }
+        tag_ids:
+          type: array
+          items: { type: string }
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaResource"
+    ForumTopicUpdateCommand:
+      type: object
+      properties:
+        title: { type: string, minLength: 1, maxLength: 240 }
+        body_format: { type: string }
+        body: { type: string }
+        edit_reason: { type: string, maxLength: 500 }
+        tag_ids:
+          type: array
+          items: { type: string }
+    ForumReplyCreateCommand:
+      type: object
+      required: [body_format, body]
+      properties:
+        parent_reply_id: { type: string }
+        body_format: { type: string, enum: [markdown, html_sanitized, rich_text_json] }
+        body: { type: string, minLength: 1 }
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/MediaResource"
+    ForumReplyUpdateCommand:
+      type: object
+      required: [body]
+      properties:
+        body_format: { type: string }
+        body: { type: string, minLength: 1 }
+        edit_reason: { type: string, maxLength: 500 }
+    ForumReportCommand:
+      type: object
+      required: [target_type, target_id, reason_code]
+      properties:
+        target_type: { type: string, enum: [topic, reply, member, board] }
+        target_id: { type: string }
+        reason_code: { type: string }
+        description: { type: string, maxLength: 2000 }
+    ForumReactionCommand:
+      type: object
+      required: [target_type, target_id, reaction_type]
+      properties:
+        target_type: { type: string, enum: [topic, reply] }
+        target_id: { type: string }
+        reaction_type: { type: string }
+        active: { type: boolean, default: true }
+    ForumVoteCommand:
+      type: object
+      required: [target_type, target_id, vote_value]
+      properties:
+        target_type: { type: string, enum: [topic, reply] }
+        target_id: { type: string }
+        vote_value: { type: integer, enum: [-1, 1] }
+    ForumBookmarkCommand:
+      type: object
+      required: [target_type, target_id, bookmarked]
+      properties:
+        target_type: { type: string, enum: [topic, reply] }
+        target_id: { type: string }
+        bookmarked: { type: boolean }
+        folder_code: { type: string }
+        note: { type: string }
+    ForumModerationCase:
+      type: object
+      required: [id, case_no, case_status]
+      properties:
+        id: { type: string }
+        case_no: { type: string }
+        case_status: { type: string }
+    ForumModerationDecisionCommand:
+      type: object
+      required: [decision_action, reason_code]
+      properties:
+        decision_action: { type: string }
+        reason_code: { type: string }
+        note: { type: string }
+    ForumTopicPage:
+      allOf:
+        - $ref: "#/components/schemas/CursorPage"
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/ForumTopic"
+    ForumReplyPage:
+      allOf:
+        - $ref: "#/components/schemas/CursorPage"
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/ForumReply"
+    ForumFeedPage:
+      allOf:
+        - $ref: "#/components/schemas/CursorPage"
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/ForumFeedItem"
+    ForumRevisionPage:
+      allOf:
+        - $ref: "#/components/schemas/CursorPage"
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                type: object
+                additionalProperties: true
+    CommandResult:
+      type: object
+      required: [success]
+      properties:
+        success: { type: boolean }
+        id: { type: string }
+        status: { type: string }

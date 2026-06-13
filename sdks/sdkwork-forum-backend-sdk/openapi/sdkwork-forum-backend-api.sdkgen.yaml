@@ -1,0 +1,16 @@
+schemaVersion: 1
+kind: sdkwork.sdkgen.config
+input: sdkwork-forum-backend-api.openapi.yaml
+output: ../generated/server-openapi
+sdkOwner: sdkwork-forum
+apiAuthority: sdkwork-communication-forum-backend-api
+sdkFamily: sdkwork-forum-backend-sdk
+standardProfile: sdkwork-v3
+languageTargets:
+  - typescript
+  - rust
+ownerOnly: true
+domain: communication
+capability: forum
+prefix: /backend/v3/api
+surface: backend-api

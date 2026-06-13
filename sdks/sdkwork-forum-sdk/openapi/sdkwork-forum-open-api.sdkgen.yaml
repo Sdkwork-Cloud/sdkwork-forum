@@ -1,0 +1,17 @@
+schemaVersion: 1
+kind: sdkwork.sdkgen.config
+input: sdkwork-forum-open-api.openapi.yaml
+output: ../generated/server-openapi
+sdkOwner: sdkwork-forum
+apiAuthority: sdkwork-communication-forum-open-api
+sdkFamily: sdkwork-forum-sdk
+standardProfile: sdkwork-v3
+languageTargets:
+  - typescript
+  - rust
+ownerOnly: true
+authMode: anonymous
+domain: communication
+capability: forum
+prefix: /forum/v3/api
+surface: open-api

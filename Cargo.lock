@@ -1266,6 +1266,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "sdkwork-database-config"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
+ "toml",
+ "tracing",
+]
+
+[[package]]
+name = "sdkwork-database-sqlx"
+version = "0.1.0"
+dependencies = [
+ "sdkwork-database-config",
+ "serde",
+ "sqlx",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "sdkwork-forum-api-server"
 version = "0.1.0"
 dependencies = [
@@ -1291,32 +1314,9 @@ dependencies = [
  "dotenvy",
  "sdkwork-communication-forum-repository-sqlx",
  "sdkwork-communication-forum-service",
- "sdkwork-pool-config",
- "sdkwork-pool-sqlx",
+ "sdkwork-database-config",
+ "sdkwork-database-sqlx",
  "sqlx",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "sdkwork-pool-config"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "thiserror 2.0.18",
- "toml",
- "tracing",
-]
-
-[[package]]
-name = "sdkwork-pool-sqlx"
-version = "0.1.0"
-dependencies = [
- "sdkwork-pool-config",
- "serde",
- "sqlx",
- "thiserror 2.0.18",
  "tokio",
  "tracing",
 ]

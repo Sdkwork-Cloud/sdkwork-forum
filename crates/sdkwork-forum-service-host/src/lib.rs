@@ -14,7 +14,7 @@ impl ForumServiceHost {
 
         tracing::info!("Connecting to database...");
 
-        let pool = sdkwork_pool_sqlx::create_pool_from_env("FORUM")
+        let pool = sdkwork_database_sqlx::create_pool_from_env("FORUM")
             .await
             .expect("Failed to create database pool")
             .expect("SDKWORK_FORUM_DATABASE_URL not set");

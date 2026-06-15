@@ -1,7 +1,6 @@
 use sdkwork_communication_forum_repository_sqlx::SqlxForumRepository;
 use sdkwork_communication_forum_service::ForumService;
 use sdkwork_communication_forum_service::value_objects::ForumRequestContext;
-use sqlx::PgPool;
 use tracing;
 
 pub struct ForumServiceHost {
@@ -13,18 +12,19 @@ impl ForumServiceHost {
         // Load .env file if present
         let _ = dotenvy::dotenv();
 
-        let database_url = std::env::var("SDKWORK_FORUM_DATABASE_URL")
-            .unwrap_or_else(|_| "postgresql://sdkwork_forum_dev:sdkworkdev123@localhost:15432/sdkwork_forum_dev".to_string());
-
         tracing::info!("Connecting to database...");
 
-        let pool = PgPool::connect(&database_url)
+        let pool = sdkwork_pool_sqlx::create_pool_from_env("FORUM")
             .await
-            .expect("Failed to connect to database");
+            .expect("Failed to create database pool")
+            .expect("SDKWORK_FORUM_DATABASE_URL not set");
+
+        let pg_pool = pool.as_postgres()
+            .expect("Expected PostgreSQL pool for forum service");
 
         tracing::info!("Database connected successfully");
 
-        let repository = SqlxForumRepository::new(pool);
+        let repository = SqlxForumRepository::new(pg_pool.clone());
         let service = ForumService::new(repository);
 
         tracing::info!("Forum service initialized");

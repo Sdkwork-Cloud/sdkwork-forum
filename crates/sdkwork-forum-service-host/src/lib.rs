@@ -10,7 +10,11 @@ pub struct ForumServiceHost {
 
 impl ForumServiceHost {
     pub async fn new() -> Self {
-        let database_url = "postgresql://forum:forum@localhost:5432/forum".to_string();
+        // Load .env file if present
+        let _ = dotenvy::dotenv();
+
+        let database_url = std::env::var("SDKWORK_FORUM_DATABASE_URL")
+            .unwrap_or_else(|_| "postgresql://sdkwork_forum_dev:sdkworkdev123@localhost:15432/sdkwork_forum_dev".to_string());
 
         tracing::info!("Connecting to database...");
 

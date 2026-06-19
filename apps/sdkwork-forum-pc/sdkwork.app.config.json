@@ -10,7 +10,9 @@
   },
   "backend": {
     "domain": "communication",
-    "capabilities": ["forum"],
+    "capabilities": [
+      "forum"
+    ],
     "apiSurfaces": [
       {
         "surface": "app-api",
@@ -25,7 +27,12 @@
     ]
   },
   "runtime": {
-    "modes": ["web", "desktop", "tablet-ipados", "tablet-android"],
+    "modes": [
+      "web",
+      "desktop",
+      "tablet-ipados",
+      "tablet-android"
+    ],
     "rootDirectories": [
       "config",
       "docs",
@@ -36,7 +43,11 @@
       "specs",
       "src",
       "tests"
-    ]
+    ],
+    "supportedDeploymentProfiles": [
+      "cloud"
+    ],
+    "defaultDeploymentProfile": "cloud"
   },
   "release": {
     "version": "0.1.0",

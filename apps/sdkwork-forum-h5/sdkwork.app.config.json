@@ -10,7 +10,9 @@
   },
   "backend": {
     "domain": "communication",
-    "capabilities": ["forum"],
+    "capabilities": [
+      "forum"
+    ],
     "apiSurfaces": [
       {
         "surface": "app-api",
@@ -20,7 +22,12 @@
     ]
   },
   "runtime": {
-    "modes": ["h5", "h5-weixin", "capacitor-ios", "capacitor-android"],
+    "modes": [
+      "h5",
+      "h5-weixin",
+      "capacitor-ios",
+      "capacitor-android"
+    ],
     "rootDirectories": [
       "config",
       "docs",
@@ -31,7 +38,11 @@
       "specs",
       "src",
       "tests"
-    ]
+    ],
+    "supportedDeploymentProfiles": [
+      "cloud"
+    ],
+    "defaultDeploymentProfile": "cloud"
   },
   "release": {
     "version": "0.1.0",

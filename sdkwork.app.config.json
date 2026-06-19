@@ -52,7 +52,11 @@
       "scripts",
       "docs",
       "tests"
-    ]
+    ],
+    "supportedDeploymentProfiles": [
+      "cloud"
+    ],
+    "defaultDeploymentProfile": "cloud"
   },
   "media": {
     "policy": "Forum attachments use Drive-owned stable media resources; forum tables store references only."

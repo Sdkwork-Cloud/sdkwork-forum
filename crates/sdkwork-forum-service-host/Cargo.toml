@@ -8,9 +8,10 @@ publish.workspace = true
 [dependencies]
 sdkwork-communication-forum-repository-sqlx = { path = "../sdkwork-communication-forum-repository-sqlx" }
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
-sdkwork-database-config = { path = "../../../sdkwork-database/crates/sdkwork-database-config" }
-sdkwork-database-sqlx = { path = "../../../sdkwork-database/crates/sdkwork-database-sqlx" }
-sdkwork-database-spi = { path = "../../../sdkwork-database/crates/sdkwork-database-spi" }
+sdkwork-forum-database-host = { workspace = true }
+sdkwork-database-config = { workspace = true }
+sdkwork-database-sqlx = { workspace = true }
+sdkwork-database-spi = { workspace = true }
 sdkwork-database-ops = { path = "../../../sdkwork-database/crates/sdkwork-database-ops" }
 sqlx = { workspace = true }
 tokio = { workspace = true }

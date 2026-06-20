@@ -1,7 +1,7 @@
-use std::path::PathBuf;
 use std::sync::Arc;
 
 use sdkwork_communication_forum_repository_sqlx::SqlxForumRepository;
+use sdkwork_forum_database_host::bootstrap_forum_database_from_env;
 use sqlx::PgPool;
 use sdkwork_communication_forum_service::ForumService;
 use sdkwork_communication_forum_service::value_objects::ForumRequestContext;
@@ -26,16 +26,12 @@ impl ForumServiceHost {
 
         tracing::info!("Connecting to database...");
 
-        let pool = sdkwork_database_sqlx::create_pool_from_env("FORUM")
+        let database_host = bootstrap_forum_database_from_env()
             .await
-            .expect("Failed to create database pool")
-            .expect("SDKWORK_FORUM_DATABASE_URL not set");
+            .expect("Failed to bootstrap forum database");
 
-        let app_root = resolve_app_root();
-        let database_module = Arc::new(
-            DefaultDatabaseModule::from_app_root(&app_root)
-                .expect("failed to load forum database module"),
-        );
+        let pool = database_host.pool().clone();
+        let database_module = database_host.module();
 
         let pg_pool = pool
             .as_postgres()
@@ -119,17 +115,6 @@ async fn load_iam_pool(forum_pool: &PgPool) -> PgPool {
         }
     }
     forum_pool.clone()
-}
-
-fn resolve_app_root() -> PathBuf {
-    std::env::var("SDKWORK_FORUM_APP_ROOT")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| {
-            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../..")
-                .canonicalize()
-                .unwrap_or_else(|_| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../.."))
-        })
 }
 
 pub fn build_forum_service() -> ForumService<SqlxForumRepository> {

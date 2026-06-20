@@ -45,6 +45,36 @@
       "lifecycle_status": "active"
     },
     {
+      "table_name": "forum_member_profile",
+      "owner": "forum-platform",
+      "compliance_level": "L2",
+      "lifecycle_status": "active"
+    },
+    {
+      "table_name": "forum_trust_level",
+      "owner": "forum-platform",
+      "compliance_level": "L2",
+      "lifecycle_status": "active"
+    },
+    {
+      "table_name": "forum_privilege_grant",
+      "owner": "forum-platform",
+      "compliance_level": "L2",
+      "lifecycle_status": "active"
+    },
+    {
+      "table_name": "forum_badge",
+      "owner": "forum-platform",
+      "compliance_level": "L2",
+      "lifecycle_status": "active"
+    },
+    {
+      "table_name": "forum_reputation_rule",
+      "owner": "forum-platform",
+      "compliance_level": "L2",
+      "lifecycle_status": "active"
+    },
+    {
       "table_name": "forum_topic",
       "owner": "forum-platform",
       "compliance_level": "L2",
@@ -135,30 +165,6 @@
       "lifecycle_status": "active"
     },
     {
-      "table_name": "forum_member_profile",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
-      "table_name": "forum_trust_level",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
-      "table_name": "forum_privilege_grant",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
-      "table_name": "forum_badge",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
       "table_name": "forum_user_badge",
       "owner": "forum-platform",
       "compliance_level": "L2",
@@ -171,19 +177,7 @@
       "lifecycle_status": "active"
     },
     {
-      "table_name": "forum_reputation_rule",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
       "table_name": "forum_report",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
-      "table_name": "forum_moderation_queue_item",
       "owner": "forum-platform",
       "compliance_level": "L2",
       "lifecycle_status": "active"
@@ -196,6 +190,12 @@
     },
     {
       "table_name": "forum_moderation_decision",
+      "owner": "forum-platform",
+      "compliance_level": "L2",
+      "lifecycle_status": "active"
+    },
+    {
+      "table_name": "forum_moderation_queue_item",
       "owner": "forum-platform",
       "compliance_level": "L2",
       "lifecycle_status": "active"

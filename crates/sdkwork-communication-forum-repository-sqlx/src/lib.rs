@@ -1,5 +1,6 @@
 pub mod schema;
 pub mod repo_impl;
+pub mod bootstrap;
 
 use std::sync::Arc;
 

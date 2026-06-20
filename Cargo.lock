@@ -1698,8 +1698,12 @@ dependencies = [
  "anyhow",
  "chrono",
  "digest",
+ "dotenvy",
  "md-5",
  "sdkwork-communication-forum-service",
+ "sdkwork-database-config",
+ "sdkwork-database-sqlx",
+ "sdkwork-forum-database-host",
  "sdkwork-id-core",
  "serde",
  "serde_json",
@@ -1873,6 +1877,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "sdkwork-forum-database-host"
+version = "0.1.0"
+dependencies = [
+ "dotenvy",
+ "sdkwork-database-config",
+ "sdkwork-database-lifecycle",
+ "sdkwork-database-spi",
+ "sdkwork-database-sqlx",
+]
+
+[[package]]
 name = "sdkwork-forum-service-host"
 version = "0.1.0"
 dependencies = [
@@ -1883,6 +1898,7 @@ dependencies = [
  "sdkwork-database-ops",
  "sdkwork-database-spi",
  "sdkwork-database-sqlx",
+ "sdkwork-forum-database-host",
  "sqlx",
  "tokio",
  "tracing",

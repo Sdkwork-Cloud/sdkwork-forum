@@ -5,19 +5,31 @@
   "serviceCode": "FORUM",
   "displayName": "SDKWork Forum Database",
   "owner": "forum-platform",
-  "engines": ["postgres"],
+  "engines": [
+    "postgres"
+  ],
   "defaultEngine": "postgres",
   "tablePrefix": "forum_",
   "contractVersion": "1.0.0",
   "baselineStrategy": "baseline-plus-migrations",
   "modules": [],
   "lifecycle": {
-    "autoMigrate": false,
+    "autoMigrate": true,
     "seedOnBoot": false,
     "defaultSeedLocale": "zh-CN",
     "defaultSeedProfile": "standard",
-    "supportedSeedLocales": ["zh-CN", "en-US", "ja-JP", "de-DE", "fr-FR", "ru-RU", "ko-KR"],
-    "activeSeedLocales": ["zh-CN"],
+    "supportedSeedLocales": [
+      "zh-CN",
+      "en-US",
+      "ja-JP",
+      "de-DE",
+      "fr-FR",
+      "ru-RU",
+      "ko-KR"
+    ],
+    "activeSeedLocales": [
+      "zh-CN"
+    ],
     "driftCheckIntervalSec": 60
   },
   "paths": {

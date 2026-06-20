@@ -3,6 +3,7 @@ resolver = "2"
 members = [
   "crates/sdkwork-communication-forum-service",
   "crates/sdkwork-communication-forum-repository-sqlx",
+  "crates/sdkwork-forum-database-host",
   "crates/sdkwork-router-forum-app-api",
   "crates/sdkwork-router-forum-backend-api",
   "crates/sdkwork-router-forum-open-api",
@@ -33,3 +34,12 @@ tracing-subscriber = "0.3"
 anyhow = "1"
 thiserror = "1"
 sdkwork-id-core = { path = "../sdkwork-id/crates/sdkwork-id-core" }
+sdkwork-forum-database-host = { path = "crates/sdkwork-forum-database-host" }
+sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config" }
+sdkwork-database-lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle" }
+sdkwork-database-spi = { path = "../sdkwork-database/crates/sdkwork-database-spi" }
+sdkwork-database-sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx" }
+sdkwork_database_config = { path = "../sdkwork-database/crates/sdkwork-database-config" }
+sdkwork_database_lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle" }
+sdkwork_database_spi = { path = "../sdkwork-database/crates/sdkwork-database-spi" }
+sdkwork_database_sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx" }

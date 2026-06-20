@@ -79,6 +79,8 @@ pub type BoardStatsPageResult = CursorPage<ForumBoardStats>;
 pub type TopicStatsPageResult = CursorPage<ForumTopicStats>;
 pub type TopicPrefixPageResult = CursorPage<ForumTopicPrefix>;
 pub type AuditActionPageResult = CursorPage<ForumAuditAction>;
+pub type NodePageResult = CursorPage<ForumNode>;
+pub type TagPageResult = CursorPage<ForumTag>;
 pub type SubscriptionPageResult = CursorPage<ForumSubscription>;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

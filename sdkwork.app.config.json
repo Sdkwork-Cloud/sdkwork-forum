@@ -49,6 +49,7 @@
       "examples",
       "configs",
       "deployments",
+      "database",
       "scripts",
       "docs",
       "tests"

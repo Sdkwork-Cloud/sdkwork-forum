@@ -34,11 +34,11 @@ Use `topic` and `reply` in all public contracts. The rejected word is documented
 
 ## Implementation Layers
 
-- Route crates define path descriptors, handler placeholders, and route manifests.
+- Route crates define path descriptors, route manifests, and contract-test handler placeholders.
+- API server crate mounts live handlers in `src/routes/` for app, backend, and open surfaces.
 - Service crate owns domain orchestration and service ports.
-- Repository crate owns SQL persistence adapters.
-- API server crate composes route crates for local/private deployments.
-- Service host crate composes service dependencies.
+- Repository crate owns SQL persistence adapters via `SqlxForumRepository`.
+- Service host crate wires PostgreSQL pool, database module, and ops service.
 - Worker crate processes outbox, search projection, stats, and moderation jobs.
 
 ## Runtime Dependency Wiring
@@ -86,8 +86,8 @@ External Dependencies (awaiting SDK generation):
 
 | Adapter | Port Trait | Implementation | Status |
 |---------|-----------|----------------|--------|
-| Repository | `ForumRepository` | `SqlxForumRepository` | Stubbed (not_implemented) |
-| Drive | `ForumDrivePort` | `NoopForumDrivePort` | Implemented (noop) |
-| Search | `ForumSearchPort` | `NoopForumSearchPort` | Implemented (noop) |
-| Notification | `ForumNotificationPort` | `NoopForumNotificationPort` | Implemented (noop) |
+| Repository | `ForumRepository` | `SqlxForumRepository` | Implemented (PostgreSQL + snowflake ids) |
+| Drive | `ForumDrivePort` | `NoopForumDrivePort` / logging | Implemented (validate on attachment) |
+| Search | `ForumSearchPort` | `HttpForumSearchPort` / logging / noop | Implemented |
+| Notification | `ForumNotificationPort` | `HttpForumNotificationPort` / logging / noop | Implemented |
 | Request Context | `ForumRequestContext` | Typed struct | Implemented |

@@ -10,6 +10,8 @@ sdkwork-communication-forum-repository-sqlx = { path = "../sdkwork-communication
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
 sdkwork-database-config = { path = "../../../sdkwork-database/crates/sdkwork-database-config" }
 sdkwork-database-sqlx = { path = "../../../sdkwork-database/crates/sdkwork-database-sqlx" }
+sdkwork-database-spi = { path = "../../../sdkwork-database/crates/sdkwork-database-spi" }
+sdkwork-database-ops = { path = "../../../sdkwork-database/crates/sdkwork-database-ops" }
 sqlx = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }

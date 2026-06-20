@@ -6,7 +6,9 @@ use crate::value_objects::ForumRequestContext;
 
 pub trait ForumRepository {
     fn list_node_tree(&self, ctx: &ForumRequestContext, command: &ListNodeTreeCommand) -> Result<NodeTreeResult, ForumServiceError>;
+    fn list_nodes(&self, ctx: &ForumRequestContext, command: &ListNodesCommand) -> Result<NodePageResult, ForumServiceError>;
     fn list_topics(&self, ctx: &ForumRequestContext, command: &ListTopicsCommand) -> Result<TopicPageResult, ForumServiceError>;
+    fn retrieve_topic_by_slug(&self, ctx: &ForumRequestContext, command: &RetrieveTopicBySlugCommand) -> Result<ForumTopic, ForumServiceError>;
     fn create_topic(&self, ctx: &ForumRequestContext, command: &CreateTopicCommand) -> Result<ForumTopic, ForumServiceError>;
     fn retrieve_topic(&self, ctx: &ForumRequestContext, topic_id: i64) -> Result<ForumTopic, ForumServiceError>;
     fn update_topic(&self, ctx: &ForumRequestContext, command: &UpdateTopicCommand) -> Result<ForumTopic, ForumServiceError>;
@@ -23,6 +25,13 @@ pub trait ForumRepository {
     fn list_moderation_queue(&self, ctx: &ForumRequestContext, command: &ListModerationQueueCommand) -> Result<ModerationQueueResult, ForumServiceError>;
     fn create_moderation_decision(&self, ctx: &ForumRequestContext, command: &CreateModerationDecisionCommand) -> Result<ModerationDecisionResult, ForumServiceError>;
     fn rebuild_search_projection(&self, ctx: &ForumRequestContext, command: &RebuildSearchProjectionCommand) -> Result<CommandResult, ForumServiceError>;
+    fn rebuild_stats(&self, ctx: &ForumRequestContext, command: &RebuildStatsCommand) -> Result<CommandResult, ForumServiceError>;
+    fn list_pending_outbox_events(
+        &self,
+        ctx: &ForumRequestContext,
+        command: &PublishOutboxCommand,
+    ) -> Result<Vec<ForumOutboxEvent>, ForumServiceError>;
+    fn mark_outbox_published(&self, ctx: &ForumRequestContext, event_id: i64) -> Result<(), ForumServiceError>;
     fn list_topic_revisions(&self, ctx: &ForumRequestContext, command: &ListTopicRevisionsCommand) -> Result<TopicRevisionPageResult, ForumServiceError>;
     fn list_reply_revisions(&self, ctx: &ForumRequestContext, command: &ListReplyRevisionsCommand) -> Result<ReplyRevisionPageResult, ForumServiceError>;
     fn create_poll_vote(&self, ctx: &ForumRequestContext, command: &CreatePollVoteCommand) -> Result<CommandResult, ForumServiceError>;
@@ -56,6 +65,8 @@ pub trait ForumRepository {
     fn list_board_stats(&self, ctx: &ForumRequestContext, command: &ListBoardStatsCommand) -> Result<BoardStatsPageResult, ForumServiceError>;
     fn list_topic_stats(&self, ctx: &ForumRequestContext, command: &ListTopicStatsCommand) -> Result<TopicStatsPageResult, ForumServiceError>;
     fn create_audit_action(&self, ctx: &ForumRequestContext, command: &CreateAuditActionCommand) -> Result<ForumAuditAction, ForumServiceError>;
+    fn list_audit_actions(&self, ctx: &ForumRequestContext, command: &ListAuditActionsCommand) -> Result<AuditActionPageResult, ForumServiceError>;
+    fn list_tags(&self, ctx: &ForumRequestContext, command: &ListTagsCommand) -> Result<TagPageResult, ForumServiceError>;
     fn list_topic_prefixes(&self, ctx: &ForumRequestContext, command: &ListTopicPrefixesCommand) -> Result<TopicPrefixPageResult, ForumServiceError>;
     fn create_topic_prefix(&self, ctx: &ForumRequestContext, command: &CreateTopicPrefixCommand) -> Result<ForumTopicPrefix, ForumServiceError>;
     fn create_space(&self, ctx: &ForumRequestContext, command: &CreateSpaceCommand) -> Result<ForumSpace, ForumServiceError>;

@@ -1,26 +1,50 @@
 pub mod schema;
 pub mod repo_impl;
 
+use std::sync::Arc;
+
+use sdkwork_communication_forum_service::ForumServiceError;
+use sdkwork_id_core::{IdGenerator, SnowflakeIdGenerator};
 use sqlx::PgPool;
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct SqlxForumRepository {
     pool: PgPool,
+    id_gen: Arc<dyn IdGenerator>,
 }
 
 impl SqlxForumRepository {
     pub fn new(pool: PgPool) -> Self {
-        Self { pool }
+        let node_id = std::env::var("SDKWORK_FORUM_SNOWFLAKE_NODE_ID")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(1);
+        let gen = SnowflakeIdGenerator::new(node_id)
+            .expect("invalid SDKWORK_FORUM_SNOWFLAKE_NODE_ID");
+        Self {
+            pool,
+            id_gen: Arc::new(gen),
+        }
     }
 
     pub fn pool(&self) -> &PgPool {
         &self.pool
     }
 
+    pub(crate) fn next_id(&self) -> Result<i64, ForumServiceError> {
+        let id_str = self
+            .id_gen
+            .next_id()
+            .map_err(|e| ForumServiceError::internal(e.to_string()))?;
+        id_str
+            .parse::<i64>()
+            .map_err(|_| ForumServiceError::internal("invalid snowflake id"))
+    }
+
     pub fn new_placeholder() -> Self {
-        Self {
-            pool: PgPool::connect_lazy("postgres://localhost:5432/forum")
+        Self::new(
+            PgPool::connect_lazy("postgres://localhost:5432/forum")
                 .expect("Failed to create placeholder pool"),
-        }
+        )
     }
 }

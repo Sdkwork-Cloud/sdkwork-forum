@@ -129,6 +129,21 @@ pub struct RebuildSearchProjectionCommand {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RebuildStatsCommand {
+    pub scope: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PublishOutboxCommand {
+    pub limit: u16,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FanoutNotificationsCommand {
+    pub limit: u16,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListTopicRevisionsCommand {
     pub topic_id: i64,
     pub cursor: Option<String>,
@@ -340,6 +355,33 @@ pub struct CreateAuditActionCommand {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListAuditActionsCommand {
+    pub cursor: Option<String>,
+    pub limit: u16,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListNodesCommand {
+    pub space_id: Option<i64>,
+    pub node_type: Option<String>,
+    pub cursor: Option<String>,
+    pub limit: u16,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ListTagsCommand {
+    pub space_id: Option<i64>,
+    pub cursor: Option<String>,
+    pub limit: u16,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RetrieveTopicBySlugCommand {
+    pub slug: String,
+    pub board_id: Option<i64>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListTopicPrefixesCommand {
     pub board_id: Option<i64>,
     pub cursor: Option<String>,
@@ -406,6 +448,7 @@ pub struct UpdateSubscriptionCommand {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ListSubscriptionsCommand {
     pub target_type: Option<String>,
+    pub target_id: Option<i64>,
     pub cursor: Option<String>,
     pub limit: u16,
 }

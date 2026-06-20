@@ -1,19 +1,29 @@
-# SQL Deployments
+# SQL Deployments (Legacy)
 
-SQL migrations will be generated from `specs/forum-database.schema.yaml`.
+This directory is **deprecated**. Forum database lifecycle assets are owned by the canonical `database/` module at the application root.
 
-## Status
+## Authoritative Sources
 
-Database schema contract is defined in YAML. SQL migrations require the schema generator tool.
+| Asset | Path |
+| --- | --- |
+| Schema contract | `database/contract/schema.yaml` (synced from `specs/forum-database.schema.yaml`) |
+| Table registry | `database/contract/table-registry.json` |
+| Baseline DDL | `database/ddl/baseline/postgres/0001_forum_baseline.sql` |
+| Migrations | `database/migrations/postgres/` |
+| Seeds | `database/seeds/` |
+| Drift policy | `database/drift/policy.yaml` |
 
-## Schema Contract
+## Commands
 
-- 45 tables across 8 groups
-- Full constraint and index definitions
-- See `specs/forum-database.schema.yaml` for complete table contracts
+From the forum application root:
 
-## Planned DDL Targets
+```bash
+pnpm db:validate
+pnpm db:init
+pnpm db:migrate
+pnpm db:drift:check
+```
 
-- PostgreSQL (primary)
-- MySQL (secondary)
-- SQLite (development/testing)
+## Legacy File
+
+`forum-ddl-postgresql.sql` is retained only as a historical snapshot. Do not edit it for new schema changes; update `specs/forum-database.schema.yaml` and sync into `database/contract/schema.yaml` instead.

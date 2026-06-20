@@ -7,7 +7,8 @@ publish.workspace = true
 
 [dependencies]
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
-sqlx = { workspace = true, features = ["runtime-tokio", "postgres", "json"] }
+sdkwork-id-core = { workspace = true }
+sqlx = { workspace = true, features = ["runtime-tokio", "postgres", "json", "bigdecimal"] }
 serde = { workspace = true }
 serde_json = { workspace = true }
 uuid = { workspace = true }

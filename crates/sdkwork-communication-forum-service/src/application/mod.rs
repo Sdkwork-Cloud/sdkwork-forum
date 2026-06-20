@@ -1,4 +1,5 @@
 use crate::domain::commands::*;
+use crate::domain::events::ForumDomainEvent;
 use crate::domain::models::*;
 use crate::domain::results::*;
 use crate::error::ForumServiceError;
@@ -7,14 +8,14 @@ use crate::integration::notifications::{ForumNotificationPort, NoopForumNotifica
 use crate::integration::search::{ForumSearchPort, NoopForumSearchPort};
 use crate::ports::repository::ForumRepository;
 use crate::value_objects::ForumRequestContext;
+use serde_json::{json, Value};
+
+mod integration_hooks;
 
 pub struct ForumService<R: ForumRepository> {
     repository: R,
-    #[allow(dead_code)]
     drive_port: Box<dyn ForumDrivePort>,
-    #[allow(dead_code)]
     search_port: Box<dyn ForumSearchPort>,
-    #[allow(dead_code)]
     notification_port: Box<dyn ForumNotificationPort>,
 }
 
@@ -46,6 +47,39 @@ impl<R: ForumRepository> ForumService<R> {
 
     pub fn list_node_tree(&self, ctx: &ForumRequestContext, command: ListNodeTreeCommand) -> Result<NodeTreeResult, ForumServiceError> {
         self.repository.list_node_tree(ctx, &command)
+    }
+
+    pub fn list_nodes(&self, ctx: &ForumRequestContext, command: ListNodesCommand) -> Result<NodePageResult, ForumServiceError> {
+        let mut cmd = command;
+        if cmd.limit == 0 {
+            cmd.limit = 20;
+        }
+        if cmd.limit > 100 {
+            cmd.limit = 100;
+        }
+        self.repository.list_nodes(ctx, &cmd)
+    }
+
+    pub fn retrieve_topic_by_slug(
+        &self,
+        ctx: &ForumRequestContext,
+        command: RetrieveTopicBySlugCommand,
+    ) -> Result<ForumTopic, ForumServiceError> {
+        if command.slug.trim().is_empty() {
+            return Err(ForumServiceError::validation("slug must not be empty"));
+        }
+        self.repository.retrieve_topic_by_slug(ctx, &command)
+    }
+
+    pub fn list_tags(&self, ctx: &ForumRequestContext, command: ListTagsCommand) -> Result<TagPageResult, ForumServiceError> {
+        let mut cmd = command;
+        if cmd.limit == 0 {
+            cmd.limit = 20;
+        }
+        if cmd.limit > 100 {
+            cmd.limit = 100;
+        }
+        self.repository.list_tags(ctx, &cmd)
     }
 
     pub fn list_topics(&self, ctx: &ForumRequestContext, command: ListTopicsCommand) -> Result<TopicPageResult, ForumServiceError> {
@@ -103,7 +137,20 @@ impl<R: ForumRepository> ForumService<R> {
                 return Err(ForumServiceError::sanctioned("user is sanctioned and cannot create topics"));
             }
         }
-        self.repository.create_topic(ctx, &command)
+        self.repository.create_topic(ctx, &command).map(|topic| {
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::topic_created(topic.id.to_string()),
+                json!({
+                    "topicId": topic.id,
+                    "boardId": topic.board_id,
+                    "authorUserId": topic.author_user_id,
+                }),
+            );
+            let _ = self.repository.update_topic_stats(ctx, topic.id);
+            let _ = self.repository.update_board_stats(ctx, topic.board_id);
+            topic
+        })
     }
 
     pub fn retrieve_topic(&self, ctx: &ForumRequestContext, topic_id: i64) -> Result<ForumTopic, ForumServiceError> {
@@ -132,14 +179,30 @@ impl<R: ForumRepository> ForumService<R> {
                 return Err(ForumServiceError::validation(format!("invalid body_format: {body_format}")));
             }
         }
-        self.repository.update_topic(ctx, &command)
+        self.repository.update_topic(ctx, &command).map(|topic| {
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::topic_updated(topic.id.to_string()),
+                json!({ "topicId": topic.id, "boardId": topic.board_id }),
+            );
+            topic
+        })
     }
 
     pub fn delete_topic(&self, ctx: &ForumRequestContext, command: DeleteTopicCommand) -> Result<CommandResult, ForumServiceError> {
         if command.topic_id <= 0 {
             return Err(ForumServiceError::validation("topic_id must be positive"));
         }
-        self.repository.delete_topic(ctx, &command)
+        let topic_id = command.topic_id;
+        self.repository.delete_topic(ctx, &command).map(|result| {
+            self.remove_search_document_best_effort("topic", &topic_id.to_string());
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::topic_deleted(topic_id.to_string()),
+                json!({ "topicId": topic_id }),
+            );
+            result
+        })
     }
 
     pub fn list_replies(&self, ctx: &ForumRequestContext, command: ListRepliesCommand) -> Result<ReplyPageResult, ForumServiceError> {
@@ -177,7 +240,21 @@ impl<R: ForumRepository> ForumService<R> {
                 return Err(ForumServiceError::sanctioned("user is sanctioned and cannot create replies"));
             }
         }
-        self.repository.create_reply(ctx, &command)
+        self.repository.create_reply(ctx, &command).map(|reply| {
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::reply_created(reply.id.to_string()),
+                json!({
+                    "replyId": reply.id,
+                    "topicId": reply.topic_id,
+                    "boardId": reply.board_id,
+                    "authorUserId": reply.author_user_id,
+                }),
+            );
+            let _ = self.repository.update_topic_stats(ctx, reply.topic_id);
+            let _ = self.repository.update_board_stats(ctx, reply.board_id);
+            reply
+        })
     }
 
     pub fn update_reply(&self, ctx: &ForumRequestContext, command: UpdateReplyCommand) -> Result<ForumReply, ForumServiceError> {
@@ -198,7 +275,16 @@ impl<R: ForumRepository> ForumService<R> {
         if command.reply_id <= 0 {
             return Err(ForumServiceError::validation("reply_id must be positive"));
         }
-        self.repository.delete_reply(ctx, &command)
+        let reply_id = command.reply_id;
+        self.repository.delete_reply(ctx, &command).map(|result| {
+            self.remove_search_document_best_effort("reply", &reply_id.to_string());
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::reply_deleted(reply_id.to_string()),
+                json!({ "replyId": reply_id }),
+            );
+            result
+        })
     }
 
     pub fn accept_reply(&self, ctx: &ForumRequestContext, command: AcceptReplyCommand) -> Result<ForumTopic, ForumServiceError> {
@@ -305,11 +391,119 @@ impl<R: ForumRepository> ForumService<R> {
         if !valid_actions.contains(&command.decision_action.as_str()) {
             return Err(ForumServiceError::validation(format!("invalid decision_action: {}", command.decision_action)));
         }
-        self.repository.create_moderation_decision(ctx, &command)
+        self.repository.create_moderation_decision(ctx, &command).map(|decision| {
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::moderation_decision_created(command.case_id.to_string()),
+                json!({
+                    "caseId": command.case_id,
+                    "decisionAction": decision.decision_action,
+                }),
+            );
+            decision
+        })
     }
 
     pub fn rebuild_search_projection(&self, ctx: &ForumRequestContext, command: RebuildSearchProjectionCommand) -> Result<CommandResult, ForumServiceError> {
-        self.repository.rebuild_search_projection(ctx, &command)
+        let result = self.repository.rebuild_search_projection(ctx, &command)?;
+        if let Err(error) = self.search_port.rebuild_index(command.board_id) {
+            tracing::warn!(board_id = ?command.board_id, error, "forum search rebuild failed");
+        }
+        Ok(result)
+    }
+
+    pub fn rebuild_stats(&self, ctx: &ForumRequestContext, command: RebuildStatsCommand) -> Result<CommandResult, ForumServiceError> {
+        self.repository.rebuild_stats(ctx, &command)
+    }
+
+    pub fn publish_pending_outbox(&self, ctx: &ForumRequestContext, command: PublishOutboxCommand) -> Result<CommandResult, ForumServiceError> {
+        let mut cmd = command;
+        if cmd.limit == 0 {
+            cmd.limit = 50;
+        }
+        if cmd.limit > 500 {
+            cmd.limit = 500;
+        }
+
+        let events = self.repository.list_pending_outbox_events(ctx, &cmd)?;
+        let mut published = 0_i64;
+        for event in events {
+            self.notify_forum_event_best_effort(&event.event_type, &event.aggregate_id);
+            self.repository.mark_outbox_published(ctx, event.id)?;
+            published += 1;
+        }
+
+        Ok(CommandResult {
+            success: true,
+            id: Some(published),
+            uuid: None,
+            status: Some("published".to_string()),
+        })
+    }
+
+    pub fn fanout_notifications(
+        &self,
+        ctx: &ForumRequestContext,
+        command: FanoutNotificationsCommand,
+    ) -> Result<CommandResult, ForumServiceError> {
+        let mut cmd = PublishOutboxCommand {
+            limit: command.limit,
+        };
+        if cmd.limit == 0 {
+            cmd.limit = 50;
+        }
+        if cmd.limit > 500 {
+            cmd.limit = 500;
+        }
+
+        let events = self.repository.list_pending_outbox_events(ctx, &cmd)?;
+        let mut delivered = 0_i64;
+        for event in events {
+            let payload: Value = serde_json::from_str(&event.payload_json).unwrap_or(json!({}));
+            let topic_id = payload
+                .get("topicId")
+                .or_else(|| payload.get("topic_id"))
+                .and_then(Value::as_i64);
+            if topic_id.is_none() {
+                continue;
+            }
+            let topic_id = topic_id.unwrap_or_default();
+            let subscriptions = self.repository.list_subscriptions(
+                ctx,
+                &ListSubscriptionsCommand {
+                    target_type: Some("topic".to_string()),
+                    target_id: Some(topic_id),
+                    cursor: None,
+                    limit: 100,
+                },
+            )?;
+            for subscription in subscriptions.items {
+                if subscription.target_id != topic_id {
+                    continue;
+                }
+                if let Err(error) = self.notification_port.publish_subscription_notification(
+                    subscription.user_id,
+                    &event.event_type,
+                    topic_id,
+                ) {
+                    tracing::warn!(
+                        user_id = subscription.user_id,
+                        topic_id,
+                        error,
+                        "forum subscription notification failed"
+                    );
+                } else {
+                    delivered += 1;
+                }
+            }
+        }
+
+        Ok(CommandResult {
+            success: true,
+            id: Some(delivered),
+            uuid: None,
+            status: Some("fanout".to_string()),
+        })
     }
 
     pub fn list_topic_revisions(&self, ctx: &ForumRequestContext, command: ListTopicRevisionsCommand) -> Result<TopicRevisionPageResult, ForumServiceError> {
@@ -576,7 +770,20 @@ impl<R: ForumRepository> ForumService<R> {
                 return Err(ForumServiceError::validation("summary must not exceed 1000 characters"));
             }
         }
-        self.repository.create_moderation_case(ctx, &command)
+        self.repository.create_moderation_case(ctx, &command).map(|case| {
+            self.notify_moderation_alert_best_effort(case.id, &case.severity);
+            let _ = self.record_domain_event(
+                ctx,
+                ForumDomainEvent::moderation_case_created(case.id.to_string()),
+                json!({
+                    "caseId": case.id,
+                    "targetType": case.target_type,
+                    "targetId": case.target_id,
+                    "severity": case.severity,
+                }),
+            );
+            case
+        })
     }
 
     pub fn retrieve_moderation_case(&self, ctx: &ForumRequestContext, command: RetrieveModerationCaseCommand) -> Result<ForumModerationCase, ForumServiceError> {
@@ -788,6 +995,21 @@ impl<R: ForumRepository> ForumService<R> {
         self.repository.create_audit_action(ctx, &command)
     }
 
+    pub fn list_audit_actions(
+        &self,
+        ctx: &ForumRequestContext,
+        command: ListAuditActionsCommand,
+    ) -> Result<AuditActionPageResult, ForumServiceError> {
+        let mut cmd = command;
+        if cmd.limit == 0 {
+            cmd.limit = 20;
+        }
+        if cmd.limit > 100 {
+            cmd.limit = 100;
+        }
+        self.repository.list_audit_actions(ctx, &cmd)
+    }
+
     pub fn list_topic_prefixes(&self, ctx: &ForumRequestContext, command: ListTopicPrefixesCommand) -> Result<TopicPrefixPageResult, ForumServiceError> {
         let mut cmd = command;
         if cmd.limit == 0 {
@@ -921,6 +1143,11 @@ impl<R: ForumRepository> ForumService<R> {
         // [REPO] Owner existence check requires repository query
         if !self.repository.check_owner_exists(ctx, &command.owner_type, command.owner_id)? {
             return Err(ForumServiceError::validation(format!("{} with id {} does not exist", command.owner_type, command.owner_id)));
+        }
+        if let Some(ref media_resource_id) = command.media_resource_id {
+            self.drive_port
+                .validate_media_reference(media_resource_id)
+                .map_err(ForumServiceError::validation)?;
         }
         self.repository.create_attachment(ctx, &command)
     }

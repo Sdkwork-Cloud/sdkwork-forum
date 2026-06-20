@@ -11,6 +11,7 @@ sdkwork-router-forum-backend-api = { path = "../sdkwork-router-forum-backend-api
 sdkwork-router-forum-open-api = { path = "../sdkwork-router-forum-open-api" }
 sdkwork-forum-service-host = { path = "../sdkwork-forum-service-host" }
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
+sdkwork-database-ops-http = { path = "../../../sdkwork-database/crates/sdkwork-database-ops-http" }
 axum = { workspace = true }
 tokio = { workspace = true }
 tower = { workspace = true }
@@ -19,6 +20,7 @@ tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+base64 = "0.22"
 
 [lib]
 path = "src/lib.rs"

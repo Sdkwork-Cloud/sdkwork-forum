@@ -1,4 +1,8 @@
 use sdkwork_communication_forum_service::ForumService;
+use sdkwork_communication_forum_service::domain::commands::{
+    FanoutNotificationsCommand, ListModerationQueueCommand, PublishOutboxCommand,
+    RebuildSearchProjectionCommand, RebuildStatsCommand,
+};
 use sdkwork_communication_forum_service::ports::repository::ForumRepository;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -19,7 +23,11 @@ impl<R: ForumRepository> ForumWorker<R> {
         Self { service }
     }
 
-    pub fn run_job(&self, job: ForumWorkerJob, ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext) -> Result<(), String> {
+    pub fn run_job(
+        &self,
+        job: ForumWorkerJob,
+        ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext,
+    ) -> Result<(), String> {
         match job {
             ForumWorkerJob::PublishOutbox => self.publish_outbox(ctx),
             ForumWorkerJob::RebuildSearchProjection => self.rebuild_search_projection(ctx),
@@ -29,38 +37,72 @@ impl<R: ForumRepository> ForumWorker<R> {
         }
     }
 
-    fn publish_outbox(&self, _ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext) -> Result<(), String> {
-        // Publish pending outbox events through service
-        let _ = &self.service;
-        // TODO: Implement outbox publishing loop when repository is connected
-        Ok(())
-    }
-
-    fn rebuild_search_projection(&self, ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext) -> Result<(), String> {
-        let command = sdkwork_communication_forum_service::domain::commands::RebuildSearchProjectionCommand {
-            scope: None,
-            board_id: None,
-        };
-        self.service.rebuild_search_projection(ctx, command)
+    fn publish_outbox(
+        &self,
+        ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext,
+    ) -> Result<(), String> {
+        self.service
+            .publish_pending_outbox(ctx, PublishOutboxCommand { limit: 100 })
             .map(|_| ())
-            .map_err(|e| e.to_string())
+            .map_err(|error| error.to_string())
     }
 
-    fn rebuild_stats(&self, _ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext) -> Result<(), String> {
-        let _ = &self.service;
-        // TODO: Implement stats rebuild when repository is connected
-        Ok(())
+    fn rebuild_search_projection(
+        &self,
+        ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext,
+    ) -> Result<(), String> {
+        self.service
+            .rebuild_search_projection(
+                ctx,
+                RebuildSearchProjectionCommand {
+                    scope: None,
+                    board_id: None,
+                },
+            )
+            .map(|_| ())
+            .map_err(|error| error.to_string())
     }
 
-    fn evaluate_moderation_policy(&self, _ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext) -> Result<(), String> {
-        let _ = &self.service;
-        // TODO: Implement policy evaluation when repository is connected
-        Ok(())
+    fn rebuild_stats(
+        &self,
+        ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext,
+    ) -> Result<(), String> {
+        self.service
+            .rebuild_stats(
+                ctx,
+                RebuildStatsCommand {
+                    scope: Some("all".to_string()),
+                },
+            )
+            .map(|_| ())
+            .map_err(|error| error.to_string())
     }
 
-    fn fanout_notifications(&self, _ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext) -> Result<(), String> {
-        let _ = &self.service;
-        // TODO: Implement notification fanout when repository is connected
-        Ok(())
+    fn evaluate_moderation_policy(
+        &self,
+        ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext,
+    ) -> Result<(), String> {
+        self.service
+            .list_moderation_queue(
+                ctx,
+                ListModerationQueueCommand {
+                    status_filter: Some("pending".to_string()),
+                    severity_filter: None,
+                    cursor: None,
+                    limit: 100,
+                },
+            )
+            .map(|_| ())
+            .map_err(|error| error.to_string())
+    }
+
+    fn fanout_notifications(
+        &self,
+        ctx: &sdkwork_communication_forum_service::value_objects::ForumRequestContext,
+    ) -> Result<(), String> {
+        self.service
+            .fanout_notifications(ctx, FanoutNotificationsCommand { limit: 100 })
+            .map(|_| ())
+            .map_err(|error| error.to_string())
     }
 }

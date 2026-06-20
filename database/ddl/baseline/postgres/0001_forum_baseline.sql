@@ -3,7 +3,7 @@
 -- Generated from: specs/forum-database.schema.yaml
 -- Schema version: 1
 -- Domain: communication / forum
--- Tables: 45 (no foreign keys)
+-- Tables: 46 (no foreign keys)
 -- ============================================================================
 
 -- ============================================================================
@@ -1447,93 +1447,30 @@ CREATE INDEX idx_forum_idempotency_record_tenant_expires
 CREATE INDEX idx_forum_idempotency_record_tenant_operation_created
     ON forum_idempotency_record (tenant_id, operation_id, created_at, id);
 
+-- --------------------------------------------------------------------------
 
--- ============================================================================
--- SEED DATA
--- ============================================================================
-
--- 1 forum_space (default)
-INSERT INTO forum_space (
-    id, uuid, tenant_id, organization_id, data_scope, status, version,
-    created_at, updated_at, deleted_at, deleted_by,
-    code, slug, name, description, visibility, default_locale, settings
-) VALUES (
-    1,
-    '00000000-0000-0000-0000-000000000001',
-    1, 0, 'default', 'active', 1,
-    '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
-    'default', 'default', 'Default Forum', NULL, 'public', NULL, '{}'::jsonb
+CREATE TABLE forum_audit_action (
+    id              BIGINT        NOT NULL,
+    uuid            UUID          NOT NULL,
+    tenant_id       BIGINT        NOT NULL,
+    organization_id BIGINT        NOT NULL,
+    data_scope      VARCHAR(32)   NOT NULL,
+    status          VARCHAR(32)   NOT NULL,
+    version         BIGINT        NOT NULL,
+    created_at      TIMESTAMPTZ   NOT NULL,
+    updated_at      TIMESTAMPTZ   NOT NULL,
+    action          VARCHAR(120)  NOT NULL,
+    target_type     VARCHAR(32)   NOT NULL,
+    target_id       BIGINT        NOT NULL,
+    operator_id     BIGINT        NOT NULL,
+    detail          VARCHAR(2000),
+    request_id      VARCHAR(128),
+    CONSTRAINT pk_forum_audit_action PRIMARY KEY (id),
+    CONSTRAINT uk_forum_audit_action_uuid UNIQUE (uuid)
 );
 
--- 1 category node (parent of boards)
-INSERT INTO forum_node (
-    id, uuid, tenant_id, organization_id, data_scope, status, version,
-    created_at, updated_at, deleted_at, deleted_by,
-    space_id, parent_id, node_type, slug, name, description,
-    path, level_no, sort_order, icon_media_id, cover_media_id, settings
-) VALUES (
-    10,
-    '00000000-0000-0000-0000-000000000010',
-    1, 0, 'default', 'active', 1,
-    '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
-    1, 0, 'category', 'general', 'General', NULL,
-    '/10', 0, 0, NULL, NULL, '{}'::jsonb
-);
+CREATE INDEX idx_forum_audit_action_tenant_target
+    ON forum_audit_action (tenant_id, target_type, target_id, created_at);
 
--- 2 board nodes
-INSERT INTO forum_node (
-    id, uuid, tenant_id, organization_id, data_scope, status, version,
-    created_at, updated_at, deleted_at, deleted_by,
-    space_id, parent_id, node_type, slug, name, description,
-    path, level_no, sort_order, icon_media_id, cover_media_id, settings
-) VALUES (
-    20,
-    '00000000-0000-0000-0000-000000000020',
-    1, 0, 'default', 'active', 1,
-    '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
-    1, 10, 'board', 'discussion', 'Discussion', NULL,
-    '/10/20', 1, 0, NULL, NULL, '{}'::jsonb
-);
-
-INSERT INTO forum_node (
-    id, uuid, tenant_id, organization_id, data_scope, status, version,
-    created_at, updated_at, deleted_at, deleted_by,
-    space_id, parent_id, node_type, slug, name, description,
-    path, level_no, sort_order, icon_media_id, cover_media_id, settings
-) VALUES (
-    21,
-    '00000000-0000-0000-0000-000000000021',
-    1, 0, 'default', 'active', 1,
-    '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
-    1, 10, 'board', 'q-and-a', 'Q&A', NULL,
-    '/10/21', 1, 1, NULL, NULL, '{}'::jsonb
-);
-
--- 2 board profiles
-INSERT INTO forum_board_profile (
-    id, uuid, tenant_id, organization_id, data_scope, status, version,
-    created_at, updated_at, deleted_at, deleted_by,
-    node_id, topic_create_mode, reply_create_mode, default_topic_sort,
-    moderation_mode, attachment_policy, board_rules
-) VALUES (
-    30,
-    '00000000-0000-0000-0000-000000000030',
-    1, 0, 'default', 'active', 1,
-    '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
-    20, 'open', 'open', 'latest',
-    'post', '{}'::jsonb, '{}'::jsonb
-);
-
-INSERT INTO forum_board_profile (
-    id, uuid, tenant_id, organization_id, data_scope, status, version,
-    created_at, updated_at, deleted_at, deleted_by,
-    node_id, topic_create_mode, reply_create_mode, default_topic_sort,
-    moderation_mode, attachment_policy, board_rules
-) VALUES (
-    31,
-    '00000000-0000-0000-0000-000000000031',
-    1, 0, 'default', 'active', 1,
-    '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
-    21, 'open', 'open', 'latest',
-    'post', '{}'::jsonb, '{}'::jsonb
-);
+CREATE INDEX idx_forum_audit_action_tenant_operator
+    ON forum_audit_action (tenant_id, operator_id, created_at, id);

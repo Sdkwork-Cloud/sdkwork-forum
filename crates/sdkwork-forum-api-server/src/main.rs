@@ -33,7 +33,7 @@ async fn main() {
         service_host: service_host.clone(),
     };
 
-    let ops_auth = Arc::new(BearerTokenOpsAuth::from_env("SDKWORK_OPS_DATABASE_AUTH_TOKEN"));
+    let ops_auth = Arc::new(BearerTokenOpsAuth::from_env("SDKWORK_ACCESS_TOKEN"));
     let ops_state = DatabaseOpsHttpState::new(
         service_host.database_pool(),
         service_host.database_module(),

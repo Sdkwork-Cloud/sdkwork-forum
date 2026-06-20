@@ -81,7 +81,7 @@ Awaiting `sdkwork-messaging-sdk` dependency resolution for real implementation.
 - `delete_document(source_type, source_id)` - Remove via `DELETE` on the same path
 - `rebuild_index(board_id)` - Trigger `POST /backend/v3/api/search/jobs/rebuild` for the configured index
 
-Configure `SDKWORK_FORUM_SEARCH_URL`, `SDKWORK_FORUM_SEARCH_INDEX_ID`, and optional backend dual tokens (`SDKWORK_FORUM_SEARCH_AUTH_TOKEN`, `SDKWORK_FORUM_SEARCH_ACCESS_TOKEN`). Board-scoped rebuild remains a forum-side concern until search exposes scoped rebuild filters.
+Configure `SDKWORK_FORUM_SEARCH_URL`, `SDKWORK_FORUM_SEARCH_INDEX_ID`, and private bootstrap `SDKWORK_ACCESS_TOKEN` for backend search calls. Board-scoped rebuild remains a forum-side concern until search exposes scoped rebuild filters.
 
 ### Appbase Permission Mapping
 

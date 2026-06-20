@@ -19,8 +19,8 @@ pub fn build_search_port() -> Box<dyn ForumSearchPort> {
         Ok(url) if !url.trim().is_empty() => Box::new(HttpForumSearchPort::configured(
             url,
             std::env::var("SDKWORK_FORUM_SEARCH_INDEX_ID").unwrap_or_else(|_| "forum".to_string()),
-            std::env::var("SDKWORK_FORUM_SEARCH_AUTH_TOKEN").ok(),
-            std::env::var("SDKWORK_FORUM_SEARCH_ACCESS_TOKEN").ok(),
+            None,
+            std::env::var("SDKWORK_ACCESS_TOKEN").ok(),
         )),
         _ if logging_ports_enabled() => Box::new(LoggingForumSearchPort),
         _ => Box::new(NoopForumSearchPort),

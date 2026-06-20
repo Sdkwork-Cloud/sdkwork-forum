@@ -1,33 +1,25 @@
-# SDKWork Forum Database Module
+# FORUM Database Module
 
-Owner: forum-platform  
-Service code: `FORUM` (`SDKWORK_FORUM_DATABASE_*`)  
-Engines: PostgreSQL  
-Baseline strategy: `baseline-plus-migrations`
+Canonical lifecycle assets for `sdkwork-forum` per `DATABASE_FRAMEWORK_SPEC.md`.
+
+- moduleId: `forum`
+- serviceCode: `FORUM`
+- tablePrefix: `forum_`
 
 ## Commands
 
-Run from repository root:
-
 ```bash
-pnpm db:validate
-pnpm db:init
-pnpm db:migrate
-pnpm db:seed
-pnpm db:status
-pnpm db:drift
-pnpm db:drift:check
-pnpm db:bootstrap
+pnpm run db:validate
+pnpm run db:plan
+pnpm run db:init
+pnpm run db:migrate
+pnpm run db:seed
+pnpm run db:status
+pnpm run db:drift:check
 ```
 
-## Standards
+## Migration status
 
-- `../sdkwork-specs/DATABASE_FRAMEWORK_SPEC.md`
-- `../sdkwork-specs/DATABASE_SPEC.md`
-- Authoritative domain contract: `../specs/forum-database.schema.yaml` (mirrored to `contract/schema.yaml`)
+No legacy SQL was auto-imported. Author `contract/schema.yaml` before adding migrations.
 
-## Baseline
-
-Production schema baseline lives in `ddl/baseline/postgres/0001_forum_baseline.sql`, sourced from `deployments/sql/forum-ddl-postgresql.sql`.
-
-Incremental changes MUST be added under `migrations/postgres/` using sortable `{version}_{name}.up.sql` names.
+Runtime services MUST create pools through `sdkwork-database-sqlx` and register `DefaultDatabaseModule` at bootstrap.

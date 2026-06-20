@@ -2,10 +2,11 @@ mod auth;
 mod context;
 mod dto;
 mod handlers;
+mod iam;
 mod middleware;
 mod routes;
 
-use axum::{middleware::from_fn, routing::get, Router};
+use axum::{middleware::from_fn, middleware::from_fn_with_state, routing::get, Router};
 use sdkwork_database_ops_http::{attach_ops_routes, BearerTokenOpsAuth, DatabaseOpsHttpState};
 use sdkwork_forum_service_host::{default_seed_locale, default_seed_profile, ForumServiceHost};
 use std::sync::Arc;
@@ -21,6 +22,11 @@ async fn main() {
     tracing_subscriber::fmt::init();
 
     tracing::info!("Starting SDKWork Forum API Server...");
+
+    if iam::iam_enabled() {
+        sdkwork_iam_web_adapter::prime_signing_master_secret();
+        tracing::info!("IAM session resolution enabled");
+    }
 
     let service_host = Arc::new(ForumServiceHost::new().await);
     let state = AppState {
@@ -40,11 +46,12 @@ async fn main() {
         Router::new()
             .route("/health", get(handlers::health))
             .merge(routes::build_forum_routes())
-            .layer(from_fn(middleware::require_dual_token_auth)),
+            .layer(from_fn(middleware::require_dual_token_auth))
+            .layer(from_fn_with_state(state.clone(), iam::resolve_iam_context))
+            .with_state(state),
         ops_state,
     )
-    .layer(CorsLayer::permissive())
-    .with_state(state);
+    .layer(CorsLayer::permissive());
 
     let addr = "0.0.0.0:8080";
     tracing::info!("Forum API server starting on {}", addr);

@@ -16,7 +16,12 @@ pub fn build_drive_port() -> Box<dyn ForumDrivePort> {
 
 pub fn build_search_port() -> Box<dyn ForumSearchPort> {
     match std::env::var("SDKWORK_FORUM_SEARCH_URL") {
-        Ok(url) if !url.trim().is_empty() => Box::new(HttpForumSearchPort::new(url)),
+        Ok(url) if !url.trim().is_empty() => Box::new(HttpForumSearchPort::configured(
+            url,
+            std::env::var("SDKWORK_FORUM_SEARCH_INDEX_ID").unwrap_or_else(|_| "forum".to_string()),
+            std::env::var("SDKWORK_FORUM_SEARCH_AUTH_TOKEN").ok(),
+            std::env::var("SDKWORK_FORUM_SEARCH_ACCESS_TOKEN").ok(),
+        )),
         _ if logging_ports_enabled() => Box::new(LoggingForumSearchPort),
         _ => Box::new(NoopForumSearchPort),
     }

@@ -7,6 +7,9 @@ use sdkwork_communication_forum_service::value_objects::ForumRequestContext;
 
 use crate::auth::parse_access_token_header;
 
+#[derive(Clone, Debug)]
+pub struct ResolvedForumContext(pub ForumRequestContext);
+
 pub struct ForumCtx(pub ForumRequestContext);
 
 #[async_trait]
@@ -17,6 +20,14 @@ where
     type Rejection = StatusCode;
 
     async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self, Self::Rejection> {
+        if let Some(resolved) = parts.extensions.get::<ResolvedForumContext>() {
+            let mut ctx = resolved.0.clone();
+            if let Some(request_id) = header_string(&parts.headers, "x-request-id") {
+                ctx = ctx.with_request_id(request_id);
+            }
+            return Ok(ForumCtx(ctx));
+        }
+
         Ok(ForumCtx(build_context(&parts.headers)))
     }
 }

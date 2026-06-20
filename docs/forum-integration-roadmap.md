@@ -47,9 +47,15 @@ sdkDependencies: []
 
 | Port | Trait | Status | Implementations |
 |------|-------|--------|-----------------|
-| Drive | `ForumDrivePort` | Implemented | `NoopForumDrivePort` (silent), `LoggingForumDrivePort` (stderr) |
-| Search | `ForumSearchPort` | Implemented | `NoopForumSearchPort` (silent), `LoggingForumSearchPort` (stderr) |
-| Notification | `ForumNotificationPort` | Implemented | `NoopForumNotificationPort` (silent), `LoggingForumNotificationPort` (stderr) |
+| Drive | `ForumDrivePort` | Partial | `NoopForumDrivePort`, `LoggingForumDrivePort` (awaiting Drive SDK) |
+| Search | `ForumSearchPort` | Implemented | `HttpForumSearchPort` (`sdkwork-search-backend-api` upsert/delete/rebuild), `LoggingForumSearchPort`, `NoopForumSearchPort` |
+| Notification | `ForumNotificationPort` | Partial | `HttpForumNotificationPort` (generic HTTP), `LoggingForumNotificationPort`, `NoopForumNotificationPort` |
+
+### IAM Request Context
+
+When `SDKWORK_FORUM_IAM_ENABLED=true`, the forum API server resolves `Authorization` + `Access-Token` against `iam_session` via `sdkwork-iam-web-adapter`. The resolved tenant/org/user ids populate `ForumRequestContext` before handlers run. Set `SDKWORK_FORUM_IAM_STRICT=true` to reject invalid sessions on app/backend forum routes instead of falling back to header/env defaults.
+
+Use `SDKWORK_FORUM_IAM_DATABASE_URL` when IAM sessions live outside the forum database module; otherwise the forum PostgreSQL pool is reused.
 
 ### Drive Media Grants
 
@@ -71,11 +77,11 @@ Awaiting `sdkwork-messaging-sdk` dependency resolution for real implementation.
 ### Search Indexing Adapter
 
 `ForumSearchPort` provides:
-- `index_document(source_type, source_id)` - Index topic/reply after projection refresh
-- `delete_document(source_type, source_id)` - Remove hidden/deleted content from index
-- `rebuild_index(board_id)` - Full or scoped reindex
+- `index_document(source_type, source_id)` - Upsert via `PUT /backend/v3/api/search/indexes/{indexId}/documents/{documentId}`
+- `delete_document(source_type, source_id)` - Remove via `DELETE` on the same path
+- `rebuild_index(board_id)` - Trigger `POST /backend/v3/api/search/jobs/rebuild` for the configured index
 
-Awaiting `sdkwork-search-backend-sdk` dependency resolution for real implementation.
+Configure `SDKWORK_FORUM_SEARCH_URL`, `SDKWORK_FORUM_SEARCH_INDEX_ID`, and optional backend dual tokens (`SDKWORK_FORUM_SEARCH_AUTH_TOKEN`, `SDKWORK_FORUM_SEARCH_ACCESS_TOKEN`). Board-scoped rebuild remains a forum-side concern until search exposes scoped rebuild filters.
 
 ### Appbase Permission Mapping
 
@@ -97,4 +103,4 @@ Forum permission codes planned:
 | `forum.admin.reputation` | Manage reputation rules | backend-api |
 | `forum.admin.badges` | Manage badges | backend-api |
 
-Awaiting `sdkwork-appbase-backend-sdk` dependency resolution for IAM integration.
+Awaiting `sdkwork-appbase-backend-sdk` dependency resolution for permission enforcement on backend routes. IAM session resolution is implemented in `sdkwork-forum-api-server` when enabled via env.

@@ -1858,6 +1858,8 @@ dependencies = [
  "sdkwork-communication-forum-service",
  "sdkwork-database-ops-http",
  "sdkwork-forum-service-host",
+ "sdkwork-iam-context-service",
+ "sdkwork-iam-web-adapter",
  "sdkwork-router-forum-app-api",
  "sdkwork-router-forum-backend-api",
  "sdkwork-router-forum-open-api",

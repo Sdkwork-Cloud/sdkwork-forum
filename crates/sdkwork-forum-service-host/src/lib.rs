@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use sdkwork_communication_forum_repository_sqlx::SqlxForumRepository;
+use sqlx::PgPool;
 use sdkwork_communication_forum_service::ForumService;
 use sdkwork_communication_forum_service::value_objects::ForumRequestContext;
 use sdkwork_database_ops::DatabaseOpsService;
@@ -14,6 +15,8 @@ mod ports;
 pub struct ForumServiceHost {
     service: ForumService<SqlxForumRepository>,
     pool: DatabasePool,
+    pg_pool: PgPool,
+    iam_pool: Option<PgPool>,
     database_module: Arc<DefaultDatabaseModule>,
 }
 
@@ -36,7 +39,14 @@ impl ForumServiceHost {
 
         let pg_pool = pool
             .as_postgres()
-            .expect("Expected PostgreSQL pool for forum service");
+            .expect("Expected PostgreSQL pool for forum service")
+            .clone();
+
+        let iam_pool = if iam_enabled_from_env() {
+            Some(load_iam_pool(&pg_pool).await)
+        } else {
+            None
+        };
 
         tracing::info!("Database connected successfully");
 
@@ -53,6 +63,8 @@ impl ForumServiceHost {
         Self {
             service,
             pool,
+            pg_pool,
+            iam_pool,
             database_module,
         }
     }
@@ -63,6 +75,14 @@ impl ForumServiceHost {
 
     pub fn database_pool(&self) -> DatabasePool {
         self.pool.clone()
+    }
+
+    pub fn postgres_pool(&self) -> &PgPool {
+        &self.pg_pool
+    }
+
+    pub fn iam_pool(&self) -> Option<&PgPool> {
+        self.iam_pool.as_ref()
     }
 
     pub fn database_module(&self) -> Arc<DefaultDatabaseModule> {
@@ -81,6 +101,24 @@ impl ForumServiceHost {
     ) -> ForumRequestContext {
         ForumRequestContext::new(tenant_id, organization_id, user_id)
     }
+}
+
+fn iam_enabled_from_env() -> bool {
+    matches!(
+        std::env::var("SDKWORK_FORUM_IAM_ENABLED").as_deref(),
+        Ok("1") | Ok("true") | Ok("TRUE")
+    )
+}
+
+async fn load_iam_pool(forum_pool: &PgPool) -> PgPool {
+    if let Ok(url) = std::env::var("SDKWORK_FORUM_IAM_DATABASE_URL") {
+        if !url.trim().is_empty() {
+            return PgPool::connect(&url)
+                .await
+                .expect("Failed to connect SDKWORK_FORUM_IAM_DATABASE_URL");
+        }
+    }
+    forum_pool.clone()
 }
 
 fn resolve_app_root() -> PathBuf {

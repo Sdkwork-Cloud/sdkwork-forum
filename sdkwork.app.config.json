@@ -30,6 +30,9 @@
         "authority": "sdkwork-forum-open-api",
         "prefix": "/forum/v3/api"
       }
+    ],
+    "accessTokenPermissionScope": [
+      "iam.users.read"
     ]
   },
   "runtime": {

@@ -19,7 +19,9 @@
         "authority": "sdkwork-forum-app-api",
         "prefix": "/app/v3/api"
       }
-    ]
+    ],
+    "tenantId": "100001",
+    "organizationId": "0"
   },
   "runtime": {
     "modes": [

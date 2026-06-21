@@ -8,7 +8,7 @@ INSERT INTO forum_space (
 ) VALUES (
     1,
     '00000000-0000-0000-0000-000000000001',
-    1, 0, 'default', 'active', 1,
+    100001, 0, 'default', 'active', 1,
     '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
     'default', 'default', 'Default Forum', NULL, 'public', NULL, '{}'::jsonb
 ) ON CONFLICT (id) DO NOTHING;
@@ -21,7 +21,7 @@ INSERT INTO forum_node (
 ) VALUES (
     10,
     '00000000-0000-0000-0000-000000000010',
-    1, 0, 'default', 'active', 1,
+    100001, 0, 'default', 'active', 1,
     '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
     1, 0, 'category', 'general', 'General', NULL,
     '/10', 0, 0, NULL, NULL, '{}'::jsonb
@@ -35,7 +35,7 @@ INSERT INTO forum_node (
 ) VALUES (
     20,
     '00000000-0000-0000-0000-000000000020',
-    1, 0, 'default', 'active', 1,
+    100001, 0, 'default', 'active', 1,
     '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
     1, 10, 'board', 'discussion', 'Discussion', NULL,
     '/10/20', 1, 0, NULL, NULL, '{}'::jsonb
@@ -49,7 +49,7 @@ INSERT INTO forum_node (
 ) VALUES (
     21,
     '00000000-0000-0000-0000-000000000021',
-    1, 0, 'default', 'active', 1,
+    100001, 0, 'default', 'active', 1,
     '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
     1, 10, 'board', 'q-and-a', 'Q&A', NULL,
     '/10/21', 1, 1, NULL, NULL, '{}'::jsonb
@@ -63,7 +63,7 @@ INSERT INTO forum_board_profile (
 ) VALUES (
     30,
     '00000000-0000-0000-0000-000000000030',
-    1, 0, 'default', 'active', 1,
+    100001, 0, 'default', 'active', 1,
     '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
     20, 'open', 'open', 'latest',
     'post', '{}'::jsonb, '{}'::jsonb
@@ -77,7 +77,7 @@ INSERT INTO forum_board_profile (
 ) VALUES (
     31,
     '00000000-0000-0000-0000-000000000031',
-    1, 0, 'default', 'active', 1,
+    100001, 0, 'default', 'active', 1,
     '2024-01-01T00:00:00Z', '2024-01-01T00:00:00Z', NULL, NULL,
     21, 'open', 'open', 'latest',
     'post', '{}'::jsonb, '{}'::jsonb

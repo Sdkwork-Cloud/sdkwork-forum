@@ -31,3 +31,10 @@ Implementation handoff:
 - TODO comments must be precise and small enough for another agent to implement without guessing.
 - Database schema changes must update `specs/forum-database.schema.yaml`, OpenAPI schemas, SDK authority files, and tests together.
 - API changes must update authored contracts under `apis/`, materialized SDK OpenAPI under `sdks/`, route manifests, and route crate descriptors together.
+
+## Documentation Canon
+
+- [docs/README.md](docs/README.md)
+- [docs/product/prd/PRD.md](docs/product/prd/PRD.md)
+- [docs/architecture/tech/TECH_ARCHITECTURE.md](docs/architecture/tech/TECH_ARCHITECTURE.md)
+

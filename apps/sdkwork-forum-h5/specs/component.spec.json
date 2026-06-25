@@ -10,10 +10,15 @@
     "domain": "communication",
     "capability": "forum",
     "surface": "app",
-    "languages": ["typescript"],
+    "languages": [
+      "typescript"
+    ],
     "generated": false,
     "private": false,
-    "manifests": ["package.json", "sdkwork.app.config.json"]
+    "manifests": [
+      "package.json",
+      "sdkwork.app.config.json"
+    ]
   },
   "canonicalSpecs": [
     {
@@ -68,12 +73,20 @@
     }
   ],
   "contracts": {
-    "publicExports": ["packages/sdkwork-forum-h5-core", "packages/sdkwork-forum-h5-discussion"],
-    "sdkClients": ["sdks/sdkwork-forum-app-sdk"],
+    "publicExports": [
+      "packages/sdkwork-forum-h5-core",
+      "packages/sdkwork-forum-h5-discussion"
+    ],
+    "sdkClients": [
+      "sdks/sdkwork-forum-app-sdk"
+    ],
     "sdkDependencies": [],
-    "dependencyApiExports": []
+    "dependencyApiExports": [],
+    "dependencyComposition": "specs/dependency.composition.json"
   },
   "verification": {
-    "commands": ["cd apps/sdkwork-forum-h5 && npx tsc --noEmit"]
+    "commands": [
+      "cd apps/sdkwork-forum-h5 && npx tsc --noEmit"
+    ]
   }
 }

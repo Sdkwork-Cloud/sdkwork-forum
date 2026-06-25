@@ -10,10 +10,15 @@
     "domain": "communication",
     "capability": "forum",
     "surface": "app",
-    "languages": ["typescript"],
+    "languages": [
+      "typescript"
+    ],
     "generated": false,
     "private": false,
-    "manifests": ["package.json", "sdkwork.app.config.json"]
+    "manifests": [
+      "package.json",
+      "sdkwork.app.config.json"
+    ]
   },
   "canonicalSpecs": [
     {
@@ -63,12 +68,21 @@
     }
   ],
   "contracts": {
-    "publicExports": ["packages/sdkwork-forum-pc-core", "packages/sdkwork-forum-pc-discussion"],
-    "sdkClients": ["sdks/sdkwork-forum-app-sdk", "sdks/sdkwork-forum-backend-sdk"],
+    "publicExports": [
+      "packages/sdkwork-forum-pc-core",
+      "packages/sdkwork-forum-pc-discussion"
+    ],
+    "sdkClients": [
+      "sdks/sdkwork-forum-app-sdk",
+      "sdks/sdkwork-forum-backend-sdk"
+    ],
     "sdkDependencies": [],
-    "dependencyApiExports": []
+    "dependencyApiExports": [],
+    "dependencyComposition": "specs/dependency.composition.json"
   },
   "verification": {
-    "commands": ["cd apps/sdkwork-forum-pc && npx tsc --noEmit"]
+    "commands": [
+      "cd apps/sdkwork-forum-pc && npx tsc --noEmit"
+    ]
   }
 }

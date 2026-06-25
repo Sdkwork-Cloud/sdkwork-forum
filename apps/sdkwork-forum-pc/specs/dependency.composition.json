@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.dependency.composition",
+  "applicationCode": "forum",
+  "clientArchitecture": "pc",
+  "surfaces": [
+    {
+      "surface": "app",
+      "corePackage": "sdkwork-forum-pc-core",
+      "sdkClients": [],
+      "reusableModules": [],
+      "hostAdapters": [],
+      "dependencyApiExports": [],
+      "dependencyApiSurfaces": []
+    }
+  ],
+  "buildToolEntries": {
+    "pnpm": {
+      "workspacePackages": [
+        "sdkwork-forum-pc-core"
+      ]
+    }
+  }
+}

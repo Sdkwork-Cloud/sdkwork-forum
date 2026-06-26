@@ -6,6 +6,10 @@ use sdkwork_communication_forum_service::value_objects::ForumRequestContext;
 
 use crate::auth::parse_access_token_header;
 
+const DEFAULT_IAM_TENANT_ID: i64 = 100_001;
+const DEFAULT_IAM_ORGANIZATION_ID: i64 = 0;
+const DEFAULT_IAM_USER_ID: i64 = 1;
+
 #[derive(Clone, Debug)]
 pub struct ResolvedForumContext(pub ForumRequestContext);
 
@@ -45,13 +49,13 @@ pub fn build_context(headers: &HeaderMap) -> ForumRequestContext {
 
     let tenant_id = header_i64(headers, "x-sdkwork-tenant-id")
         .or_else(|| env_i64("SDKWORK_FORUM_DEFAULT_TENANT_ID"))
-        .unwrap_or(1);
+        .unwrap_or(DEFAULT_IAM_TENANT_ID);
     let organization_id = header_i64(headers, "x-sdkwork-organization-id")
         .or_else(|| env_i64("SDKWORK_FORUM_DEFAULT_ORGANIZATION_ID"))
-        .unwrap_or(0);
+        .unwrap_or(DEFAULT_IAM_ORGANIZATION_ID);
     let user_id = header_i64(headers, "x-sdkwork-user-id")
         .or_else(|| env_i64("SDKWORK_FORUM_DEFAULT_USER_ID"))
-        .unwrap_or(1);
+        .unwrap_or(DEFAULT_IAM_USER_ID);
 
     let mut ctx = ForumRequestContext::new(tenant_id, organization_id, user_id);
     if let Some(request_id) = header_string(headers, "x-request-id") {

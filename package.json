@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node tests/static/forum-contract-boundary.test.mjs && node tests/contract/forum-contract.test.mjs && node tests/schema/forum-schema.test.mjs && node tests/contract/database-framework.contract.test.mjs",
     "test:static": "node tests/static/forum-contract-boundary.test.mjs",
-    "test:contract:database": "node tests/contract/database-framework.contract.test.mjs",
+    "test:contract:database": "node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .",
     "validate:contracts": "node tools/validators/validate_forum_contracts.mjs",
     "materialize:openapi": "node tools/generators/materialize_forum_openapi.mjs",
     "db:validate": "node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .",
@@ -18,10 +18,14 @@
     "db:drift": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . drift",
     "db:drift:check": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . drift-check",
     "db:bootstrap": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . bootstrap",
-    "db:materialize:contract": "node ../sdkwork-specs/tools/materialize-database-contract-from-baseline.mjs --root . --baseline database/ddl/baseline/postgres/0001_forum_baseline.sql --module-id forum --owner forum-platform --prefixes forum_ --engines postgres",
+    "db:materialize:contract": "node ../sdkwork-specs/tools/materialize-database-contract-from-baseline.mjs --root . --baseline database/ddl/baseline/postgres/0001_forum_legacy_baseline.sql --module-id forum --owner forum-platform --prefixes forum_ --engines postgres",
     "topology:validate": "node ../sdkwork-app-topology/scripts/sdkwork-topology.mjs validate --root . --spec specs/topology.spec.json",
     "topology:plan": "node ../sdkwork-app-topology/scripts/sdkwork-topology.mjs plan --root . --spec specs/topology.spec.json",
     "gateway:package:cloud": "node ../sdkwork-app-topology/scripts/gateway-cloud-bundle.mjs bundle --root .",
-    "gateway:validate:cloud": "node ../sdkwork-app-topology/scripts/gateway-cloud-bundle.mjs validate --root ."
+    "gateway:validate:cloud": "node ../sdkwork-app-topology/scripts/gateway-cloud-bundle.mjs validate --root .",
+    "gateway:assembly:materialize": "node scripts/gateway/assembly-materialize.mjs",
+    "gateway:assembly:validate": "node scripts/gateway/assembly-validate.mjs",
+    "db:postgres:init": "node ../sdkwork-specs/tools/postgres/postgres-db-cli.mjs --mode init --config .env.postgres --app-root .",
+    "db:postgres:plan": "node ../sdkwork-specs/tools/postgres/postgres-db-cli.mjs --mode plan --config .env.postgres --app-root . --dry-run"
   }
 }

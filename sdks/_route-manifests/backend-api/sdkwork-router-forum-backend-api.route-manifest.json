@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "sdkwork.route.manifest",
-  "packageName": "sdkwork-router-forum-backend-api",
+  "packageName": "sdkwork-routes-forum-backend-api",
   "surface": "backend-api",
   "owner": "sdkwork-forum",
   "domain": "communication",
@@ -10,8 +10,8 @@
   "sdkFamily": "sdkwork-forum-backend-sdk",
   "prefix": "/backend/v3/api",
   "source": {
-    "crateRoot": "crates/sdkwork-router-forum-backend-api",
-    "crateImport": "sdkwork_router_forum_backend_api"
+    "crateRoot": "crates/sdkwork-routes-forum-backend-api",
+    "crateImport": "sdkwork_routes_forum_backend_api"
   },
   "routes": [
     { "method": "GET", "path": "/backend/v3/api/forum/nodes", "operationId": "nodes.list", "tags": ["communication"], "auth": { "mode": "dual-token", "required": true, "permission": "forum.backend.nodes.read", "tenantScope": "tenant", "dataScope": "organization" }, "handler": { "module": "crate::handlers", "name": "list_nodes" }, "schemas": { "request": null, "response": "ForumNodePage", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-backend-api" }, "source": { "file": "src/paths.rs" } },

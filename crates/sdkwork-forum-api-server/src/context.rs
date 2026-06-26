@@ -1,5 +1,4 @@
 use axum::{
-    async_trait,
     extract::FromRequestParts,
     http::{request::Parts, HeaderMap, StatusCode},
 };
@@ -12,7 +11,6 @@ pub struct ResolvedForumContext(pub ForumRequestContext);
 
 pub struct ForumCtx(pub ForumRequestContext);
 
-#[async_trait]
 impl<S> FromRequestParts<S> for ForumCtx
 where
     S: Send + Sync,

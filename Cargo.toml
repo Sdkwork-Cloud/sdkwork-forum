@@ -1,12 +1,13 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/sdkwork-forum-gateway-assembly",
   "crates/sdkwork-communication-forum-service",
   "crates/sdkwork-communication-forum-repository-sqlx",
   "crates/sdkwork-forum-database-host",
-  "crates/sdkwork-router-forum-app-api",
-  "crates/sdkwork-router-forum-backend-api",
-  "crates/sdkwork-router-forum-open-api",
+  "crates/sdkwork-routes-forum-app-api",
+  "crates/sdkwork-routes-forum-backend-api",
+  "crates/sdkwork-routes-forum-open-api",
   "crates/sdkwork-forum-api-server",
   "crates/sdkwork-forum-service-host",
   "crates/sdkwork-communication-forum-worker"
@@ -19,16 +20,16 @@ license = "UNLICENSED"
 publish = false
 
 [workspace.dependencies]
-axum = "0.7"
-axum-extra = "0.9"
+axum = "0.8"
+axum-extra = "0.10"
 tokio = { version = "1", features = ["full"] }
 sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "chrono", "uuid"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"] }
-tower = "0.4"
-tower-http = { version = "0.5", features = ["cors", "trace"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors", "trace"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 anyhow = "1"
@@ -43,3 +44,4 @@ sdkwork_database_config = { path = "../sdkwork-database/crates/sdkwork-database-
 sdkwork_database_lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle" }
 sdkwork_database_spi = { path = "../sdkwork-database/crates/sdkwork-database-spi" }
 sdkwork_database_sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx" }
+sdkwork-web-bootstrap = { path = "../sdkwork-web-framework/crates/sdkwork-web-bootstrap" }

@@ -32,14 +32,14 @@ const requiredFiles = [
   "sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json",
   "sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json",
   "sdks/sdkwork-forum-sdk/.sdkwork-assembly.json",
-  "sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json",
-  "sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json",
-  "sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json",
+  "sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json",
+  "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json",
+  "sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json",
   "crates/sdkwork-communication-forum-service/src/lib.rs",
   "crates/sdkwork-communication-forum-repository-sqlx/src/lib.rs",
-  "crates/sdkwork-router-forum-app-api/src/lib.rs",
-  "crates/sdkwork-router-forum-backend-api/src/lib.rs",
-  "crates/sdkwork-router-forum-open-api/src/lib.rs"
+  "crates/sdkwork-routes-forum-app-api/src/lib.rs",
+  "crates/sdkwork-routes-forum-backend-api/src/lib.rs",
+  "crates/sdkwork-routes-forum-open-api/src/lib.rs"
 ];
 
 for (const file of requiredFiles) {
@@ -56,9 +56,9 @@ const strictContractFiles = [
   "sdks/sdkwork-forum-app-sdk/openapi/sdkwork-forum-app-api.openapi.yaml",
   "sdks/sdkwork-forum-backend-sdk/openapi/sdkwork-forum-backend-api.openapi.yaml",
   "sdks/sdkwork-forum-sdk/openapi/sdkwork-forum-open-api.openapi.yaml",
-  "sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json",
-  "sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json",
-  "sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json"
+  "sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json",
+  "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json",
+  "sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json"
 ];
 
 for (const file of strictContractFiles) {
@@ -167,9 +167,9 @@ for (const [file, owner, authority, family, prefix] of assemblies) {
 }
 
 const manifestSpecs = [
-  ["sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json", "app-api", "/app/v3/api"],
-  ["sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json", "backend-api", "/backend/v3/api"],
-  ["sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json", "open-api", "/forum/v3/api"]
+  ["sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json", "app-api", "/app/v3/api"],
+  ["sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json", "backend-api", "/backend/v3/api"],
+  ["sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json", "open-api", "/forum/v3/api"]
 ];
 
 for (const [file, surface, prefix] of manifestSpecs) {

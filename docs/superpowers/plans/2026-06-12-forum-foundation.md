@@ -62,9 +62,9 @@
 **Files:**
 - Create: `crates/sdkwork-communication-forum-service/**`
 - Create: `crates/sdkwork-communication-forum-repository-sqlx/**`
-- Create: `crates/sdkwork-router-forum-app-api/**`
-- Create: `crates/sdkwork-router-forum-backend-api/**`
-- Create: `crates/sdkwork-router-forum-open-api/**`
+- Create: `crates/sdkwork-routes-forum-app-api/**`
+- Create: `crates/sdkwork-routes-forum-backend-api/**`
+- Create: `crates/sdkwork-routes-forum-open-api/**`
 - Create: `crates/sdkwork-forum-api-server/**`
 - Create: `crates/sdkwork-forum-service-host/**`
 - Create: `crates/sdkwork-communication-forum-worker/**`

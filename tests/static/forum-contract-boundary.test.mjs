@@ -14,13 +14,13 @@ const requiredFiles = [
   "sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json",
   "sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json",
   "sdks/sdkwork-forum-sdk/.sdkwork-assembly.json",
-  "sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json",
-  "sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json",
-  "sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json",
+  "sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json",
+  "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json",
+  "sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json",
   "crates/sdkwork-communication-forum-service/src/lib.rs",
-  "crates/sdkwork-router-forum-app-api/src/lib.rs",
-  "crates/sdkwork-router-forum-backend-api/src/lib.rs",
-  "crates/sdkwork-router-forum-open-api/src/lib.rs"
+  "crates/sdkwork-routes-forum-app-api/src/lib.rs",
+  "crates/sdkwork-routes-forum-backend-api/src/lib.rs",
+  "crates/sdkwork-routes-forum-open-api/src/lib.rs"
 ];
 
 const failures = [];
@@ -36,9 +36,9 @@ const contractFiles = [
   "apis/app-api/forum/openapi.yaml",
   "apis/backend-api/forum/openapi.yaml",
   "apis/open-api/forum/openapi.yaml",
-  "sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json",
-  "sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json",
-  "sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json"
+  "sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json",
+  "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json",
+  "sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json"
 ];
 
 for (const file of contractFiles) {

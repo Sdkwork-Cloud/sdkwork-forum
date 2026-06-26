@@ -59,9 +59,9 @@ if (existsSync(join(root, openApiFile))) {
 }
 
 const manifestSpecs = [
-  ["sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json", "app-api", "/app/v3/api"],
-  ["sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json", "backend-api", "/backend/v3/api"],
-  ["sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json", "open-api", "/forum/v3/api"],
+  ["sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json", "app-api", "/app/v3/api"],
+  ["sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json", "backend-api", "/backend/v3/api"],
+  ["sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json", "open-api", "/forum/v3/api"],
 ];
 
 for (const [file, surface, prefix] of manifestSpecs) {

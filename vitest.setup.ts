@@ -22,9 +22,9 @@ globalThis.forumTestFixtures = {
   fileExists: (file) => existsSync(join(root, file)),
   readFile: (file) => readFileSync(join(root, file), "utf8"),
   routeManifests: {
-    appApi: loadJson("sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json"),
-    backendApi: loadJson("sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json"),
-    openApi: loadJson("sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json"),
+    appApi: loadJson("sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json"),
+    backendApi: loadJson("sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json"),
+    openApi: loadJson("sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json"),
   },
   assemblies: {
     appSdk: loadJson("sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json"),

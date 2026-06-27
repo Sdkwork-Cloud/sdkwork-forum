@@ -104,5 +104,5 @@ Forum permission codes planned:
 | `forum.admin.reputation` | Manage reputation rules | backend-api |
 | `forum.admin.badges` | Manage badges | backend-api |
 
-Awaiting `sdkwork-iam-backend-sdk` dependency resolution for permission enforcement on backend routes. IAM session resolution is implemented in `sdkwork-forum-api-server` when enabled via env.
+Awaiting `sdkwork-iam-backend-sdk` dependency resolution for permission enforcement on backend routes. IAM session resolution is implemented in `sdkwork-forum-standalone-gateway` when enabled via env.
 

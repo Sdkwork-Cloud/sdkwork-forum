@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "kind": "sdkwork.component.spec",
   "component": {
-    "name": "sdkwork-forum-api-server",
+    "name": "sdkwork-forum-standalone-gateway",
     "displayName": "SDKWork Forum API Server",
     "version": "0.1.0",
     "type": "rust-crate",
-    "root": "crates/sdkwork-forum-api-server",
+    "root": "crates/sdkwork-forum-standalone-gateway",
     "domain": "communication",
     "capability": "forum",
     "languages": ["rust"],
@@ -26,6 +26,6 @@
     "dependencyApiExports": []
   },
   "verification": {
-    "commands": ["cargo check -p sdkwork-forum-api-server"]
+    "commands": ["cargo check -p sdkwork-forum-standalone-gateway"]
   }
 }

@@ -5,7 +5,7 @@ pub mod bootstrap;
 use std::sync::Arc;
 
 use sdkwork_communication_forum_service::ForumServiceError;
-use sdkwork_id_core::{IdGenerator, SnowflakeIdGenerator};
+use sdkwork_database_id::{IdGenerator, SnowflakeIdGenerator};
 use sqlx::PgPool;
 
 #[derive(Clone)]

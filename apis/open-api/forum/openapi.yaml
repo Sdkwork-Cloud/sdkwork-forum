@@ -3,19 +3,21 @@ info:
   title: SDKWork Forum Open API
   version: 0.1.0
   summary: Public forum read API.
-  description: >
-    Public Open API for forum boards, topics, replies, tags, and search.
-    Current operations are anonymous reads and intentionally do not require
-    SDKWork internal context headers or dual-token authentication.
+  description: 'Public Open API for forum boards, topics, replies, tags, and search.
+    Current operations are anonymous reads and intentionally do not require SDKWork
+    internal context headers or dual-token authentication.
+
+    '
 jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
 servers:
-  - url: /forum/v3/api
+- url: /forum/v3/api
 tags:
-  - name: communication
+- name: communication
 paths:
   /sites/{siteSlug}/boards:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: List public forum boards.
       operationId: boards.list
       security: []
@@ -27,25 +29,38 @@ paths:
       x-sdkwork-resource: forum_board
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
+      - $ref: '#/components/parameters/SiteSlug'
       responses:
-        "200":
+        '200':
           description: Public boards.
           content:
             application/json:
               schema:
-                type: object
-                required: [items]
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/ForumBoard"
+                allOf:
+                - $ref: '#/components/schemas/SdkWorkApiResponse'
+                - type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - items
+                      - pageInfo
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/ForumBoard'
+                        pageInfo:
+                          $ref: '#/components/schemas/PageInfo'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/boards/{boardId}/topics:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: List public topics in a board.
       operationId: boards.topics.list
       security: []
@@ -57,23 +72,24 @@ paths:
       x-sdkwork-resource: forum_public_topic_projection
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
-        - $ref: "#/components/parameters/BoardId"
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/Sort"
+      - $ref: '#/components/parameters/SiteSlug'
+      - $ref: '#/components/parameters/BoardId'
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Sort'
       responses:
-        "200":
+        '200':
           description: Public topic page.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForumPublicTopicPage"
+                $ref: '#/components/schemas/SdkWorkListResponse'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/topics:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: List public topics.
       operationId: topics.list
       security: []
@@ -85,25 +101,27 @@ paths:
       x-sdkwork-resource: forum_public_topic_projection
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
-        - $ref: "#/components/parameters/Sort"
-        - name: tag
-          in: query
-          schema: { type: string }
+      - $ref: '#/components/parameters/SiteSlug'
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Sort'
+      - name: tag
+        in: query
+        schema:
+          type: string
       responses:
-        "200":
+        '200':
           description: Public topic page.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForumPublicTopicPage"
+                $ref: '#/components/schemas/SdkWorkListResponse'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/topics/{topicId}:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: Retrieve public topic by id.
       operationId: topics.retrieve
       security: []
@@ -115,20 +133,33 @@ paths:
       x-sdkwork-resource: forum_public_topic_projection
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
-        - $ref: "#/components/parameters/TopicId"
+      - $ref: '#/components/parameters/SiteSlug'
+      - $ref: '#/components/parameters/TopicId'
       responses:
-        "200":
+        '200':
           description: Public topic detail.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForumPublicTopic"
+                allOf:
+                - $ref: '#/components/schemas/SdkWorkApiResponse'
+                - type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - item
+                      properties:
+                        item:
+                          $ref: '#/components/schemas/ForumPublicTopic'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/topics/by_slug/{topicSlug}:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: Retrieve public topic by slug.
       operationId: topics.bySlug.retrieve
       security: []
@@ -140,20 +171,33 @@ paths:
       x-sdkwork-resource: forum_public_topic_projection
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
-        - $ref: "#/components/parameters/TopicSlug"
+      - $ref: '#/components/parameters/SiteSlug'
+      - $ref: '#/components/parameters/TopicSlug'
       responses:
-        "200":
+        '200':
           description: Public topic detail.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForumPublicTopic"
+                allOf:
+                - $ref: '#/components/schemas/SdkWorkApiResponse'
+                - type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                      - item
+                      properties:
+                        item:
+                          $ref: '#/components/schemas/ForumPublicTopic'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/topics/{topicId}/replies:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: List public topic replies.
       operationId: topics.replies.list
       security: []
@@ -165,22 +209,23 @@ paths:
       x-sdkwork-resource: forum_topic_reply
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
-        - $ref: "#/components/parameters/TopicId"
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
+      - $ref: '#/components/parameters/SiteSlug'
+      - $ref: '#/components/parameters/TopicId'
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
       responses:
-        "200":
+        '200':
           description: Public replies.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForumPublicReplyPage"
+                $ref: '#/components/schemas/SdkWorkListResponse'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/tags:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: List public tags.
       operationId: tags.list
       security: []
@@ -192,25 +237,38 @@ paths:
       x-sdkwork-resource: forum_tag
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
+      - $ref: '#/components/parameters/SiteSlug'
       responses:
-        "200":
+        '200':
           description: Public tags.
           content:
             application/json:
               schema:
-                type: object
-                required: [items]
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/ForumTag"
+                allOf:
+                - $ref: '#/components/schemas/SdkWorkApiResponse'
+                - type: object
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      additionalProperties: false
+                      required:
+                      - items
+                      - pageInfo
+                      properties:
+                        items:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/ForumTag'
+                        pageInfo:
+                          $ref: '#/components/schemas/PageInfo'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
   /sites/{siteSlug}/search:
     get:
-      tags: [communication]
+      tags:
+      - communication
       summary: Search public forum content.
       operationId: search.query
       security: []
@@ -222,22 +280,25 @@ paths:
       x-sdkwork-resource: forum_search_document
       x-sdkwork-tenant-scope: platform
       parameters:
-        - $ref: "#/components/parameters/SiteSlug"
-        - name: q
-          in: query
-          required: true
-          schema: { type: string, minLength: 1, maxLength: 200 }
-        - $ref: "#/components/parameters/Cursor"
-        - $ref: "#/components/parameters/Limit"
+      - $ref: '#/components/parameters/SiteSlug'
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 200
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
       responses:
-        "200":
+        '200':
           description: Public search results.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ForumPublicTopicPage"
+                $ref: '#/components/schemas/SdkWorkListResponse'
         default:
-          $ref: "#/components/responses/Problem"
+          $ref: '#/components/responses/Problem'
 components:
   securitySchemes: {}
   parameters:
@@ -245,171 +306,443 @@ components:
       name: siteSlug
       in: path
       required: true
-      schema: { type: string, minLength: 1, maxLength: 120 }
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 120
     BoardId:
       name: boardId
       in: path
       required: true
-      schema: { type: string }
+      schema:
+        type: string
     TopicId:
       name: topicId
       in: path
       required: true
-      schema: { type: string }
+      schema:
+        type: string
     TopicSlug:
       name: topicSlug
       in: path
       required: true
-      schema: { type: string, minLength: 1, maxLength: 180 }
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 180
     Cursor:
       name: cursor
       in: query
-      schema: { type: string }
+      schema:
+        type: string
     Limit:
       name: limit
       in: query
-      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
     Sort:
       name: sort
       in: query
-      schema: { type: string, enum: [latest, top, featured, created] }
+      schema:
+        type: string
+        enum:
+        - latest
+        - top
+        - featured
+        - created
   responses:
     Problem:
       description: Problem detail.
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/ProblemDetail"
+            $ref: '#/components/schemas/ProblemDetail'
   schemas:
     ProblemDetail:
       type: object
-      required: [type, title, status]
+      additionalProperties: true
+      required:
+      - type
+      - title
+      - status
+      - code
+      - traceId
       properties:
-        type: { type: string }
-        title: { type: string }
-        status: { type: integer }
-        detail: { type: string }
-        code: { type: string }
+        type:
+          type: string
+          format: uri-reference
+        title:
+          type: string
+        status:
+          type: integer
+          minimum: 100
+          maximum: 599
+        detail:
+          type: string
+        instance:
+          type: string
+        code:
+          $ref: '#/components/schemas/SdkWorkPlatformErrorCode'
+        traceId:
+          type: string
+          format: uuid
+          description: Server-owned request correlation id.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
     CursorPage:
       type: object
-      required: [items, nextCursor, hasMore]
+      required:
+      - items
+      - nextCursor
+      - hasMore
       properties:
-        items: { type: array, items: true }
-        nextCursor: { type: [string, "null"] }
-        hasMore: { type: boolean }
+        items:
+          type: array
+          items: true
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        hasMore:
+          type: boolean
     MediaResource:
       type: object
-      required: [id, kind]
+      required:
+      - id
+      - kind
       properties:
-        id: { type: string }
-        kind: { type: string }
-        fileName: { type: string }
-        mimeType: { type: string }
+        id:
+          type: string
+        kind:
+          type: string
+        fileName:
+          type: string
+        mimeType:
+          type: string
     ForumBoard:
       type: object
-      required: [id, slug, name]
+      required:
+      - id
+      - slug
+      - name
       properties:
-        id: { type: string }
-        slug: { type: string }
-        name: { type: string }
-        description: { type: string }
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
         stats:
           type: object
           additionalProperties: true
     ForumTag:
       type: object
-      required: [id, slug, name]
+      required:
+      - id
+      - slug
+      - name
       properties:
-        id: { type: string }
-        slug: { type: string }
-        name: { type: string }
-        usageCount: { type: string }
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        usageCount:
+          type: string
     ForumTopicPrefix:
       type: object
-      required: [id, code, label]
+      required:
+      - id
+      - code
+      - label
       properties:
-        id: { type: string }
-        code: { type: string }
-        label: { type: string }
+        id:
+          type: string
+        code:
+          type: string
+        label:
+          type: string
     ForumTopic:
       type: object
-      required: [id, title, body, createdAt]
+      required:
+      - id
+      - title
+      - body
+      - createdAt
       properties:
-        id: { type: string }
-        title: { type: string }
-        body: { type: string }
-        createdAt: { type: string, format: date-time }
+        id:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
     ForumReply:
       type: object
-      required: [id, topicId, body, createdAt]
+      required:
+      - id
+      - topicId
+      - body
+      - createdAt
       properties:
-        id: { type: string }
-        topicId: { type: string }
-        authorDisplayName: { type: string }
-        body: { type: string }
-        createdAt: { type: string, format: date-time }
+        id:
+          type: string
+        topicId:
+          type: string
+        authorDisplayName:
+          type: string
+        body:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
     ForumFeedItem:
       type: object
-      required: [id, topic, activityAt]
+      required:
+      - id
+      - topic
+      - activityAt
       properties:
-        id: { type: string }
+        id:
+          type: string
         topic:
-          $ref: "#/components/schemas/ForumPublicTopic"
-        activityAt: { type: string, format: date-time }
+          $ref: '#/components/schemas/ForumPublicTopic'
+        activityAt:
+          type: string
+          format: date-time
     ForumPublicTopic:
       type: object
-      required: [id, title, excerpt, createdAt, updatedAt]
+      required:
+      - id
+      - title
+      - excerpt
+      - createdAt
+      - updatedAt
       properties:
-        id: { type: string }
-        boardId: { type: string }
-        slug: { type: string }
-        title: { type: string }
-        excerpt: { type: string }
-        authorDisplayName: { type: string }
+        id:
+          type: string
+        boardId:
+          type: string
+        slug:
+          type: string
+        title:
+          type: string
+        excerpt:
+          type: string
+        authorDisplayName:
+          type: string
         tags:
           type: array
           items:
-            $ref: "#/components/schemas/ForumTag"
+            $ref: '#/components/schemas/ForumTag'
         stats:
           type: object
           additionalProperties: true
-        createdAt: { type: string, format: date-time }
-        updatedAt: { type: string, format: date-time }
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     ForumReportCommand:
       type: object
-      required: [targetType, targetId, reasonCode]
+      required:
+      - targetType
+      - targetId
+      - reasonCode
       properties:
-        targetType: { type: string }
-        targetId: { type: string }
-        reasonCode: { type: string }
+        targetType:
+          type: string
+        targetId:
+          type: string
+        reasonCode:
+          type: string
     ForumModerationCase:
       type: object
-      required: [id, caseNo, caseStatus]
+      required:
+      - id
+      - caseNo
+      - caseStatus
       properties:
-        id: { type: string }
-        caseNo: { type: string }
-        caseStatus: { type: string }
+        id:
+          type: string
+        caseNo:
+          type: string
+        caseStatus:
+          type: string
     ForumModerationDecisionCommand:
       type: object
-      required: [decisionAction, reasonCode]
+      required:
+      - decisionAction
+      - reasonCode
       properties:
-        decisionAction: { type: string }
-        reasonCode: { type: string }
+        decisionAction:
+          type: string
+        reasonCode:
+          type: string
     ForumPublicTopicPage:
       allOf:
-        - $ref: "#/components/schemas/CursorPage"
-        - type: object
-          properties:
+      - $ref: '#/components/schemas/CursorPage'
+      - type: object
+        properties:
+          items:
+            type: array
             items:
-              type: array
-              items:
-                $ref: "#/components/schemas/ForumPublicTopic"
+              $ref: '#/components/schemas/ForumPublicTopic'
     ForumPublicReplyPage:
       allOf:
-        - $ref: "#/components/schemas/CursorPage"
-        - type: object
-          properties:
+      - $ref: '#/components/schemas/CursorPage'
+      - type: object
+        properties:
+          items:
+            type: array
             items:
-              type: array
-              items:
-                $ref: "#/components/schemas/ForumReply"
+              $ref: '#/components/schemas/ForumReply'
+    SdkWorkApiResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - data
+      - traceId
+      properties:
+        code:
+          type: integer
+          format: int32
+          enum:
+          - 0
+          default: 0
+          minimum: 0
+          maximum: 0
+        data:
+          description: Operation-specific payload typed per response schema.
+        traceId:
+          type: string
+          format: uuid
+          description: Server-owned request correlation id.
+    SdkWorkResourceData:
+      type: object
+      additionalProperties: false
+      required:
+      - item
+      properties:
+        item:
+          type: object
+          additionalProperties: true
+          description: Typed domain resource for the operation.
+    SdkWorkPageData:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - pageInfo
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        pageInfo:
+          $ref: '#/components/schemas/PageInfo'
+    SdkWorkCommandData:
+      type: object
+      additionalProperties: false
+      required:
+      - accepted
+      properties:
+        accepted:
+          type: boolean
+          const: true
+        resourceId:
+          type: string
+        status:
+          type: string
+    PageInfo:
+      type: object
+      additionalProperties: false
+      required:
+      - mode
+      properties:
+        mode:
+          type: string
+          enum:
+          - offset
+          - cursor
+        page:
+          type: integer
+          minimum: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 200
+        totalItems:
+          type: string
+          pattern: ^[0-9]+$
+        totalPages:
+          type: integer
+          minimum: 0
+        nextCursor:
+          type:
+          - string
+          - 'null'
+        hasMore:
+          type: boolean
+    SdkWorkPlatformErrorCode:
+      type: integer
+      format: int32
+      minimum: 40001
+      maximum: 79999
+      description: Platform or domain error code per API_SPEC.md 搂15.3.
+    FieldError:
+      type: object
+      additionalProperties: false
+      required:
+      - field
+      - message
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+          minimum: 40011
+          maximum: 40099
+    SdkWorkResourceResponse:
+      allOf:
+      - $ref: '#/components/schemas/SdkWorkApiResponse'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/SdkWorkResourceData'
+    SdkWorkListResponse:
+      allOf:
+      - $ref: '#/components/schemas/SdkWorkApiResponse'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/SdkWorkPageData'
+    SdkWorkCommandResponse:
+      allOf:
+      - $ref: '#/components/schemas/SdkWorkApiResponse'
+      - type: object
+        required:
+        - data
+        properties:
+          data:
+            $ref: '#/components/schemas/SdkWorkCommandData'

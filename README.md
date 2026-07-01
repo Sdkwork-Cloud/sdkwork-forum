@@ -1,4 +1,5 @@
 # SDKWork Forum
+repository-kind: application
 
 `sdkwork-forum` is the SDKWork forum foundation under the canonical `communication` domain and `forum` capability.
 

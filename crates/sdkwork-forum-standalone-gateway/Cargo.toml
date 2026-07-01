@@ -13,9 +13,9 @@ path = "src/main.rs"
 sdkwork_forum_gateway_assembly = { package = "sdkwork-forum-gateway-assembly", path = "../sdkwork-forum-gateway-assembly" }
 sdkwork-forum-service-host = { path = "../sdkwork-forum-service-host" }
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
-sdkwork-iam-web-adapter = { path = "../../../sdkwork-iam/crates/sdkwork-iam-web-adapter" }
-sdkwork-iam-context-service = { path = "../../../sdkwork-iam/crates/sdkwork-iam-context-service" }
-sdkwork-database-ops-http = { path = "../../../sdkwork-database/crates/sdkwork-database-ops-http" }
+sdkwork-iam-web-adapter = { workspace = true }
+sdkwork-iam-context-service = { workspace = true }
+sdkwork-database-ops-http = { workspace = true }
 axum = { workspace = true }
 tokio = { workspace = true }
 tower = { workspace = true }

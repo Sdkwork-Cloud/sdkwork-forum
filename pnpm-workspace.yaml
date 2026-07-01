@@ -1,3 +1,7 @@
 packages:
+  - "apps/sdkwork-forum-h5"
+  - "apps/sdkwork-forum-h5/packages/*"
+  - "apps/sdkwork-forum-pc"
+  - "apps/sdkwork-forum-pc/packages/*"
   - "sdks/*/composed"
   - "tools/*"

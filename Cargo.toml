@@ -20,6 +20,23 @@ license = "UNLICENSED"
 publish = false
 
 [workspace.dependencies]
+sdkwork-web-axum = { path = "../sdkwork-web-framework/crates/sdkwork-web-axum" }
+sdkwork-web-core = { path = "../sdkwork-web-framework/crates/sdkwork-web-core" }
+sdkwork-web-bootstrap = { path = "../sdkwork-web-framework/crates/sdkwork-web-bootstrap" }
+sdkwork-database-ops-http = { path = "../sdkwork-database/crates/sdkwork-database-ops-http" }
+sdkwork-iam-context-service = { path = "../sdkwork-iam/crates/sdkwork-iam-context-service" }
+sdkwork-iam-web-adapter = { path = "../sdkwork-iam/crates/sdkwork-iam-web-adapter" }
+sdkwork-database-ops = { path = "../sdkwork-database/crates/sdkwork-database-ops" }
+sdkwork-database-sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx" }
+sdkwork-database-spi = { path = "../sdkwork-database/crates/sdkwork-database-spi" }
+sdkwork-database-lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle" }
+sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config" }
+sdkwork-database-id = { path = "../sdkwork-database/crates/sdkwork-database-id" }
+sdkwork-forum-database-host = { path = "crates/sdkwork-forum-database-host" }
+sdkwork_database_config = { path = "../sdkwork-database/crates/sdkwork-database-config", package = "sdkwork-database-config" }
+sdkwork_database_lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle", package = "sdkwork-database-lifecycle" }
+sdkwork_database_spi = { path = "../sdkwork-database/crates/sdkwork-database-spi", package = "sdkwork-database-spi" }
+sdkwork_database_sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx", package = "sdkwork-database-sqlx" }
 axum = "0.8"
 axum-extra = "0.10"
 tokio = { version = "1", features = ["full"] }
@@ -34,14 +51,3 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 anyhow = "1"
 thiserror = "1"
-sdkwork-database-id = { path = "../sdkwork-database/crates/sdkwork-database-id", package = "sdkwork-database-id" }
-sdkwork-forum-database-host = { path = "crates/sdkwork-forum-database-host" }
-sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config" }
-sdkwork-database-lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle" }
-sdkwork-database-spi = { path = "../sdkwork-database/crates/sdkwork-database-spi" }
-sdkwork-database-sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx" }
-sdkwork_database_config = { path = "../sdkwork-database/crates/sdkwork-database-config" }
-sdkwork_database_lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle" }
-sdkwork_database_spi = { path = "../sdkwork-database/crates/sdkwork-database-spi" }
-sdkwork_database_sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx" }
-sdkwork-web-bootstrap = { path = "../sdkwork-web-framework/crates/sdkwork-web-bootstrap" }

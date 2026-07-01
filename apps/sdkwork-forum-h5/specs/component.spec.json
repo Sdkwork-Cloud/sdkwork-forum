@@ -81,8 +81,7 @@
       "sdks/sdkwork-forum-app-sdk"
     ],
     "sdkDependencies": [],
-    "dependencyApiExports": [],
-    "dependencyComposition": "specs/dependency.composition.json"
+    "dependencyApiExports": []
   },
   "verification": {
     "commands": [

@@ -6,6 +6,14 @@ Canonical lifecycle assets for `sdkwork-forum` per `DATABASE_FRAMEWORK_SPEC.md`.
 - serviceCode: `FORUM`
 - tablePrefix: `forum_`
 
+## Initialization state
+
+This module is in **initialization state** for greenfield deployments:
+
+1. **Baseline** — `database/ddl/baseline/{engine}/0001_forum_baseline.sql` contains the full DDL snapshot.
+2. **Migrations** — `database/migrations/{engine}/` is reserved for post-GA incremental schema changes only. It is intentionally empty at initialization.
+3. **Drift** — run `pnpm db:drift:check` before release.
+
 ## Commands
 
 ```bash
@@ -18,16 +26,3 @@ pnpm run db:seed
 pnpm run db:status
 pnpm run db:drift:check
 ```
-
-## Contract sources
-
-- Semantic schema registry: `specs/forum-database.schema.yaml` (authoritative for table design)
-- Framework contract: `database/contract/*` (materialized from baseline via `db:materialize:contract`)
-- Baseline DDL: `database/ddl/baseline/postgres/0001_forum_baseline.sql`
-
-## Runtime
-
-PostgreSQL services MUST bootstrap through `sdkwork-forum-database-host`:
-
-- `bootstrap_forum_database()` / `bootstrap_forum_database_from_env()`
-- Repository re-exports: `sdkwork-communication-forum-repository-sqlx::bootstrap`

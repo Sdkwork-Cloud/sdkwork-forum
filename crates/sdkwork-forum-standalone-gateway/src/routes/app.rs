@@ -14,14 +14,14 @@ use crate::AppState;
 #[derive(Debug, Deserialize)]
 struct CursorQuery {
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 #[derive(Debug, Deserialize)]
 struct BoardTopicsQuery {
     board_id: Option<i64>,
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -29,7 +29,7 @@ struct FeedQuery {
     feed_type: Option<String>,
     feed_owner_id: Option<String>,
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -37,7 +37,7 @@ struct SearchQuery {
     q: Option<String>,
     board_id: Option<i64>,
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 pub fn router() -> Router<AppState> {
@@ -96,7 +96,7 @@ async fn list_board_topics(
         ListTopicsCommand {
             board_id: Some(board_id),
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
             sort: Some("latest".to_string()),
             status_filter: None,
         },
@@ -115,7 +115,7 @@ async fn list_topics(
         ListTopicsCommand {
             board_id: query.board_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
             sort: Some("latest".to_string()),
             status_filter: None,
         },
@@ -211,7 +211,7 @@ async fn list_replies(
         ListRepliesCommand {
             topic_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -291,7 +291,7 @@ async fn list_topic_revisions(
         ListTopicRevisionsCommand {
             topic_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -309,7 +309,7 @@ async fn list_reply_revisions(
         ListReplyRevisionsCommand {
             reply_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -523,7 +523,7 @@ async fn list_feed(
             feed_type: query.feed_type,
             feed_owner_id: query.feed_owner_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -541,7 +541,7 @@ async fn search(
             query: query.q.unwrap_or_default(),
             board_id: query.board_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),

@@ -14,7 +14,7 @@ use crate::AppState;
 #[derive(Debug, Deserialize)]
 struct CursorQuery {
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -22,7 +22,7 @@ struct SearchQuery {
     q: Option<String>,
     board_id: Option<i64>,
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 pub fn router() -> Router<AppState> {
@@ -60,7 +60,7 @@ async fn list_boards(
             space_id: None,
             node_type: Some("board".to_string()),
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -78,7 +78,7 @@ async fn list_board_topics(
         ListTopicsCommand {
             board_id: Some(board_id),
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
             sort: Some("latest".to_string()),
             status_filter: Some("visible".to_string()),
         },
@@ -98,7 +98,7 @@ async fn list_topics(
         ListTopicsCommand {
             board_id: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
             sort: Some("latest".to_string()),
             status_filter: Some("visible".to_string()),
         },
@@ -144,7 +144,7 @@ async fn list_replies(
         ListRepliesCommand {
             topic_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -162,7 +162,7 @@ async fn list_tags(
         ListTagsCommand {
             space_id: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -181,7 +181,7 @@ async fn search(
             query: query.q.unwrap_or_default(),
             board_id: query.board_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),

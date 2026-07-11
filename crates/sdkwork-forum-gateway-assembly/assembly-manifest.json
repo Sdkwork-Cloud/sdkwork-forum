@@ -4,7 +4,7 @@
   "applicationCode": "forum",
   "packageName": "sdkwork-forum-gateway-assembly",
   "crateDir": "crates/sdkwork-forum-gateway-assembly",
-  "generatedAt": "2026-06-25T13:08:05.533Z",
+  "generatedAt": "2026-07-08T01:33:38.243Z",
   "routeCrates": [
     {
       "packageName": "sdkwork-routes-forum-app-api",

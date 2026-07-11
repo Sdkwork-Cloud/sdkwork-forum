@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.iam.module",
+  "moduleId": "forum",
+  "domain": "forum",
+  "permissions": {
+    "catalog": []
+  }
+}

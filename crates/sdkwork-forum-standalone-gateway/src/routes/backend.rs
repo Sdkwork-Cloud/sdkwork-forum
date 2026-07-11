@@ -14,14 +14,14 @@ use crate::AppState;
 #[derive(Debug, Deserialize)]
 struct CursorQuery {
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 #[derive(Debug, Deserialize)]
 struct TopicsQuery {
     board_id: Option<i64>,
     cursor: Option<String>,
-    limit: Option<u16>,
+    page_size: Option<u16>,
 }
 
 pub fn router() -> Router<AppState> {
@@ -94,7 +94,7 @@ async fn list_nodes(
             space_id: None,
             node_type: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -188,7 +188,7 @@ async fn list_topic_prefixes(
         ListTopicPrefixesCommand {
             board_id: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -242,7 +242,7 @@ async fn list_topics(
         ListTopicsCommand {
             board_id: query.board_id,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
             sort: None,
             status_filter: None,
         },
@@ -415,7 +415,7 @@ async fn list_moderation_queue(
             status_filter: None,
             severity_filter: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -432,7 +432,7 @@ async fn list_moderation_cases(
         ListModerationCasesCommand {
             status_filter: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -533,7 +533,7 @@ async fn list_sanctions(
         ListSanctionsCommand {
             user_id: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -618,7 +618,7 @@ async fn list_reputation_rules(
         &ctx,
         ListReputationRulesCommand {
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -674,7 +674,7 @@ async fn list_reputation_ledger(
         ListReputationLedgerCommand {
             user_id: None,
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -690,7 +690,7 @@ async fn list_trust_levels(
         &ctx,
         ListTrustLevelsCommand {
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -739,7 +739,7 @@ async fn list_badges(
         &ctx,
         ListBadgesCommand {
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -789,7 +789,7 @@ async fn list_board_stats(
         &ctx,
         ListBoardStatsCommand {
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -805,7 +805,7 @@ async fn list_topic_stats(
         &ctx,
         ListTopicStatsCommand {
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),
@@ -834,7 +834,7 @@ async fn list_audit_actions(
         &ctx,
         ListAuditActionsCommand {
             cursor: query.cursor,
-            limit: query.limit.unwrap_or(20),
+            limit: query.page_size.unwrap_or(20),
         },
     ) {
         Ok(page) => Json(ApiResponse::ok(page_json(&page))),

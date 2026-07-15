@@ -11,7 +11,6 @@ use sdkwork_database_ops_http::{attach_ops_routes, BearerTokenOpsAuth, DatabaseO
 use sdkwork_forum_service_host::{default_seed_locale, default_seed_profile, ForumServiceHost};
 use sdkwork_web_bootstrap::ServiceRouterConfig;
 use std::sync::Arc;
-use tower_http::cors::CorsLayer;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -51,7 +50,10 @@ async fn main() {
                 .with_state(state),
             ops_state,
         )
-        .layer(CorsLayer::permissive()),
+        .layer(sdkwork_web_bootstrap::application_cors_layer_from_env(
+            &["SDKWORK_FORUM_ENVIRONMENT"],
+            &["SDKWORK_FORUM_CORS_ALLOWED_ORIGINS", "SDKWORK_CORS_ALLOWED_ORIGINS"],
+        )),
         ServiceRouterConfig::default().with_always_ready(),
     );
 

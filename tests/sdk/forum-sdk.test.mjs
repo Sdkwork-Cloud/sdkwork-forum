@@ -56,9 +56,9 @@ for (const file of manifestFiles) {
 }
 
 const assemblyFiles = [
-  "sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json",
-  "sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json",
-  "sdks/sdkwork-forum-sdk/.sdkwork-assembly.json",
+  "sdks/sdkwork-forum-app-sdk/sdk-manifest.json",
+  "sdks/sdkwork-forum-backend-sdk/sdk-manifest.json",
+  "sdks/sdkwork-forum-sdk/sdk-manifest.json",
 ];
 
 for (const file of assemblyFiles) {

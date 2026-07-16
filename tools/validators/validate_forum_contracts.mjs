@@ -29,9 +29,9 @@ const requiredFiles = [
   "sdks/sdkwork-forum-app-sdk/openapi/sdkwork-forum-app-api.openapi.yaml",
   "sdks/sdkwork-forum-backend-sdk/openapi/sdkwork-forum-backend-api.openapi.yaml",
   "sdks/sdkwork-forum-sdk/openapi/sdkwork-forum-open-api.openapi.yaml",
-  "sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json",
-  "sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json",
-  "sdks/sdkwork-forum-sdk/.sdkwork-assembly.json",
+  "sdks/sdkwork-forum-app-sdk/sdk-manifest.json",
+  "sdks/sdkwork-forum-backend-sdk/sdk-manifest.json",
+  "sdks/sdkwork-forum-sdk/sdk-manifest.json",
   "sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json",
   "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json",
   "sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json",
@@ -151,9 +151,9 @@ if (existsSync(join(root, openApiFile))) {
 }
 
 const assemblies = [
-  ["sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json", "sdkwork-forum", "sdkwork-forum-app-api", "sdkwork-forum-app-sdk", "/app/v3/api"],
-  ["sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json", "sdkwork-forum", "sdkwork-forum-backend-api", "sdkwork-forum-backend-sdk", "/backend/v3/api"],
-  ["sdks/sdkwork-forum-sdk/.sdkwork-assembly.json", "sdkwork-forum", "sdkwork-forum-open-api", "sdkwork-forum-sdk", "/forum/v3/api"]
+  ["sdks/sdkwork-forum-app-sdk/sdk-manifest.json", "sdkwork-forum", "sdkwork-forum-app-api", "sdkwork-forum-app-sdk", "/app/v3/api"],
+  ["sdks/sdkwork-forum-backend-sdk/sdk-manifest.json", "sdkwork-forum", "sdkwork-forum-backend-api", "sdkwork-forum-backend-sdk", "/backend/v3/api"],
+  ["sdks/sdkwork-forum-sdk/sdk-manifest.json", "sdkwork-forum", "sdkwork-forum-open-api", "sdkwork-forum-sdk", "/forum/v3/api"]
 ];
 
 for (const [file, owner, authority, family, prefix] of assemblies) {

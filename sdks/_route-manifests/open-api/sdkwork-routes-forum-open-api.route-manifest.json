@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.route.manifest",
+  "packageName": "sdkwork-routes-forum-open-api",
+  "surface": "open-api",
+  "owner": "sdkwork-forum",
+  "domain": "communication",
+  "capability": "forum",
+  "apiAuthority": "sdkwork-forum-open-api",
+  "sdkFamily": "sdkwork-forum-sdk",
+  "prefix": "/forum/v3/api",
+  "source": {
+    "crateRoot": "crates/sdkwork-routes-forum-open-api",
+    "crateImport": "sdkwork_routes_forum_open_api"
+  },
+  "routes": [
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/boards", "operationId": "boards.list", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "list_public_boards" }, "schemas": { "request": null, "response": "ForumBoard[]", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/boards/{boardId}/topics", "operationId": "boards.topics.list", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "list_public_board_topics" }, "schemas": { "request": null, "response": "ForumPublicTopicPage", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/topics", "operationId": "topics.list", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "list_public_topics" }, "schemas": { "request": null, "response": "ForumPublicTopicPage", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/topics/{topicId}", "operationId": "topics.retrieve", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "retrieve_public_topic" }, "schemas": { "request": null, "response": "ForumPublicTopic", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/topics/by_slug/{topicSlug}", "operationId": "topics.bySlug.retrieve", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "retrieve_public_topic_by_slug" }, "schemas": { "request": null, "response": "ForumPublicTopic", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/topics/{topicId}/replies", "operationId": "topics.replies.list", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "list_public_replies" }, "schemas": { "request": null, "response": "ForumPublicReplyPage", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/tags", "operationId": "tags.list", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "list_public_tags" }, "schemas": { "request": null, "response": "ForumTag[]", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } },
+    { "method": "GET", "path": "/forum/v3/api/sites/{siteSlug}/search", "operationId": "search.query", "tags": ["communication"], "auth": { "mode": "public", "required": false, "tenantScope": "platform", "dataScope": "public" }, "handler": { "module": "crate::handlers", "name": "query_public_search" }, "schemas": { "request": null, "response": "ForumPublicTopicPage", "problem": "ProblemDetail" }, "ownership": { "owner": "sdkwork-forum", "apiAuthority": "sdkwork-forum-open-api" }, "source": { "file": "src/paths.rs" } }
+  ]
+}

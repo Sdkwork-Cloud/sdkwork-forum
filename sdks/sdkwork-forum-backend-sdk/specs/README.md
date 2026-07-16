@@ -1,3 +1,3 @@
 # Forum Backend SDK Specs
 
-`component.spec.json` mirrors `.sdkwork-assembly.json` dependency declarations.
+`component.spec.json` mirrors `sdk-manifest.json` dependency declarations.

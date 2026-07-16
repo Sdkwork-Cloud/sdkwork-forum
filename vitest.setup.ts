@@ -27,9 +27,9 @@ globalThis.forumTestFixtures = {
     openApi: loadJson("sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json"),
   },
   assemblies: {
-    appSdk: loadJson("sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json"),
-    backendSdk: loadJson("sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json"),
-    openSdk: loadJson("sdks/sdkwork-forum-sdk/.sdkwork-assembly.json"),
+    appSdk: loadJson("sdks/sdkwork-forum-app-sdk/sdk-manifest.json"),
+    backendSdk: loadJson("sdks/sdkwork-forum-backend-sdk/sdk-manifest.json"),
+    openSdk: loadJson("sdks/sdkwork-forum-sdk/sdk-manifest.json"),
   },
   sdkgenConfigs: {
     appApi: loadYaml("sdks/sdkwork-forum-app-sdk/openapi/sdkwork-forum-app-api.sdkgen.yaml"),

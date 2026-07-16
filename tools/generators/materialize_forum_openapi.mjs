@@ -18,7 +18,22 @@ const materializations = [
   }
 ];
 
-for (const item of materializations) {
+const routeManifestMaterializations = [
+  {
+    source: "sdks/_route-manifests/app-api/sdkwork-router-forum-app-api.route-manifest.json",
+    target: "sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json"
+  },
+  {
+    source: "sdks/_route-manifests/backend-api/sdkwork-router-forum-backend-api.route-manifest.json",
+    target: "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json"
+  },
+  {
+    source: "sdks/_route-manifests/open-api/sdkwork-router-forum-open-api.route-manifest.json",
+    target: "sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json"
+  }
+];
+
+for (const item of [...materializations, ...routeManifestMaterializations]) {
   const target = join(root, item.target);
   mkdirSync(dirname(target), { recursive: true });
   copyFileSync(join(root, item.source), target);

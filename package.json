@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/static/forum-contract-boundary.test.mjs && node tests/contract/forum-contract.test.mjs && node tests/schema/forum-schema.test.mjs && node tests/contract/database-framework.contract.test.mjs",
+    "stop": "node ../sdkwork-specs/tools/stop-sdkwork-workspace-processes.mjs --workspace .",    "test": "node tests/static/forum-contract-boundary.test.mjs && node tests/contract/forum-contract.test.mjs && node tests/schema/forum-schema.test.mjs && node tests/contract/database-framework.contract.test.mjs",
     "test:static": "node tests/static/forum-contract-boundary.test.mjs",
     "test:contract:database": "node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .",
     "validate:contracts": "node tools/validators/validate_forum_contracts.mjs",

@@ -54,7 +54,7 @@
 - Create: `sdks/_route-manifests/**`
 - Create: `tools/generators/materialize_forum_openapi.mjs`
 
-- [ ] **Step 1: Create `.sdkwork-assembly.json`, `sdk-manifest.json`, and component specs**
+- [ ] **Step 1: Create `sdk-manifest.json`, `sdk-manifest.json`, and component specs**
 - [ ] **Step 2: Materialize OpenAPI authority files into SDK family workspaces**
 - [ ] **Step 3: Define route manifests matching OpenAPI operations**
 

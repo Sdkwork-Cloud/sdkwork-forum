@@ -96,9 +96,9 @@ for (const [file, surface, prefix] of manifestSpecs) {
 }
 
 const assemblySpecs = [
-  ["sdks/sdkwork-forum-app-sdk/.sdkwork-assembly.json", "sdkwork-forum-app-api", "sdkwork-forum-app-sdk", "/app/v3/api"],
-  ["sdks/sdkwork-forum-backend-sdk/.sdkwork-assembly.json", "sdkwork-forum-backend-api", "sdkwork-forum-backend-sdk", "/backend/v3/api"],
-  ["sdks/sdkwork-forum-sdk/.sdkwork-assembly.json", "sdkwork-forum-open-api", "sdkwork-forum-sdk", "/forum/v3/api"],
+  ["sdks/sdkwork-forum-app-sdk/sdk-manifest.json", "sdkwork-forum-app-api", "sdkwork-forum-app-sdk", "/app/v3/api"],
+  ["sdks/sdkwork-forum-backend-sdk/sdk-manifest.json", "sdkwork-forum-backend-api", "sdkwork-forum-backend-sdk", "/backend/v3/api"],
+  ["sdks/sdkwork-forum-sdk/sdk-manifest.json", "sdkwork-forum-open-api", "sdkwork-forum-sdk", "/forum/v3/api"],
 ];
 
 for (const [file, authority, family, prefix] of assemblySpecs) {

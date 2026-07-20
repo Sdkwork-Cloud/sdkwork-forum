@@ -45,7 +45,7 @@ Use `topic` and `reply` in all public contracts. The rejected word is documented
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    sdkwork-forum-standalone-gateway                  │
+│                    sdkwork-api-forum-standalone-gateway                  │
 │  ┌──────────────┐ ┌──────────────┐ ┌──────────────────────┐│
 │  │ app-api      │ │ backend-api  │ │ open-api             ││
 │  │ router crate │ │ router crate │ │ router crate         ││

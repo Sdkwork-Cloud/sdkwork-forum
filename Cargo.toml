@@ -1,14 +1,15 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/sdkwork-forum-gateway-assembly",
+    "crates/sdkwork-api-forum-assembly",
+    "crates/sdkwork-api-forum-assembly",
   "crates/sdkwork-communication-forum-service",
   "crates/sdkwork-communication-forum-repository-sqlx",
   "crates/sdkwork-forum-database-host",
   "crates/sdkwork-routes-forum-app-api",
   "crates/sdkwork-routes-forum-backend-api",
   "crates/sdkwork-routes-forum-open-api",
-  "crates/sdkwork-forum-standalone-gateway",
+  "crates/sdkwork-api-forum-standalone-gateway",
   "crates/sdkwork-forum-service-host",
   "crates/sdkwork-communication-forum-worker"
 ]

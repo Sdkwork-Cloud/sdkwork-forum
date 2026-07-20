@@ -65,7 +65,7 @@
 - Create: `crates/sdkwork-routes-forum-app-api/**`
 - Create: `crates/sdkwork-routes-forum-backend-api/**`
 - Create: `crates/sdkwork-routes-forum-open-api/**`
-- Create: `crates/sdkwork-forum-standalone-gateway/**`
+- Create: `crates/sdkwork-api-forum-standalone-gateway/**`
 - Create: `crates/sdkwork-forum-service-host/**`
 - Create: `crates/sdkwork-communication-forum-worker/**`
 

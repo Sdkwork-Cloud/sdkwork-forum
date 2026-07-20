@@ -72,7 +72,7 @@
   },
   "components": {
     "applicationServer": {
-      "crate": "sdkwork-forum-standalone-gateway",
+      "crate": "sdkwork-api-forum-standalone-gateway",
       "binary": "forum-server"
     }
   },
@@ -82,7 +82,7 @@
         "processes": [
           {
             "id": "application.public-ingress",
-            "crate": "sdkwork-forum-standalone-gateway",
+            "crate": "sdkwork-api-forum-standalone-gateway",
             "binary": "forum-server",
             "required": true,
             "role": "api-standalone-gateway"
@@ -103,7 +103,7 @@
         "processes": [
           {
             "id": "application.public-ingress",
-            "crate": "sdkwork-forum-standalone-gateway",
+            "crate": "sdkwork-api-forum-standalone-gateway",
             "binary": "forum-server",
             "required": true,
             "role": "api-standalone-gateway"
@@ -118,7 +118,7 @@
         "processes": [
           {
             "id": "application.public-ingress",
-            "crate": "sdkwork-forum-standalone-gateway",
+            "crate": "sdkwork-api-forum-standalone-gateway",
             "binary": "forum-server",
             "required": true,
             "role": "api-standalone-gateway"

@@ -111,7 +111,7 @@
   "contracts": {
     "publicExports": [],
     "runtimeEntrypoints": [
-      "crates/sdkwork-forum-standalone-gateway",
+      "crates/sdkwork-api-forum-standalone-gateway",
       "crates/sdkwork-forum-service-host"
     ],
     "sdkClients": [

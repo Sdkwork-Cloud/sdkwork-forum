@@ -1,16 +1,16 @@
 [package]
-name = "sdkwork-forum-standalone-gateway"
+name = "sdkwork-api-forum-standalone-gateway"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
 
 [[bin]]
-name = "sdkwork-forum-standalone-gateway"
+name = "sdkwork-api-forum-standalone-gateway"
 path = "src/main.rs"
 
 [dependencies]
-sdkwork_forum_gateway_assembly = { package = "sdkwork-forum-gateway-assembly", path = "../sdkwork-forum-gateway-assembly" }
+sdkwork_api_forum_assembly = { package = "sdkwork-api-forum-assembly", path = "../sdkwork-api-forum-assembly" }
 sdkwork-forum-service-host = { path = "../sdkwork-forum-service-host" }
 sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
 sdkwork-iam-web-adapter = { workspace = true }

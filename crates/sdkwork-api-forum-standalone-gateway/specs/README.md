@@ -1,6 +1,6 @@
 # Server Specs
 
-Component spec for `sdkwork-forum-standalone-gateway`.
+Component spec for `sdkwork-api-forum-standalone-gateway`.
 
 - **Crate type**: HTTP API server process
 - **Domain**: communication

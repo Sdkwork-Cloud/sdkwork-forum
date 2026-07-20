@@ -1,8 +1,8 @@
 pub fn compose_forum_api_routes() -> Vec<ForumRouteInfo> {
-    let _assembly = sdkwork_forum_gateway_assembly::assemble_application_router();
-    let app_routes = sdkwork_forum_gateway_assembly::build_sdkwork_forum_app_api_router();
-    let backend_routes = sdkwork_forum_gateway_assembly::build_sdkwork_forum_backend_api_router();
-    let open_routes = sdkwork_forum_gateway_assembly::build_sdkwork_forum_open_api_router();
+    let _assembly = sdkwork_api_forum_assembly::assemble_api_router();
+    let app_routes = sdkwork_api_forum_assembly::build_sdkwork_forum_app_api_router();
+    let backend_routes = sdkwork_api_forum_assembly::build_sdkwork_forum_backend_api_router();
+    let open_routes = sdkwork_api_forum_assembly::build_sdkwork_forum_open_api_router();
 
     let mut all_routes: Vec<ForumRouteInfo> = Vec::new();
 

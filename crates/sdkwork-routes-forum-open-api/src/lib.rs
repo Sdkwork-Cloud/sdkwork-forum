@@ -5,6 +5,7 @@ pub mod manifest;
 pub mod mapper;
 pub mod paths;
 pub mod routes;
+mod runtime;
 pub mod web_bootstrap;
 
 use sdkwork_web_core::HttpRouteManifest;
@@ -20,6 +21,6 @@ pub fn gateway_route_manifest() -> HttpRouteManifest {
     open_route_manifest()
 }
 
-pub fn gateway_mount() -> Vec<RouteDescriptor> {
-    build_sdkwork_forum_open_api_router()
+pub fn gateway_mount() -> axum::Router<sdkwork_forum_http_support::AppState> {
+    runtime::router()
 }

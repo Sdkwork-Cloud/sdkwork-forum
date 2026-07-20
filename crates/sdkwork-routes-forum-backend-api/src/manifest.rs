@@ -1,4 +1,5 @@
-pub const ROUTE_MANIFEST_PATH: &str = "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json";
+pub const ROUTE_MANIFEST_PATH: &str =
+    "sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json";
 pub const SCHEMA_VERSION: u32 = 1;
 pub const MANIFEST_KIND: &str = "sdkwork.route.manifest";
 pub const PACKAGE_NAME: &str = "sdkwork-routes-forum-backend-api";

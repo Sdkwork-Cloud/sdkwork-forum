@@ -16,19 +16,74 @@ impl RouteDescriptor {
         auth_mode: &'static str,
         tags: &'static [&'static str],
     ) -> Self {
-        Self { method, path, operation_id, surface: "open-api", auth_mode, tags }
+        Self {
+            method,
+            path,
+            operation_id,
+            surface: "open-api",
+            auth_mode,
+            tags,
+        }
     }
 }
 
 pub const OPEN_ROUTES: &[RouteDescriptor] = &[
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/boards", "boards.list", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/boards/{boardId}/topics", "boards.topics.list", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/topics", "topics.list", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/topics/{topicId}", "topics.retrieve", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/topics/by_slug/{topicSlug}", "topics.bySlug.retrieve", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/topics/{topicId}/replies", "topics.replies.list", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/tags", "tags.list", "public", &["communication"]),
-    RouteDescriptor::new("GET", "/forum/v3/api/sites/{siteSlug}/search", "search.query", "public", &["communication"]),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/boards",
+        "boards.list",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/boards/{boardId}/topics",
+        "boards.topics.list",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/topics",
+        "topics.list",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/topics/{topicId}",
+        "topics.retrieve",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/topics/by_slug/{topicSlug}",
+        "topics.bySlug.retrieve",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/topics/{topicId}/replies",
+        "topics.replies.list",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/tags",
+        "tags.list",
+        "public",
+        &["communication"],
+    ),
+    RouteDescriptor::new(
+        "GET",
+        "/forum/v3/api/sites/{siteSlug}/search",
+        "search.query",
+        "public",
+        &["communication"],
+    ),
 ];
 
 pub fn build_sdkwork_forum_open_api_router() -> Vec<RouteDescriptor> {
@@ -36,7 +91,9 @@ pub fn build_sdkwork_forum_open_api_router() -> Vec<RouteDescriptor> {
 }
 
 pub fn find_route(method: &str, path: &str) -> Option<&'static RouteDescriptor> {
-    OPEN_ROUTES.iter().find(|r| r.method == method && path_matches(r.path, path))
+    OPEN_ROUTES
+        .iter()
+        .find(|r| r.method == method && path_matches(r.path, path))
 }
 
 fn path_matches(template: &str, actual: &str) -> bool {
@@ -45,7 +102,8 @@ fn path_matches(template: &str, actual: &str) -> bool {
     if template_segments.len() != actual_segments.len() {
         return false;
     }
-    template_segments.iter().zip(actual_segments.iter()).all(|(t, a)| {
-        t.starts_with('{') || t == a
-    })
+    template_segments
+        .iter()
+        .zip(actual_segments.iter())
+        .all(|(t, a)| t.starts_with('{') || t == a)
 }

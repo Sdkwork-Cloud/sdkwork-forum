@@ -7,9 +7,9 @@ use sdkwork_communication_forum_service::domain::commands::*;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
-use crate::context::{page_json, ForumCtx};
-use crate::dto::{ApiResponse, CreateReplyRequest, CreateTopicRequest};
-use crate::AppState;
+use sdkwork_forum_http_support::context::{page_json, ForumCtx};
+use sdkwork_forum_http_support::dto::{ApiResponse, CreateReplyRequest, CreateTopicRequest};
+use sdkwork_forum_http_support::AppState;
 
 #[derive(Debug, Deserialize)]
 struct CursorQuery {
@@ -43,8 +43,14 @@ struct SearchQuery {
 pub fn router() -> Router<AppState> {
     Router::new()
         .route("/app/v3/api/forum/nodes/tree", get(list_node_tree))
-        .route("/app/v3/api/forum/boards/{board_id}/topics", get(list_board_topics))
-        .route("/app/v3/api/forum/topics", get(list_topics).post(create_topic))
+        .route(
+            "/app/v3/api/forum/boards/{board_id}/topics",
+            get(list_board_topics),
+        )
+        .route(
+            "/app/v3/api/forum/topics",
+            get(list_topics).post(create_topic),
+        )
         .route(
             "/app/v3/api/forum/topics/{topic_id}",
             get(retrieve_topic).patch(update_topic).delete(delete_topic),
@@ -57,23 +63,38 @@ pub fn router() -> Router<AppState> {
             "/app/v3/api/forum/replies/{reply_id}",
             patch(update_reply).delete(delete_reply),
         )
-        .route("/app/v3/api/forum/topics/{topic_id}/revisions", get(list_topic_revisions))
-        .route("/app/v3/api/forum/replies/{reply_id}/revisions", get(list_reply_revisions))
+        .route(
+            "/app/v3/api/forum/topics/{topic_id}/revisions",
+            get(list_topic_revisions),
+        )
+        .route(
+            "/app/v3/api/forum/replies/{reply_id}/revisions",
+            get(list_reply_revisions),
+        )
         .route(
             "/app/v3/api/forum/questions/{topic_id}/accepted_reply",
             put(accept_reply).delete(clear_accepted_reply),
         )
-        .route("/app/v3/api/forum/polls/{poll_id}/votes", post(create_poll_vote))
+        .route(
+            "/app/v3/api/forum/polls/{poll_id}/votes",
+            post(create_poll_vote),
+        )
         .route("/app/v3/api/forum/reactions", post(create_reaction))
         .route("/app/v3/api/forum/votes", post(create_vote))
         .route("/app/v3/api/forum/bookmarks", post(create_bookmark))
-        .route("/app/v3/api/forum/read_state/topics/{topic_id}", patch(update_read_state))
+        .route(
+            "/app/v3/api/forum/read_state/topics/{topic_id}",
+            patch(update_read_state),
+        )
         .route("/app/v3/api/forum/reports", post(create_report))
         .route("/app/v3/api/forum/feed", get(list_feed))
         .route("/app/v3/api/forum/search", get(search))
 }
 
-async fn list_node_tree(State(state): State<AppState>, ForumCtx(ctx): ForumCtx) -> Json<ApiResponse<Value>> {
+async fn list_node_tree(
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
+) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_node_tree(
         &ctx,
         ListNodeTreeCommand {
@@ -87,7 +108,8 @@ async fn list_node_tree(State(state): State<AppState>, ForumCtx(ctx): ForumCtx) 
 }
 
 async fn list_board_topics(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(board_id): Path<i64>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -107,7 +129,8 @@ async fn list_board_topics(
 }
 
 async fn list_topics(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<BoardTopicsQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_topics(
@@ -126,7 +149,8 @@ async fn list_topics(
 }
 
 async fn create_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(req): Json<CreateTopicRequest>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_topic(
@@ -148,7 +172,8 @@ async fn create_topic(
 }
 
 async fn retrieve_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().retrieve_topic(&ctx, topic_id) {
@@ -158,7 +183,8 @@ async fn retrieve_topic(
 }
 
 async fn update_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -166,7 +192,10 @@ async fn update_topic(
         &ctx,
         UpdateTopicCommand {
             topic_id,
-            title: body.get("title").and_then(Value::as_str).map(str::to_string),
+            title: body
+                .get("title")
+                .and_then(Value::as_str)
+                .map(str::to_string),
             body: body.get("body").and_then(Value::as_str).map(str::to_string),
             body_format: body
                 .get("bodyFormat")
@@ -186,7 +215,8 @@ async fn update_topic(
 }
 
 async fn delete_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().delete_topic(
@@ -202,7 +232,8 @@ async fn delete_topic(
 }
 
 async fn list_replies(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -220,7 +251,8 @@ async fn list_replies(
 }
 
 async fn create_reply(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Json(req): Json<CreateReplyRequest>,
 ) -> Json<ApiResponse<Value>> {
@@ -239,7 +271,8 @@ async fn create_reply(
 }
 
 async fn update_reply(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(reply_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -266,7 +299,8 @@ async fn update_reply(
 }
 
 async fn delete_reply(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(reply_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().delete_reply(
@@ -282,7 +316,8 @@ async fn delete_reply(
 }
 
 async fn list_topic_revisions(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -300,7 +335,8 @@ async fn list_topic_revisions(
 }
 
 async fn list_reply_revisions(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(reply_id): Path<i64>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -318,7 +354,8 @@ async fn list_reply_revisions(
 }
 
 async fn accept_reply(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -327,30 +364,34 @@ async fn accept_reply(
         .or_else(|| body.get("reply_id"))
         .and_then(Value::as_i64)
         .unwrap_or_default();
-    match state.service_host.service().accept_reply(
-        &ctx,
-        AcceptReplyCommand { topic_id, reply_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .accept_reply(&ctx, AcceptReplyCommand { topic_id, reply_id })
+    {
         Ok(topic) => Json(ApiResponse::ok(json!(topic))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn clear_accepted_reply(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().clear_accepted_reply(
-        &ctx,
-        ClearAcceptedReplyCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .clear_accepted_reply(&ctx, ClearAcceptedReplyCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn create_poll_vote(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(poll_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -362,7 +403,10 @@ async fn create_poll_vote(
         .unwrap_or_default();
     match state.service_host.service().create_poll_vote(
         &ctx,
-        CreatePollVoteCommand { poll_id, option_ids },
+        CreatePollVoteCommand {
+            poll_id,
+            option_ids,
+        },
     ) {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
@@ -370,7 +414,8 @@ async fn create_poll_vote(
 }
 
 async fn create_reaction(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_reaction(
@@ -401,7 +446,8 @@ async fn create_reaction(
 }
 
 async fn create_vote(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_vote(
@@ -436,7 +482,8 @@ async fn create_vote(
 }
 
 async fn create_bookmark(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().update_bookmark(
@@ -462,7 +509,8 @@ async fn create_bookmark(
 }
 
 async fn update_read_state(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -482,7 +530,8 @@ async fn update_read_state(
 }
 
 async fn create_report(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_report(
@@ -505,7 +554,10 @@ async fn create_report(
                 .and_then(Value::as_str)
                 .unwrap_or("other")
                 .to_string(),
-            description: body.get("description").and_then(Value::as_str).map(str::to_string),
+            description: body
+                .get("description")
+                .and_then(Value::as_str)
+                .map(str::to_string),
         },
     ) {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
@@ -514,7 +566,8 @@ async fn create_report(
 }
 
 async fn list_feed(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<FeedQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_feed(
@@ -532,7 +585,8 @@ async fn list_feed(
 }
 
 async fn search(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<SearchQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().query_search(

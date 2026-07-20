@@ -31,9 +31,14 @@ pub fn extract_topic_slug_from_path(path: &str) -> Option<String> {
 }
 
 pub fn get_param(params: &[(String, String)], key: &str) -> Option<String> {
-    params.iter().find(|(k, _)| k == key).map(|(_, v)| v.clone())
+    params
+        .iter()
+        .find(|(k, _)| k == key)
+        .map(|(_, v)| v.clone())
 }
 
 pub fn get_param_u16(params: &[(String, String)], key: &str, default: u16) -> u16 {
-    get_param(params, key).and_then(|v| v.parse().ok()).unwrap_or(default)
+    get_param(params, key)
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(default)
 }

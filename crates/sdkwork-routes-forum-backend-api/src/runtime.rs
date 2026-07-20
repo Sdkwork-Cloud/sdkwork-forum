@@ -7,9 +7,9 @@ use sdkwork_communication_forum_service::domain::commands::*;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
-use crate::context::{page_json, ForumCtx};
-use crate::dto::ApiResponse;
-use crate::AppState;
+use sdkwork_forum_http_support::context::{page_json, ForumCtx};
+use sdkwork_forum_http_support::dto::ApiResponse;
+use sdkwork_forum_http_support::AppState;
 
 #[derive(Debug, Deserialize)]
 struct CursorQuery {
@@ -26,7 +26,10 @@ struct TopicsQuery {
 
 pub fn router() -> Router<AppState> {
     Router::new()
-        .route("/backend/v3/api/forum/nodes", get(list_nodes).post(create_node))
+        .route(
+            "/backend/v3/api/forum/nodes",
+            get(list_nodes).post(create_node),
+        )
         .route(
             "/backend/v3/api/forum/nodes/{node_id}",
             patch(update_node).delete(delete_node),
@@ -40,7 +43,10 @@ pub fn router() -> Router<AppState> {
             "/backend/v3/api/forum/topics/{topic_id}",
             get(retrieve_topic).patch(update_topic).delete(delete_topic),
         )
-        .route("/backend/v3/api/forum/topics/{topic_id}/pin", post(pin_topic).delete(unpin_topic))
+        .route(
+            "/backend/v3/api/forum/topics/{topic_id}/pin",
+            post(pin_topic).delete(unpin_topic),
+        )
         .route(
             "/backend/v3/api/forum/topics/{topic_id}/feature",
             post(feature_topic).delete(unfeature_topic),
@@ -49,8 +55,14 @@ pub fn router() -> Router<AppState> {
             "/backend/v3/api/forum/topics/{topic_id}/lock",
             post(lock_topic).delete(unlock_topic),
         )
-        .route("/backend/v3/api/forum/topics/{topic_id}/move", post(move_topic))
-        .route("/backend/v3/api/forum/moderation/queue", get(list_moderation_queue))
+        .route(
+            "/backend/v3/api/forum/topics/{topic_id}/move",
+            post(move_topic),
+        )
+        .route(
+            "/backend/v3/api/forum/moderation/queue",
+            get(list_moderation_queue),
+        )
         .route(
             "/backend/v3/api/forum/moderation/cases",
             get(list_moderation_cases).post(create_moderation_case),
@@ -67,25 +79,38 @@ pub fn router() -> Router<AppState> {
             "/backend/v3/api/forum/sanctions",
             get(list_sanctions).post(create_sanction),
         )
-        .route("/backend/v3/api/forum/sanctions/{sanction_id}", patch(update_sanction))
+        .route(
+            "/backend/v3/api/forum/sanctions/{sanction_id}",
+            patch(update_sanction),
+        )
         .route(
             "/backend/v3/api/forum/reputation/rules",
             get(list_reputation_rules).post(create_reputation_rule),
         )
-        .route("/backend/v3/api/forum/reputation/ledger", get(list_reputation_ledger))
+        .route(
+            "/backend/v3/api/forum/reputation/ledger",
+            get(list_reputation_ledger),
+        )
         .route(
             "/backend/v3/api/forum/trust_levels",
             get(list_trust_levels).post(create_trust_level),
         )
-        .route("/backend/v3/api/forum/badges", get(list_badges).post(create_badge))
+        .route(
+            "/backend/v3/api/forum/badges",
+            get(list_badges).post(create_badge),
+        )
         .route("/backend/v3/api/forum/stats/boards", get(list_board_stats))
         .route("/backend/v3/api/forum/stats/topics", get(list_topic_stats))
         .route("/backend/v3/api/forum/search/reindex", post(reindex_search))
-        .route("/backend/v3/api/forum/audit/actions", get(list_audit_actions))
+        .route(
+            "/backend/v3/api/forum/audit/actions",
+            get(list_audit_actions),
+        )
 }
 
 async fn list_nodes(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_nodes(
@@ -102,7 +127,11 @@ async fn list_nodes(
     }
 }
 
-async fn create_node(State(state): State<AppState>, ForumCtx(ctx): ForumCtx, Json(body): Json<Value>) -> Json<ApiResponse<Value>> {
+async fn create_node(
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
+    Json(body): Json<Value>,
+) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_node(
         &ctx,
         CreateNodeCommand {
@@ -111,21 +140,31 @@ async fn create_node(State(state): State<AppState>, ForumCtx(ctx): ForumCtx, Jso
                 .or_else(|| body.get("space_id"))
                 .and_then(Value::as_i64)
                 .unwrap_or(1),
-            parent_id: body.get("parentId").or_else(|| body.get("parent_id")).and_then(Value::as_i64),
+            parent_id: body
+                .get("parentId")
+                .or_else(|| body.get("parent_id"))
+                .and_then(Value::as_i64),
             node_type: body
                 .get("nodeType")
                 .or_else(|| body.get("node_type"))
                 .and_then(Value::as_str)
                 .unwrap_or("board")
                 .to_string(),
-            slug: body.get("slug").and_then(Value::as_str).unwrap_or("node").to_string(),
+            slug: body
+                .get("slug")
+                .and_then(Value::as_str)
+                .unwrap_or("node")
+                .to_string(),
             name: body
                 .get("name")
                 .or_else(|| body.get("title"))
                 .and_then(Value::as_str)
                 .unwrap_or("Node")
                 .to_string(),
-            description: body.get("description").and_then(Value::as_str).map(str::to_string),
+            description: body
+                .get("description")
+                .and_then(Value::as_str)
+                .map(str::to_string),
             sort_order: body
                 .get("sortOrder")
                 .or_else(|| body.get("sort_order"))
@@ -139,7 +178,8 @@ async fn create_node(State(state): State<AppState>, ForumCtx(ctx): ForumCtx, Jso
 }
 
 async fn update_node(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(node_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -152,13 +192,19 @@ async fn update_node(
                 .or_else(|| body.get("title"))
                 .and_then(Value::as_str)
                 .map(str::to_string),
-            description: body.get("description").and_then(Value::as_str).map(str::to_string),
+            description: body
+                .get("description")
+                .and_then(Value::as_str)
+                .map(str::to_string),
             sort_order: body
                 .get("sortOrder")
                 .or_else(|| body.get("sort_order"))
                 .and_then(Value::as_i64)
                 .map(|v| v as i32),
-            parent_id: body.get("parentId").or_else(|| body.get("parent_id")).and_then(Value::as_i64),
+            parent_id: body
+                .get("parentId")
+                .or_else(|| body.get("parent_id"))
+                .and_then(Value::as_i64),
         },
     ) {
         Ok(node) => Json(ApiResponse::ok(json!(node))),
@@ -167,20 +213,23 @@ async fn update_node(
 }
 
 async fn delete_node(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(node_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().delete_node(
-        &ctx,
-        DeleteNodeCommand { node_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .delete_node(&ctx, DeleteNodeCommand { node_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn list_topic_prefixes(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_topic_prefixes(
@@ -197,7 +246,8 @@ async fn list_topic_prefixes(
 }
 
 async fn create_topic_prefix(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_topic_prefix(
@@ -214,8 +264,15 @@ async fn create_topic_prefix(
                 .and_then(Value::as_str)
                 .unwrap_or("prefix")
                 .to_string(),
-            label: body.get("label").and_then(Value::as_str).unwrap_or("Prefix").to_string(),
-            color: body.get("color").and_then(Value::as_str).map(str::to_string),
+            label: body
+                .get("label")
+                .and_then(Value::as_str)
+                .unwrap_or("Prefix")
+                .to_string(),
+            color: body
+                .get("color")
+                .and_then(Value::as_str)
+                .map(str::to_string),
             sort_order: body
                 .get("sortOrder")
                 .or_else(|| body.get("sort_order"))
@@ -234,7 +291,8 @@ async fn create_topic_prefix(
 }
 
 async fn list_topics(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<TopicsQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_topics(
@@ -253,7 +311,8 @@ async fn list_topics(
 }
 
 async fn retrieve_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().retrieve_topic(&ctx, topic_id) {
@@ -263,7 +322,8 @@ async fn retrieve_topic(
 }
 
 async fn update_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -271,7 +331,10 @@ async fn update_topic(
         &ctx,
         UpdateTopicCommand {
             topic_id,
-            title: body.get("title").and_then(Value::as_str).map(str::to_string),
+            title: body
+                .get("title")
+                .and_then(Value::as_str)
+                .map(str::to_string),
             body: body.get("body").and_then(Value::as_str).map(str::to_string),
             body_format: body
                 .get("bodyFormat")
@@ -291,7 +354,8 @@ async fn update_topic(
 }
 
 async fn delete_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().delete_topic(
@@ -307,85 +371,98 @@ async fn delete_topic(
 }
 
 async fn pin_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().pin_topic(
-        &ctx,
-        PinTopicCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .pin_topic(&ctx, PinTopicCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn unpin_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().unpin_topic(
-        &ctx,
-        PinTopicCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .unpin_topic(&ctx, PinTopicCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn feature_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().feature_topic(
-        &ctx,
-        FeatureTopicCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .feature_topic(&ctx, FeatureTopicCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn unfeature_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().unfeature_topic(
-        &ctx,
-        FeatureTopicCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .unfeature_topic(&ctx, FeatureTopicCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn lock_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().lock_topic(
-        &ctx,
-        LockTopicCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .lock_topic(&ctx, LockTopicCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn unlock_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().unlock_topic(
-        &ctx,
-        LockTopicCommand { topic_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .unlock_topic(&ctx, LockTopicCommand { topic_id })
+    {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn move_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(topic_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -406,7 +483,8 @@ async fn move_topic(
 }
 
 async fn list_moderation_queue(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_moderation_queue(
@@ -424,7 +502,8 @@ async fn list_moderation_queue(
 }
 
 async fn list_moderation_cases(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_moderation_cases(
@@ -441,7 +520,8 @@ async fn list_moderation_cases(
 }
 
 async fn create_moderation_case(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_moderation_case(
@@ -478,20 +558,23 @@ async fn create_moderation_case(
 }
 
 async fn retrieve_moderation_case(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(case_id): Path<i64>,
 ) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().retrieve_moderation_case(
-        &ctx,
-        RetrieveModerationCaseCommand { case_id },
-    ) {
+    match state
+        .service_host
+        .service()
+        .retrieve_moderation_case(&ctx, RetrieveModerationCaseCommand { case_id })
+    {
         Ok(case) => Json(ApiResponse::ok(json!(case))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }
 
 async fn create_moderation_decision(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(case_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -525,7 +608,8 @@ async fn create_moderation_decision(
 }
 
 async fn list_sanctions(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_sanctions(
@@ -542,7 +626,8 @@ async fn list_sanctions(
 }
 
 async fn create_sanction(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_sanction(
@@ -553,7 +638,10 @@ async fn create_sanction(
                 .or_else(|| body.get("user_id"))
                 .and_then(Value::as_i64)
                 .unwrap_or_default(),
-            case_id: body.get("caseId").or_else(|| body.get("case_id")).and_then(Value::as_i64),
+            case_id: body
+                .get("caseId")
+                .or_else(|| body.get("case_id"))
+                .and_then(Value::as_i64),
             decision_id: body
                 .get("decisionId")
                 .or_else(|| body.get("decision_id"))
@@ -590,7 +678,8 @@ async fn create_sanction(
 }
 
 async fn update_sanction(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(sanction_id): Path<i64>,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
@@ -611,7 +700,8 @@ async fn update_sanction(
 }
 
 async fn list_reputation_rules(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_reputation_rules(
@@ -627,7 +717,8 @@ async fn list_reputation_rules(
 }
 
 async fn create_reputation_rule(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_reputation_rule(
@@ -666,7 +757,8 @@ async fn create_reputation_rule(
 }
 
 async fn list_reputation_ledger(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_reputation_ledger(
@@ -683,7 +775,8 @@ async fn list_reputation_ledger(
 }
 
 async fn list_trust_levels(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_trust_levels(
@@ -699,7 +792,8 @@ async fn list_trust_levels(
 }
 
 async fn create_trust_level(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_trust_level(
@@ -717,7 +811,11 @@ async fn create_trust_level(
                 .and_then(Value::as_str)
                 .unwrap_or("member")
                 .to_string(),
-            name: body.get("name").and_then(Value::as_str).unwrap_or("Member").to_string(),
+            name: body
+                .get("name")
+                .and_then(Value::as_str)
+                .unwrap_or("Member")
+                .to_string(),
             threshold_rules: body
                 .get("thresholdRules")
                 .or_else(|| body.get("threshold_rules"))
@@ -732,7 +830,8 @@ async fn create_trust_level(
 }
 
 async fn list_badges(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_badges(
@@ -748,7 +847,8 @@ async fn list_badges(
 }
 
 async fn create_badge(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Json(body): Json<Value>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().create_badge(
@@ -760,8 +860,15 @@ async fn create_badge(
                 .and_then(Value::as_str)
                 .unwrap_or("badge")
                 .to_string(),
-            name: body.get("name").and_then(Value::as_str).unwrap_or("Badge").to_string(),
-            description: body.get("description").and_then(Value::as_str).map(str::to_string),
+            name: body
+                .get("name")
+                .and_then(Value::as_str)
+                .unwrap_or("Badge")
+                .to_string(),
+            description: body
+                .get("description")
+                .and_then(Value::as_str)
+                .map(str::to_string),
             grant_mode: body
                 .get("grantMode")
                 .or_else(|| body.get("grant_mode"))
@@ -773,7 +880,10 @@ async fn create_badge(
                 .or_else(|| body.get("icon_media_id"))
                 .and_then(Value::as_str)
                 .map(str::to_string),
-            rule_json: body.get("ruleJson").or_else(|| body.get("rule_json")).cloned(),
+            rule_json: body
+                .get("ruleJson")
+                .or_else(|| body.get("rule_json"))
+                .cloned(),
         },
     ) {
         Ok(badge) => Json(ApiResponse::ok(json!(badge))),
@@ -782,7 +892,8 @@ async fn create_badge(
 }
 
 async fn list_board_stats(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_board_stats(
@@ -798,7 +909,8 @@ async fn list_board_stats(
 }
 
 async fn list_topic_stats(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_topic_stats(
@@ -813,7 +925,10 @@ async fn list_topic_stats(
     }
 }
 
-async fn reindex_search(State(state): State<AppState>, ForumCtx(ctx): ForumCtx) -> Json<ApiResponse<Value>> {
+async fn reindex_search(
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
+) -> Json<ApiResponse<Value>> {
     match state.service_host.service().rebuild_search_projection(
         &ctx,
         RebuildSearchProjectionCommand {
@@ -827,7 +942,8 @@ async fn reindex_search(State(state): State<AppState>, ForumCtx(ctx): ForumCtx) 
 }
 
 async fn list_audit_actions(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().list_audit_actions(

@@ -83,11 +83,15 @@ pub fn handle_moderation_cases_create(_path: &str, _body: &[u8]) -> HandlerResul
 }
 
 pub fn handle_moderation_cases_retrieve(_path: &str, _query: &str) -> HandlerResult {
-    Err(ForumRouteError::not_implemented("moderation.cases.retrieve"))
+    Err(ForumRouteError::not_implemented(
+        "moderation.cases.retrieve",
+    ))
 }
 
 pub fn handle_moderation_cases_decisions_create(_path: &str, _body: &[u8]) -> HandlerResult {
-    Err(ForumRouteError::not_implemented("moderation.cases.decisions.create"))
+    Err(ForumRouteError::not_implemented(
+        "moderation.cases.decisions.create",
+    ))
 }
 
 pub fn handle_sanctions_list(_path: &str, _query: &str) -> HandlerResult {

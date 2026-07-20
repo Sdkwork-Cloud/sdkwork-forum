@@ -4,7 +4,8 @@ pub fn json_error_response(code: &str, message: &str, status: u16) -> Vec<u8> {
         escape_json(code),
         status,
         escape_json(message)
-    ).into_bytes()
+    )
+    .into_bytes()
 }
 
 pub fn problem_content_type() -> &'static str {

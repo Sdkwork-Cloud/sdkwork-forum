@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "crates/sdkwork-api-forum-assembly",
-    "crates/sdkwork-api-forum-assembly",
+  "crates/sdkwork-forum-http-support",
   "crates/sdkwork-communication-forum-service",
   "crates/sdkwork-communication-forum-repository-sqlx",
   "crates/sdkwork-forum-database-host",
@@ -34,6 +34,7 @@ sdkwork-database-lifecycle = { path = "../sdkwork-database/crates/sdkwork-databa
 sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config" }
 sdkwork-database-id = { path = "../sdkwork-database/crates/sdkwork-database-id" }
 sdkwork-forum-database-host = { path = "crates/sdkwork-forum-database-host" }
+sdkwork-forum-http-support = { path = "crates/sdkwork-forum-http-support" }
 axum = "0.8"
 axum-extra = "0.10"
 tokio = { version = "1", features = ["full"] }

@@ -7,9 +7,9 @@ use sdkwork_communication_forum_service::domain::commands::*;
 use serde::Deserialize;
 use serde_json::{json, Value};
 
-use crate::context::{page_json, ForumCtx};
-use crate::dto::ApiResponse;
-use crate::AppState;
+use sdkwork_forum_http_support::context::{page_json, ForumCtx};
+use sdkwork_forum_http_support::dto::ApiResponse;
+use sdkwork_forum_http_support::AppState;
 
 #[derive(Debug, Deserialize)]
 struct CursorQuery {
@@ -50,7 +50,8 @@ pub fn router() -> Router<AppState> {
 }
 
 async fn list_boards(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(_site_slug): Path<String>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -69,7 +70,8 @@ async fn list_boards(
 }
 
 async fn list_board_topics(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path((_site_slug, board_id)): Path<(String, i64)>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -89,7 +91,8 @@ async fn list_board_topics(
 }
 
 async fn list_topics(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(_site_slug): Path<String>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -109,7 +112,8 @@ async fn list_topics(
 }
 
 async fn retrieve_topic(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path((_site_slug, topic_id)): Path<(String, i64)>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().retrieve_topic(&ctx, topic_id) {
@@ -119,7 +123,8 @@ async fn retrieve_topic(
 }
 
 async fn retrieve_topic_by_slug(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path((_site_slug, topic_slug)): Path<(String, String)>,
 ) -> Json<ApiResponse<Value>> {
     match state.service_host.service().retrieve_topic_by_slug(
@@ -135,7 +140,8 @@ async fn retrieve_topic_by_slug(
 }
 
 async fn list_replies(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path((_site_slug, topic_id)): Path<(String, i64)>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -153,7 +159,8 @@ async fn list_replies(
 }
 
 async fn list_tags(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(_site_slug): Path<String>,
     Query(query): Query<CursorQuery>,
 ) -> Json<ApiResponse<Value>> {
@@ -171,7 +178,8 @@ async fn list_tags(
 }
 
 async fn search(
-    State(state): State<AppState>, ForumCtx(ctx): ForumCtx,
+    State(state): State<AppState>,
+    ForumCtx(ctx): ForumCtx,
     Path(_site_slug): Path<String>,
     Query(query): Query<SearchQuery>,
 ) -> Json<ApiResponse<Value>> {

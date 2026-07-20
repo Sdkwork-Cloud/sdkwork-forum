@@ -10,7 +10,11 @@ path = "src/lib.rs"
 
 [dependencies]
 sdkwork-web-core = { workspace = true }
-axum = { version = "0.8", default-features = false, features = ["json"] }
+axum.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
+sdkwork-forum-http-support.workspace = true
 sdkwork-iam-web-adapter = { workspace = true }
 sdkwork-web-axum = { workspace = true }
 sdkwork-web-bootstrap = { workspace = true }

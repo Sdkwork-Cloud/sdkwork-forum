@@ -51,11 +51,15 @@ pub fn handle_replies_revisions_list(_path: &str, _query: &str) -> HandlerResult
 }
 
 pub fn handle_questions_accepted_reply_update(_path: &str, _body: &[u8]) -> HandlerResult {
-    Err(ForumRouteError::not_implemented("questions.acceptedReply.update"))
+    Err(ForumRouteError::not_implemented(
+        "questions.acceptedReply.update",
+    ))
 }
 
 pub fn handle_questions_accepted_reply_delete(_path: &str) -> HandlerResult {
-    Err(ForumRouteError::not_implemented("questions.acceptedReply.delete"))
+    Err(ForumRouteError::not_implemented(
+        "questions.acceptedReply.delete",
+    ))
 }
 
 pub fn handle_polls_votes_create(_path: &str, _body: &[u8]) -> HandlerResult {

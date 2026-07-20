@@ -11,7 +11,10 @@ path = "src/lib.rs"
 
 [dependencies]
 axum.workspace = true
-tokio.workspace = true
+sdkwork-database-spi.workspace = true
+sdkwork-database-sqlx.workspace = true
+sdkwork-forum-http-support.workspace = true
+sdkwork-forum-service-host = { path = "../sdkwork-forum-service-host" }
 sdkwork-routes-forum-app-api = { path = "../sdkwork-routes-forum-app-api" }
 sdkwork-routes-forum-backend-api = { path = "../sdkwork-routes-forum-backend-api" }
 sdkwork-routes-forum-open-api = { path = "../sdkwork-routes-forum-open-api" }

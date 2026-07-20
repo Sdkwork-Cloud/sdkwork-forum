@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-forum-http-support",
+    "displayName": "SDKWork Forum HTTP Support",
+    "version": "0.1.0",
+    "type": "rust-crate",
+    "root": "sdkwork-forum/crates/sdkwork-forum-http-support",
+    "domain": "communication",
+    "capability": "forum-http",
+    "languages": ["rust"],
+    "generated": false,
+    "manifests": ["Cargo.toml"]
+  },
+  "canonicalSpecs": [
+    { "file": "RUST_CODE_SPEC.md", "path": "../../../sdkwork-specs/RUST_CODE_SPEC.md", "purpose": "Rust HTTP support layout." },
+    { "file": "API_SPEC.md", "path": "../../../sdkwork-specs/API_SPEC.md", "purpose": "HTTP context and security contracts." }
+  ],
+  "contracts": {
+    "publicExports": ["crate::AppState", "crate::context", "crate::dto", "crate::iam", "crate::middleware"],
+    "runtimeEntrypoints": [],
+    "routeManifest": null,
+    "sdkClients": [],
+    "events": [],
+    "configKeys": []
+  },
+  "verification": {
+    "commands": ["cargo check -p sdkwork-forum-http-support"]
+  }
+}

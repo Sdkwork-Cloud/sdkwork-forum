@@ -1,0 +1,43 @@
+{
+  "kind": "sdkwork.api.assembly",
+  "schemaVersion": 1,
+  "applicationCode": "forum",
+  "apiMode": "served",
+  "packageName": "sdkwork-api-forum-assembly",
+  "crateDir": "crates/sdkwork-api-forum-assembly",
+  "routeCrates": [
+    {
+      "packageName": "sdkwork-routes-forum-app-api",
+      "memberDir": "crates/sdkwork-routes-forum-app-api",
+      "libName": "sdkwork_routes_forum_app_api",
+      "surface": "app-api",
+      "pathPrefix": null,
+      "mountOrder": 0,
+      "componentRef": "crates/sdkwork-routes-forum-app-api/specs/component.spec.json",
+      "routeManifestRef": "crates/sdkwork-routes-forum-app-api/sdks/_route-manifests/app-api/sdkwork-routes-forum-app-api.route-manifest.json",
+      "sourceRef": "crates/sdkwork-routes-forum-app-api/Cargo.toml"
+    },
+    {
+      "packageName": "sdkwork-routes-forum-backend-api",
+      "memberDir": "crates/sdkwork-routes-forum-backend-api",
+      "libName": "sdkwork_routes_forum_backend_api",
+      "surface": "backend-api",
+      "pathPrefix": null,
+      "mountOrder": 1,
+      "componentRef": "crates/sdkwork-routes-forum-backend-api/specs/component.spec.json",
+      "routeManifestRef": "crates/sdkwork-routes-forum-backend-api/sdks/_route-manifests/backend-api/sdkwork-routes-forum-backend-api.route-manifest.json",
+      "sourceRef": "crates/sdkwork-routes-forum-backend-api/Cargo.toml"
+    },
+    {
+      "packageName": "sdkwork-routes-forum-open-api",
+      "memberDir": "crates/sdkwork-routes-forum-open-api",
+      "libName": "sdkwork_routes_forum_open_api",
+      "surface": "open-api",
+      "pathPrefix": null,
+      "mountOrder": 2,
+      "componentRef": "crates/sdkwork-routes-forum-open-api/specs/component.spec.json",
+      "routeManifestRef": "crates/sdkwork-routes-forum-open-api/sdks/_route-manifests/open-api/sdkwork-routes-forum-open-api.route-manifest.json",
+      "sourceRef": "crates/sdkwork-routes-forum-open-api/Cargo.toml"
+    }
+  ]
+}

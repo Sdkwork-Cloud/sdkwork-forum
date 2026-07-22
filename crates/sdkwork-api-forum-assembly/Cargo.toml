@@ -11,6 +11,7 @@ path = "src/lib.rs"
 
 [dependencies]
 axum.workspace = true
+tokio.workspace = true
 sdkwork-database-spi.workspace = true
 sdkwork-database-sqlx.workspace = true
 sdkwork-forum-http-support.workspace = true

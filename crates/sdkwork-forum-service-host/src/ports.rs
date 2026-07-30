@@ -1,4 +1,6 @@
-use sdkwork_communication_forum_service::integration::drive::{ForumDrivePort, LoggingForumDrivePort, NoopForumDrivePort};
+use sdkwork_communication_forum_service::integration::drive::{
+    ForumDrivePort, LoggingForumDrivePort, NoopForumDrivePort,
+};
 use sdkwork_communication_forum_service::integration::notifications::{
     ForumNotificationPort, HttpForumNotificationPort, LoggingForumNotificationPort,
     NoopForumNotificationPort,

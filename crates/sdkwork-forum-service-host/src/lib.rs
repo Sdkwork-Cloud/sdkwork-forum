@@ -1,13 +1,13 @@
 use std::sync::Arc;
 
 use sdkwork_communication_forum_repository_sqlx::SqlxForumRepository;
-use sdkwork_forum_database_host::bootstrap_forum_database_from_env;
-use sqlx::PgPool;
-use sdkwork_communication_forum_service::ForumService;
 use sdkwork_communication_forum_service::value_objects::ForumRequestContext;
+use sdkwork_communication_forum_service::ForumService;
 use sdkwork_database_ops::DatabaseOpsService;
 use sdkwork_database_spi::{DefaultDatabaseModule, LocaleTag, SeedProfile};
 use sdkwork_database_sqlx::DatabasePool;
+use sdkwork_forum_database_host::bootstrap_forum_database_from_env;
+use sqlx::PgPool;
 use tracing;
 
 mod ports;
@@ -39,7 +39,7 @@ impl ForumServiceHost {
             .clone();
 
         let iam_pool = if iam_enabled_from_env() {
-            Some(load_iam_pool(&pg_pool).await)
+            Some(load_iam_pool(&pg_pool))
         } else {
             None
         };
@@ -106,14 +106,7 @@ fn iam_enabled_from_env() -> bool {
     )
 }
 
-async fn load_iam_pool(forum_pool: &PgPool) -> PgPool {
-    if let Ok(url) = std::env::var("SDKWORK_FORUM_IAM_DATABASE_URL") {
-        if !url.trim().is_empty() {
-            return PgPool::connect(&url)
-                .await
-                .expect("Failed to connect SDKWORK_FORUM_IAM_DATABASE_URL");
-        }
-    }
+fn load_iam_pool(forum_pool: &PgPool) -> PgPool {
     forum_pool.clone()
 }
 
@@ -122,14 +115,11 @@ pub fn build_forum_service() -> ForumService<SqlxForumRepository> {
 }
 
 pub fn default_seed_locale() -> LocaleTag {
-    LocaleTag(
-        std::env::var("SDKWORK_FORUM_DATABASE_SEED_LOCALE").unwrap_or_else(|_| "zh-CN".to_string()),
-    )
+    LocaleTag(std::env::var("SDKWORK_DATABASE_SEED_LOCALE").unwrap_or_else(|_| "zh-CN".to_string()))
 }
 
 pub fn default_seed_profile() -> SeedProfile {
     SeedProfile(
-        std::env::var("SDKWORK_FORUM_DATABASE_SEED_PROFILE")
-            .unwrap_or_else(|_| "standard".to_string()),
+        std::env::var("SDKWORK_DATABASE_SEED_PROFILE").unwrap_or_else(|_| "standard".to_string()),
     )
 }

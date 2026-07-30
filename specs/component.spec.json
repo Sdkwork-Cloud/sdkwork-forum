@@ -126,7 +126,7 @@
       "forum.moderation.decision_created"
     ],
     "configKeys": [
-      "SDKWORK_FORUM_DATABASE_URL",
+      "SDKWORK_DATABASE_URL",
       "SDKWORK_FORUM_SEARCH_INDEX",
       "SDKWORK_FORUM_ATTACHMENT_DRIVE_SPACE"
     ],

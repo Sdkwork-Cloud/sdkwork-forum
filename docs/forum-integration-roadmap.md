@@ -55,7 +55,7 @@ sdkDependencies: []
 
 When `SDKWORK_FORUM_IAM_ENABLED=true`, the forum API server resolves `Authorization` + `Access-Token` against `iam_session` via `sdkwork-iam-web-adapter`. The resolved tenant/org/user ids populate `ForumRequestContext` before handlers run. Set `SDKWORK_FORUM_IAM_STRICT=true` to reject invalid sessions on app/backend forum routes instead of falling back to header/env defaults.
 
-Use `SDKWORK_FORUM_IAM_DATABASE_URL` when IAM sessions live outside the forum database module; otherwise the forum PostgreSQL pool is reused.
+Use `SDKWORK_DATABASE_URL` when IAM sessions live outside the forum database module; otherwise the forum PostgreSQL pool is reused.
 
 ### Drive Media Grants
 

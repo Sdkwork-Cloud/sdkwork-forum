@@ -13,6 +13,6 @@ WORKDIR /app
 COPY --from=builder /app/target/release/ ./
 
 ENV RUST_LOG=info
-ENV SDKWORK_FORUM_DATABASE_URL=postgres://localhost:5432/forum
+ENV SDKWORK_DATABASE_URL=postgres://localhost:5432/forum
 
 CMD ["./sdkwork-forum-worker"]

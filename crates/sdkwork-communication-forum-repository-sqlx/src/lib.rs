@@ -44,7 +44,7 @@ impl SqlxForumRepository {
 
     pub fn new_placeholder() -> Self {
         Self::new(
-            PgPool::connect_lazy("postgres://localhost:5432/forum")
+            PgPool::connect_lazy("postgres://localhost:5432/sdkwork_ai_dev")
                 .expect("Failed to create placeholder pool"),
         )
     }

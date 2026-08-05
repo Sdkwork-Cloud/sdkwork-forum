@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { Loading, EmptyState, Card, Button, formatRelativeTime } from '@sdkwork/forum-h5-commons'
 import { useTopics } from '../hooks/useTopics'

@@ -25,9 +25,6 @@
     "vite": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "exports": {
     ".": {
       "types": "./src/index.ts",

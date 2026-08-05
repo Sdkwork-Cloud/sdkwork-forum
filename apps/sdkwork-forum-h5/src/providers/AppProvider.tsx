@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useMemo } from 'react'
+import { createContext, useContext, ReactNode, useMemo } from 'react'
 import { createSdkClient, ForumSdkClient, TokenManager } from '@sdkwork/forum-h5-core'
 import { getEnvironment, Environment } from '@sdkwork/forum-h5-core'
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Loading, EmptyState, Card, Button, formatDate } from '@sdkwork/forum-h5-commons'
 import { useTopic } from '../hooks/useTopic'

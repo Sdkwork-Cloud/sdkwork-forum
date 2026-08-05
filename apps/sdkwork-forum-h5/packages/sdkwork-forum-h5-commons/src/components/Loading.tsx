@@ -1,4 +1,3 @@
-import React from 'react'
 
 export function Loading({ text = '加载中...' }: { text?: string }) {
   return (

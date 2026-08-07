@@ -10,7 +10,7 @@
 -- GROUP: taxonomy
 -- ============================================================================
 
-CREATE TABLE forum_space (
+CREATE TABLE IF NOT EXISTS forum_space (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -35,12 +35,12 @@ CREATE TABLE forum_space (
     CONSTRAINT uk_forum_space_tenant_slug UNIQUE (tenant_id, slug)
 );
 
-CREATE INDEX idx_forum_space_tenant_status_updated
+CREATE INDEX IF NOT EXISTS idx_forum_space_tenant_status_updated
     ON forum_space (tenant_id, organization_id, status, updated_at);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_node (
+CREATE TABLE IF NOT EXISTS forum_node (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -69,15 +69,15 @@ CREATE TABLE forum_node (
     CONSTRAINT uk_forum_node_tenant_space_parent_slug UNIQUE (tenant_id, space_id, parent_id, slug)
 );
 
-CREATE INDEX idx_forum_node_tenant_parent_status_sort
+CREATE INDEX IF NOT EXISTS idx_forum_node_tenant_parent_status_sort
     ON forum_node (tenant_id, organization_id, parent_id, status, sort_order);
 
-CREATE INDEX idx_forum_node_tenant_space_type_status
+CREATE INDEX IF NOT EXISTS idx_forum_node_tenant_space_type_status
     ON forum_node (tenant_id, space_id, node_type, status, sort_order);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_board_profile (
+CREATE TABLE IF NOT EXISTS forum_board_profile (
     id                  BIGINT        NOT NULL,
     uuid                UUID          NOT NULL,
     tenant_id           BIGINT        NOT NULL,
@@ -101,12 +101,12 @@ CREATE TABLE forum_board_profile (
     CONSTRAINT uk_forum_board_profile_node UNIQUE (tenant_id, node_id)
 );
 
-CREATE INDEX idx_forum_board_profile_tenant_status_updated
+CREATE INDEX IF NOT EXISTS idx_forum_board_profile_tenant_status_updated
     ON forum_board_profile (tenant_id, organization_id, status, updated_at);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_tag (
+CREATE TABLE IF NOT EXISTS forum_tag (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -129,12 +129,12 @@ CREATE TABLE forum_tag (
     CONSTRAINT uk_forum_tag_tenant_space_slug UNIQUE (tenant_id, space_id, slug)
 );
 
-CREATE INDEX idx_forum_tag_tenant_usage
+CREATE INDEX IF NOT EXISTS idx_forum_tag_tenant_usage
     ON forum_tag (tenant_id, space_id, status, usage_count);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_topic_tag (
+CREATE TABLE IF NOT EXISTS forum_topic_tag (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -154,15 +154,15 @@ CREATE TABLE forum_topic_tag (
     CONSTRAINT uk_forum_topic_tag_topic_tag UNIQUE (tenant_id, topic_id, tag_id)
 );
 
-CREATE INDEX idx_forum_topic_tag_tenant_tag_created
+CREATE INDEX IF NOT EXISTS idx_forum_topic_tag_tenant_tag_created
     ON forum_topic_tag (tenant_id, tag_id, created_at, id);
 
-CREATE INDEX idx_forum_topic_tag_tenant_topic
+CREATE INDEX IF NOT EXISTS idx_forum_topic_tag_tenant_topic
     ON forum_topic_tag (tenant_id, topic_id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_topic_prefix (
+CREATE TABLE IF NOT EXISTS forum_topic_prefix (
     id                   BIGINT        NOT NULL,
     uuid                 UUID          NOT NULL,
     tenant_id            BIGINT        NOT NULL,
@@ -185,12 +185,12 @@ CREATE TABLE forum_topic_prefix (
     CONSTRAINT uk_forum_topic_prefix_board_code UNIQUE (tenant_id, board_id, code)
 );
 
-CREATE INDEX idx_forum_topic_prefix_tenant_board_status_sort
+CREATE INDEX IF NOT EXISTS idx_forum_topic_prefix_tenant_board_status_sort
     ON forum_topic_prefix (tenant_id, board_id, status, sort_order);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_node_acl (
+CREATE TABLE IF NOT EXISTS forum_node_acl (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -213,10 +213,10 @@ CREATE TABLE forum_node_acl (
     CONSTRAINT uk_forum_node_acl_scope UNIQUE (tenant_id, node_id, principal_type, principal_id, permission_code)
 );
 
-CREATE INDEX idx_forum_node_acl_tenant_principal
+CREATE INDEX IF NOT EXISTS idx_forum_node_acl_tenant_principal
     ON forum_node_acl (tenant_id, principal_type, principal_id, status);
 
-CREATE INDEX idx_forum_node_acl_tenant_node_permission
+CREATE INDEX IF NOT EXISTS idx_forum_node_acl_tenant_node_permission
     ON forum_node_acl (tenant_id, node_id, permission_code, status);
 
 
@@ -224,7 +224,7 @@ CREATE INDEX idx_forum_node_acl_tenant_node_permission
 -- GROUP: member
 -- ============================================================================
 
-CREATE TABLE forum_member_profile (
+CREATE TABLE IF NOT EXISTS forum_member_profile (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -250,15 +250,15 @@ CREATE TABLE forum_member_profile (
     CONSTRAINT uk_forum_member_profile_user UNIQUE (tenant_id, user_id)
 );
 
-CREATE INDEX idx_forum_member_profile_tenant_reputation
+CREATE INDEX IF NOT EXISTS idx_forum_member_profile_tenant_reputation
     ON forum_member_profile (tenant_id, reputation_score, id);
 
-CREATE INDEX idx_forum_member_profile_tenant_trust
+CREATE INDEX IF NOT EXISTS idx_forum_member_profile_tenant_trust
     ON forum_member_profile (tenant_id, trust_level, status);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_trust_level (
+CREATE TABLE IF NOT EXISTS forum_trust_level (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -281,12 +281,12 @@ CREATE TABLE forum_trust_level (
     CONSTRAINT uk_forum_trust_level_tenant_code UNIQUE (tenant_id, code)
 );
 
-CREATE INDEX idx_forum_trust_level_tenant_status_level
+CREATE INDEX IF NOT EXISTS idx_forum_trust_level_tenant_status_level
     ON forum_trust_level (tenant_id, status, level_no);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_privilege_grant (
+CREATE TABLE IF NOT EXISTS forum_privilege_grant (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -310,15 +310,15 @@ CREATE TABLE forum_privilege_grant (
     CONSTRAINT uk_forum_privilege_grant_scope UNIQUE (tenant_id, principal_type, principal_id, privilege_code, scope_type, scope_id)
 );
 
-CREATE INDEX idx_forum_privilege_grant_tenant_principal
+CREATE INDEX IF NOT EXISTS idx_forum_privilege_grant_tenant_principal
     ON forum_privilege_grant (tenant_id, principal_type, principal_id, status);
 
-CREATE INDEX idx_forum_privilege_grant_tenant_expire
+CREATE INDEX IF NOT EXISTS idx_forum_privilege_grant_tenant_expire
     ON forum_privilege_grant (tenant_id, expire_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_badge (
+CREATE TABLE IF NOT EXISTS forum_badge (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -341,12 +341,12 @@ CREATE TABLE forum_badge (
     CONSTRAINT uk_forum_badge_tenant_code UNIQUE (tenant_id, code)
 );
 
-CREATE INDEX idx_forum_badge_tenant_status_updated
+CREATE INDEX IF NOT EXISTS idx_forum_badge_tenant_status_updated
     ON forum_badge (tenant_id, status, updated_at);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_reputation_rule (
+CREATE TABLE IF NOT EXISTS forum_reputation_rule (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -368,7 +368,7 @@ CREATE TABLE forum_reputation_rule (
     CONSTRAINT uk_forum_reputation_rule_tenant_code UNIQUE (tenant_id, code)
 );
 
-CREATE INDEX idx_forum_reputation_rule_tenant_event
+CREATE INDEX IF NOT EXISTS idx_forum_reputation_rule_tenant_event
     ON forum_reputation_rule (tenant_id, event_type, status);
 
 
@@ -376,7 +376,7 @@ CREATE INDEX idx_forum_reputation_rule_tenant_event
 -- GROUP: discussion
 -- ============================================================================
 
-CREATE TABLE forum_topic (
+CREATE TABLE IF NOT EXISTS forum_topic (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -417,21 +417,21 @@ CREATE TABLE forum_topic (
     CONSTRAINT uk_forum_topic_board_slug UNIQUE (tenant_id, board_id, slug)
 );
 
-CREATE INDEX idx_forum_topic_tenant_board_status_activity
+CREATE INDEX IF NOT EXISTS idx_forum_topic_tenant_board_status_activity
     ON forum_topic (tenant_id, board_id, moderation_status, last_activity_at, id);
 
-CREATE INDEX idx_forum_topic_tenant_author_updated
+CREATE INDEX IF NOT EXISTS idx_forum_topic_tenant_author_updated
     ON forum_topic (tenant_id, author_user_id, updated_at, id);
 
-CREATE INDEX idx_forum_topic_tenant_featured
+CREATE INDEX IF NOT EXISTS idx_forum_topic_tenant_featured
     ON forum_topic (tenant_id, featured_at, id);
 
-CREATE INDEX idx_forum_topic_tenant_pinned
+CREATE INDEX IF NOT EXISTS idx_forum_topic_tenant_pinned
     ON forum_topic (tenant_id, board_id, pinned_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_topic_revision (
+CREATE TABLE IF NOT EXISTS forum_topic_revision (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -456,12 +456,12 @@ CREATE TABLE forum_topic_revision (
     CONSTRAINT uk_forum_topic_revision_topic_no UNIQUE (tenant_id, topic_id, revision_no)
 );
 
-CREATE INDEX idx_forum_topic_revision_tenant_topic_created
+CREATE INDEX IF NOT EXISTS idx_forum_topic_revision_tenant_topic_created
     ON forum_topic_revision (tenant_id, topic_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_topic_reply (
+CREATE TABLE IF NOT EXISTS forum_topic_reply (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -493,18 +493,18 @@ CREATE TABLE forum_topic_reply (
     CONSTRAINT uk_forum_topic_reply_topic_no UNIQUE (tenant_id, topic_id, reply_no)
 );
 
-CREATE INDEX idx_forum_topic_reply_tenant_topic_status_created
+CREATE INDEX IF NOT EXISTS idx_forum_topic_reply_tenant_topic_status_created
     ON forum_topic_reply (tenant_id, topic_id, moderation_status, created_at, id);
 
-CREATE INDEX idx_forum_topic_reply_tenant_author_updated
+CREATE INDEX IF NOT EXISTS idx_forum_topic_reply_tenant_author_updated
     ON forum_topic_reply (tenant_id, author_user_id, updated_at, id);
 
-CREATE INDEX idx_forum_topic_reply_tenant_parent
+CREATE INDEX IF NOT EXISTS idx_forum_topic_reply_tenant_parent
     ON forum_topic_reply (tenant_id, parent_reply_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_reply_revision (
+CREATE TABLE IF NOT EXISTS forum_reply_revision (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -529,12 +529,12 @@ CREATE TABLE forum_reply_revision (
     CONSTRAINT uk_forum_reply_revision_reply_no UNIQUE (tenant_id, reply_id, revision_no)
 );
 
-CREATE INDEX idx_forum_reply_revision_tenant_reply_created
+CREATE INDEX IF NOT EXISTS idx_forum_reply_revision_tenant_reply_created
     ON forum_reply_revision (tenant_id, reply_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_attachment (
+CREATE TABLE IF NOT EXISTS forum_attachment (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -560,10 +560,10 @@ CREATE TABLE forum_attachment (
     CONSTRAINT uk_forum_attachment_uuid UNIQUE (uuid)
 );
 
-CREATE INDEX idx_forum_attachment_tenant_owner_sort
+CREATE INDEX IF NOT EXISTS idx_forum_attachment_tenant_owner_sort
     ON forum_attachment (tenant_id, owner_type, owner_id, status, sort_order);
 
-CREATE INDEX idx_forum_attachment_tenant_drive_node
+CREATE INDEX IF NOT EXISTS idx_forum_attachment_tenant_drive_node
     ON forum_attachment (tenant_id, drive_node_id);
 
 
@@ -571,7 +571,7 @@ CREATE INDEX idx_forum_attachment_tenant_drive_node
 -- GROUP: qa_poll
 -- ============================================================================
 
-CREATE TABLE forum_question_profile (
+CREATE TABLE IF NOT EXISTS forum_question_profile (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -595,12 +595,12 @@ CREATE TABLE forum_question_profile (
     CONSTRAINT uk_forum_question_profile_topic UNIQUE (tenant_id, topic_id)
 );
 
-CREATE INDEX idx_forum_question_profile_tenant_solved_updated
+CREATE INDEX IF NOT EXISTS idx_forum_question_profile_tenant_solved_updated
     ON forum_question_profile (tenant_id, solved_status, updated_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_poll (
+CREATE TABLE IF NOT EXISTS forum_poll (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -627,12 +627,12 @@ CREATE TABLE forum_poll (
     CONSTRAINT uk_forum_poll_topic UNIQUE (tenant_id, topic_id)
 );
 
-CREATE INDEX idx_forum_poll_tenant_status_close
+CREATE INDEX IF NOT EXISTS idx_forum_poll_tenant_status_close
     ON forum_poll (tenant_id, status, close_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_poll_option (
+CREATE TABLE IF NOT EXISTS forum_poll_option (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -655,12 +655,12 @@ CREATE TABLE forum_poll_option (
     CONSTRAINT uk_forum_poll_option_poll_key UNIQUE (tenant_id, poll_id, option_key)
 );
 
-CREATE INDEX idx_forum_poll_option_tenant_poll_sort
+CREATE INDEX IF NOT EXISTS idx_forum_poll_option_tenant_poll_sort
     ON forum_poll_option (tenant_id, poll_id, status, sort_order);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_poll_vote (
+CREATE TABLE IF NOT EXISTS forum_poll_vote (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -682,10 +682,10 @@ CREATE TABLE forum_poll_vote (
     CONSTRAINT uk_forum_poll_vote_single UNIQUE (tenant_id, poll_id, voter_user_id, option_id)
 );
 
-CREATE INDEX idx_forum_poll_vote_tenant_poll_user
+CREATE INDEX IF NOT EXISTS idx_forum_poll_vote_tenant_poll_user
     ON forum_poll_vote (tenant_id, poll_id, voter_user_id);
 
-CREATE INDEX idx_forum_poll_vote_tenant_option_created
+CREATE INDEX IF NOT EXISTS idx_forum_poll_vote_tenant_option_created
     ON forum_poll_vote (tenant_id, option_id, created_at, id);
 
 
@@ -693,7 +693,7 @@ CREATE INDEX idx_forum_poll_vote_tenant_option_created
 -- GROUP: engagement
 -- ============================================================================
 
-CREATE TABLE forum_reaction (
+CREATE TABLE IF NOT EXISTS forum_reaction (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -714,15 +714,15 @@ CREATE TABLE forum_reaction (
     CONSTRAINT uk_forum_reaction_target_actor_type UNIQUE (tenant_id, target_type, target_id, actor_user_id, reaction_type)
 );
 
-CREATE INDEX idx_forum_reaction_tenant_target
+CREATE INDEX IF NOT EXISTS idx_forum_reaction_tenant_target
     ON forum_reaction (tenant_id, target_type, target_id, status);
 
-CREATE INDEX idx_forum_reaction_tenant_actor_created
+CREATE INDEX IF NOT EXISTS idx_forum_reaction_tenant_actor_created
     ON forum_reaction (tenant_id, actor_user_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_vote (
+CREATE TABLE IF NOT EXISTS forum_vote (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -744,15 +744,15 @@ CREATE TABLE forum_vote (
     CONSTRAINT uk_forum_vote_target_actor UNIQUE (tenant_id, target_type, target_id, actor_user_id)
 );
 
-CREATE INDEX idx_forum_vote_tenant_target
+CREATE INDEX IF NOT EXISTS idx_forum_vote_tenant_target
     ON forum_vote (tenant_id, target_type, target_id, status);
 
-CREATE INDEX idx_forum_vote_tenant_actor_created
+CREATE INDEX IF NOT EXISTS idx_forum_vote_tenant_actor_created
     ON forum_vote (tenant_id, actor_user_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_bookmark (
+CREATE TABLE IF NOT EXISTS forum_bookmark (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -774,12 +774,12 @@ CREATE TABLE forum_bookmark (
     CONSTRAINT uk_forum_bookmark_target_user UNIQUE (tenant_id, target_type, target_id, user_id)
 );
 
-CREATE INDEX idx_forum_bookmark_tenant_user_updated
+CREATE INDEX IF NOT EXISTS idx_forum_bookmark_tenant_user_updated
     ON forum_bookmark (tenant_id, user_id, updated_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_subscription (
+CREATE TABLE IF NOT EXISTS forum_subscription (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -801,15 +801,15 @@ CREATE TABLE forum_subscription (
     CONSTRAINT uk_forum_subscription_target_user UNIQUE (tenant_id, target_type, target_id, user_id)
 );
 
-CREATE INDEX idx_forum_subscription_tenant_target_level
+CREATE INDEX IF NOT EXISTS idx_forum_subscription_tenant_target_level
     ON forum_subscription (tenant_id, target_type, target_id, notify_level);
 
-CREATE INDEX idx_forum_subscription_tenant_user_updated
+CREATE INDEX IF NOT EXISTS idx_forum_subscription_tenant_user_updated
     ON forum_subscription (tenant_id, user_id, updated_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_read_state (
+CREATE TABLE IF NOT EXISTS forum_read_state (
     id                BIGINT        NOT NULL,
     uuid              UUID          NOT NULL,
     tenant_id         BIGINT        NOT NULL,
@@ -831,12 +831,12 @@ CREATE TABLE forum_read_state (
     CONSTRAINT uk_forum_read_state_topic_user UNIQUE (tenant_id, topic_id, user_id)
 );
 
-CREATE INDEX idx_forum_read_state_tenant_user_updated
+CREATE INDEX IF NOT EXISTS idx_forum_read_state_tenant_user_updated
     ON forum_read_state (tenant_id, user_id, updated_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_notification_preference (
+CREATE TABLE IF NOT EXISTS forum_notification_preference (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -858,12 +858,12 @@ CREATE TABLE forum_notification_preference (
     CONSTRAINT uk_forum_notification_preference_user_event_channel UNIQUE (tenant_id, user_id, event_type, channel)
 );
 
-CREATE INDEX idx_forum_notification_preference_tenant_user
+CREATE INDEX IF NOT EXISTS idx_forum_notification_preference_tenant_user
     ON forum_notification_preference (tenant_id, user_id, status);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_user_badge (
+CREATE TABLE IF NOT EXISTS forum_user_badge (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -886,12 +886,12 @@ CREATE TABLE forum_user_badge (
     CONSTRAINT uk_forum_user_badge_user_badge UNIQUE (tenant_id, user_id, badge_id)
 );
 
-CREATE INDEX idx_forum_user_badge_tenant_user_created
+CREATE INDEX IF NOT EXISTS idx_forum_user_badge_tenant_user_created
     ON forum_user_badge (tenant_id, user_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_reputation_ledger (
+CREATE TABLE IF NOT EXISTS forum_reputation_ledger (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -916,10 +916,10 @@ CREATE TABLE forum_reputation_ledger (
     CONSTRAINT uk_forum_reputation_ledger_key UNIQUE (tenant_id, idempotency_key)
 );
 
-CREATE INDEX idx_forum_reputation_ledger_tenant_user_created
+CREATE INDEX IF NOT EXISTS idx_forum_reputation_ledger_tenant_user_created
     ON forum_reputation_ledger (tenant_id, user_id, created_at, id);
 
-CREATE INDEX idx_forum_reputation_ledger_tenant_source
+CREATE INDEX IF NOT EXISTS idx_forum_reputation_ledger_tenant_source
     ON forum_reputation_ledger (tenant_id, source_type, source_id);
 
 
@@ -927,7 +927,7 @@ CREATE INDEX idx_forum_reputation_ledger_tenant_source
 -- GROUP: moderation
 -- ============================================================================
 
-CREATE TABLE forum_report (
+CREATE TABLE IF NOT EXISTS forum_report (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -951,15 +951,15 @@ CREATE TABLE forum_report (
     CONSTRAINT uk_forum_report_uuid UNIQUE (uuid)
 );
 
-CREATE INDEX idx_forum_report_tenant_target_status
+CREATE INDEX IF NOT EXISTS idx_forum_report_tenant_target_status
     ON forum_report (tenant_id, target_type, target_id, report_status);
 
-CREATE INDEX idx_forum_report_tenant_status_created
+CREATE INDEX IF NOT EXISTS idx_forum_report_tenant_status_created
     ON forum_report (tenant_id, report_status, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_moderation_case (
+CREATE TABLE IF NOT EXISTS forum_moderation_case (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -985,15 +985,15 @@ CREATE TABLE forum_moderation_case (
     CONSTRAINT uk_forum_moderation_case_no UNIQUE (tenant_id, case_no)
 );
 
-CREATE INDEX idx_forum_moderation_case_tenant_status_updated
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_case_tenant_status_updated
     ON forum_moderation_case (tenant_id, case_status, updated_at, id);
 
-CREATE INDEX idx_forum_moderation_case_tenant_target
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_case_tenant_target
     ON forum_moderation_case (tenant_id, target_type, target_id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_moderation_decision (
+CREATE TABLE IF NOT EXISTS forum_moderation_decision (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -1020,15 +1020,15 @@ CREATE TABLE forum_moderation_decision (
     CONSTRAINT uk_forum_moderation_decision_key UNIQUE (tenant_id, idempotency_key)
 );
 
-CREATE INDEX idx_forum_moderation_decision_tenant_case_created
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_decision_tenant_case_created
     ON forum_moderation_decision (tenant_id, case_id, created_at, id);
 
-CREATE INDEX idx_forum_moderation_decision_tenant_target
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_decision_tenant_target
     ON forum_moderation_decision (tenant_id, target_type, target_id, created_at);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_moderation_queue_item (
+CREATE TABLE IF NOT EXISTS forum_moderation_queue_item (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -1053,15 +1053,15 @@ CREATE TABLE forum_moderation_queue_item (
     CONSTRAINT uk_forum_moderation_queue_item_uuid UNIQUE (uuid)
 );
 
-CREATE INDEX idx_forum_moderation_queue_tenant_status_severity_due
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_queue_tenant_status_severity_due
     ON forum_moderation_queue_item (tenant_id, queue_status, severity, due_at, id);
 
-CREATE INDEX idx_forum_moderation_queue_tenant_target
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_queue_tenant_target
     ON forum_moderation_queue_item (tenant_id, target_type, target_id, queue_status);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_moderation_policy (
+CREATE TABLE IF NOT EXISTS forum_moderation_policy (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -1085,12 +1085,12 @@ CREATE TABLE forum_moderation_policy (
     CONSTRAINT uk_forum_moderation_policy_code UNIQUE (tenant_id, code)
 );
 
-CREATE INDEX idx_forum_moderation_policy_tenant_scope_priority
+CREATE INDEX IF NOT EXISTS idx_forum_moderation_policy_tenant_scope_priority
     ON forum_moderation_policy (tenant_id, target_scope, target_scope_id, status, priority);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_sanction (
+CREATE TABLE IF NOT EXISTS forum_sanction (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -1115,15 +1115,15 @@ CREATE TABLE forum_sanction (
     CONSTRAINT uk_forum_sanction_uuid UNIQUE (uuid)
 );
 
-CREATE INDEX idx_forum_sanction_tenant_user_active
+CREATE INDEX IF NOT EXISTS idx_forum_sanction_tenant_user_active
     ON forum_sanction (tenant_id, user_id, sanction_type, status, expires_at);
 
-CREATE INDEX idx_forum_sanction_tenant_case
+CREATE INDEX IF NOT EXISTS idx_forum_sanction_tenant_case
     ON forum_sanction (tenant_id, case_id, created_at);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_appeal (
+CREATE TABLE IF NOT EXISTS forum_appeal (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -1147,10 +1147,10 @@ CREATE TABLE forum_appeal (
     CONSTRAINT uk_forum_appeal_uuid UNIQUE (uuid)
 );
 
-CREATE INDEX idx_forum_appeal_tenant_status_created
+CREATE INDEX IF NOT EXISTS idx_forum_appeal_tenant_status_created
     ON forum_appeal (tenant_id, appeal_status, created_at, id);
 
-CREATE INDEX idx_forum_appeal_tenant_appellant
+CREATE INDEX IF NOT EXISTS idx_forum_appeal_tenant_appellant
     ON forum_appeal (tenant_id, appellant_user_id, created_at, id);
 
 
@@ -1158,7 +1158,7 @@ CREATE INDEX idx_forum_appeal_tenant_appellant
 -- GROUP: projection
 -- ============================================================================
 
-CREATE TABLE forum_feed_item (
+CREATE TABLE IF NOT EXISTS forum_feed_item (
     id                 BIGINT        NOT NULL,
     uuid               UUID          NOT NULL,
     tenant_id          BIGINT        NOT NULL,
@@ -1182,15 +1182,15 @@ CREATE TABLE forum_feed_item (
     CONSTRAINT uk_forum_feed_item_scope_topic UNIQUE (tenant_id, feed_type, feed_owner_id, topic_id)
 );
 
-CREATE INDEX idx_forum_feed_item_tenant_scope_rank
+CREATE INDEX IF NOT EXISTS idx_forum_feed_item_tenant_scope_rank
     ON forum_feed_item (tenant_id, feed_type, feed_owner_id, status, rank_score, id);
 
-CREATE INDEX idx_forum_feed_item_tenant_activity
+CREATE INDEX IF NOT EXISTS idx_forum_feed_item_tenant_activity
     ON forum_feed_item (tenant_id, activity_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_public_topic_projection (
+CREATE TABLE IF NOT EXISTS forum_public_topic_projection (
     id                   BIGINT        NOT NULL,
     uuid                 UUID          NOT NULL,
     tenant_id            BIGINT        NOT NULL,
@@ -1218,15 +1218,15 @@ CREATE TABLE forum_public_topic_projection (
     CONSTRAINT uk_forum_public_topic_projection_site_topic UNIQUE (tenant_id, site_slug, topic_id)
 );
 
-CREATE INDEX idx_forum_public_topic_projection_site_updated
+CREATE INDEX IF NOT EXISTS idx_forum_public_topic_projection_site_updated
     ON forum_public_topic_projection (tenant_id, site_slug, status, updated_at, id);
 
-CREATE INDEX idx_forum_public_topic_projection_board_updated
+CREATE INDEX IF NOT EXISTS idx_forum_public_topic_projection_board_updated
     ON forum_public_topic_projection (tenant_id, site_slug, board_id, updated_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_topic_stats (
+CREATE TABLE IF NOT EXISTS forum_topic_stats (
     id                 BIGINT        NOT NULL,
     uuid               UUID          NOT NULL,
     tenant_id          BIGINT        NOT NULL,
@@ -1251,12 +1251,12 @@ CREATE TABLE forum_topic_stats (
     CONSTRAINT uk_forum_topic_stats_topic UNIQUE (tenant_id, topic_id)
 );
 
-CREATE INDEX idx_forum_topic_stats_tenant_score
+CREATE INDEX IF NOT EXISTS idx_forum_topic_stats_tenant_score
     ON forum_topic_stats (tenant_id, vote_score, topic_id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_board_stats (
+CREATE TABLE IF NOT EXISTS forum_board_stats (
     id                 BIGINT        NOT NULL,
     uuid               UUID          NOT NULL,
     tenant_id          BIGINT        NOT NULL,
@@ -1281,12 +1281,12 @@ CREATE TABLE forum_board_stats (
     CONSTRAINT uk_forum_board_stats_board UNIQUE (tenant_id, board_id)
 );
 
-CREATE INDEX idx_forum_board_stats_tenant_activity
+CREATE INDEX IF NOT EXISTS idx_forum_board_stats_tenant_activity
     ON forum_board_stats (tenant_id, last_activity_at, board_id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_member_stats (
+CREATE TABLE IF NOT EXISTS forum_member_stats (
     id                      BIGINT        NOT NULL,
     uuid                    UUID          NOT NULL,
     tenant_id               BIGINT        NOT NULL,
@@ -1311,12 +1311,12 @@ CREATE TABLE forum_member_stats (
     CONSTRAINT uk_forum_member_stats_user UNIQUE (tenant_id, user_id)
 );
 
-CREATE INDEX idx_forum_member_stats_tenant_activity
+CREATE INDEX IF NOT EXISTS idx_forum_member_stats_tenant_activity
     ON forum_member_stats (tenant_id, last_activity_at, user_id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_search_document (
+CREATE TABLE IF NOT EXISTS forum_search_document (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -1344,10 +1344,10 @@ CREATE TABLE forum_search_document (
     CONSTRAINT uk_forum_search_document_source UNIQUE (tenant_id, source_type, source_id)
 );
 
-CREATE INDEX idx_forum_search_document_tenant_status_updated
+CREATE INDEX IF NOT EXISTS idx_forum_search_document_tenant_status_updated
     ON forum_search_document (tenant_id, index_status, updated_at, id);
 
-CREATE INDEX idx_forum_search_document_tenant_board_updated
+CREATE INDEX IF NOT EXISTS idx_forum_search_document_tenant_board_updated
     ON forum_search_document (tenant_id, board_id, updated_at, id);
 
 
@@ -1355,7 +1355,7 @@ CREATE INDEX idx_forum_search_document_tenant_board_updated
 -- GROUP: integration
 -- ============================================================================
 
-CREATE TABLE forum_outbox_event (
+CREATE TABLE IF NOT EXISTS forum_outbox_event (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -1379,15 +1379,15 @@ CREATE TABLE forum_outbox_event (
     CONSTRAINT uk_forum_outbox_event_key UNIQUE (event_key)
 );
 
-CREATE INDEX idx_forum_outbox_event_status_next
+CREATE INDEX IF NOT EXISTS idx_forum_outbox_event_status_next
     ON forum_outbox_event (status, next_attempt_at, id);
 
-CREATE INDEX idx_forum_outbox_event_tenant_aggregate
+CREATE INDEX IF NOT EXISTS idx_forum_outbox_event_tenant_aggregate
     ON forum_outbox_event (tenant_id, aggregate_type, aggregate_id, created_at);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_inbox_event (
+CREATE TABLE IF NOT EXISTS forum_inbox_event (
     id               BIGINT        NOT NULL,
     uuid             UUID          NOT NULL,
     tenant_id        BIGINT        NOT NULL,
@@ -1409,15 +1409,15 @@ CREATE TABLE forum_inbox_event (
     CONSTRAINT uk_forum_inbox_event_message_consumer UNIQUE (source_system, message_id, consumer_name)
 );
 
-CREATE INDEX idx_forum_inbox_event_status_updated
+CREATE INDEX IF NOT EXISTS idx_forum_inbox_event_status_updated
     ON forum_inbox_event (status, updated_at, id);
 
-CREATE INDEX idx_forum_inbox_event_tenant_type_created
+CREATE INDEX IF NOT EXISTS idx_forum_inbox_event_tenant_type_created
     ON forum_inbox_event (tenant_id, event_type, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_idempotency_record (
+CREATE TABLE IF NOT EXISTS forum_idempotency_record (
     id                  BIGINT        NOT NULL,
     uuid                UUID          NOT NULL,
     tenant_id           BIGINT        NOT NULL,
@@ -1441,15 +1441,15 @@ CREATE TABLE forum_idempotency_record (
     CONSTRAINT uk_forum_idempotency_record_key UNIQUE (tenant_id, idempotency_key)
 );
 
-CREATE INDEX idx_forum_idempotency_record_tenant_expires
+CREATE INDEX IF NOT EXISTS idx_forum_idempotency_record_tenant_expires
     ON forum_idempotency_record (tenant_id, expires_at, id);
 
-CREATE INDEX idx_forum_idempotency_record_tenant_operation_created
+CREATE INDEX IF NOT EXISTS idx_forum_idempotency_record_tenant_operation_created
     ON forum_idempotency_record (tenant_id, operation_id, created_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE forum_audit_action (
+CREATE TABLE IF NOT EXISTS forum_audit_action (
     id              BIGINT        NOT NULL,
     uuid            UUID          NOT NULL,
     tenant_id       BIGINT        NOT NULL,
@@ -1469,8 +1469,8 @@ CREATE TABLE forum_audit_action (
     CONSTRAINT uk_forum_audit_action_uuid UNIQUE (uuid)
 );
 
-CREATE INDEX idx_forum_audit_action_tenant_target
+CREATE INDEX IF NOT EXISTS idx_forum_audit_action_tenant_target
     ON forum_audit_action (tenant_id, target_type, target_id, created_at);
 
-CREATE INDEX idx_forum_audit_action_tenant_operator
+CREATE INDEX IF NOT EXISTS idx_forum_audit_action_tenant_operator
     ON forum_audit_action (tenant_id, operator_id, created_at, id);

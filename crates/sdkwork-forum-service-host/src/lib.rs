@@ -6,7 +6,7 @@ use sdkwork_communication_forum_service::ForumService;
 use sdkwork_database_ops::DatabaseOpsService;
 use sdkwork_database_spi::{DefaultDatabaseModule, LocaleTag, SeedProfile};
 use sdkwork_database_sqlx::DatabasePool;
-use sdkwork_forum_database_host::bootstrap_forum_database_from_env;
+use sdkwork_forum_database_host::{bootstrap_forum_database, bootstrap_forum_database_from_env};
 use sqlx::PgPool;
 use tracing;
 
@@ -30,6 +30,17 @@ impl ForumServiceHost {
             .await
             .expect("Failed to bootstrap forum database");
 
+        Self::from_database_host(database_host)
+    }
+
+    /// Build the host against a caller-provided database pool so the platform
+    /// cloud gateway can share its process-wide PostgreSQL pool.
+    pub async fn from_database_pool(pool: DatabasePool) -> Result<Self, String> {
+        let database_host = bootstrap_forum_database(pool).await?;
+        Ok(Self::from_database_host(database_host))
+    }
+
+    fn from_database_host(database_host: sdkwork_forum_database_host::ForumDatabaseHost) -> Self {
         let pool = database_host.pool().clone();
         let database_module = database_host.module();
 

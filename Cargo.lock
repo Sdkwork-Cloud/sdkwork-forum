@@ -2137,6 +2137,7 @@ dependencies = [
  "axum",
  "sdkwork-communication-forum-service",
  "sdkwork-forum-http-support",
+ "sdkwork-web-core",
  "serde",
  "serde_json",
 ]
@@ -2148,6 +2149,7 @@ dependencies = [
  "axum",
  "sdkwork-communication-forum-service",
  "sdkwork-forum-http-support",
+ "sdkwork-web-core",
  "serde",
  "serde_json",
 ]

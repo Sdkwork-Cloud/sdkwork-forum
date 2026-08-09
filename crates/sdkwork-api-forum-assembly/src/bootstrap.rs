@@ -1,4 +1,9 @@
 //! Application API assembly bootstrap for sdkwork-forum.
+//!
+//! The assembly exports the indivisible `ApiAssemblyContribution` contract
+//! (API_ASSEMBLY_SPEC.md section 4) as the `contribution` field of a
+//! host-neutral bundle; the platform cloud gateway passes that field intact
+//! into profile composition.
 
 use std::sync::Arc;
 
@@ -8,31 +13,91 @@ use sdkwork_database_spi::{DefaultDatabaseModule, LocaleTag, SeedProfile};
 use sdkwork_database_sqlx::DatabasePool;
 use sdkwork_forum_http_support::{iam, middleware, AppState};
 use sdkwork_forum_service_host::{default_seed_locale, default_seed_profile, ForumServiceHost};
+use sdkwork_web_bootstrap::{
+    ApiAssemblyContribution, DatabasePoolReadinessCheck, ReadinessCheck,
+};
+use sdkwork_web_core::HttpRouteManifest;
 
+/// Host-neutral API assembly bundle: the indivisible contribution plus the
+/// database operations metadata owned by the Forum standalone host.
 pub struct ApiAssembly {
-    pub router: Router,
+    pub contribution: ApiAssemblyContribution,
     pub database_pool: DatabasePool,
     pub database_module: Arc<DefaultDatabaseModule>,
     pub seed_locale: LocaleTag,
     pub seed_profile: SeedProfile,
 }
 
-pub async fn assemble_api_router() -> ApiAssembly {
-    let service_host = Arc::new(ForumServiceHost::new().await);
+fn combined_route_manifest() -> HttpRouteManifest {
+    let manifests = [
+        sdkwork_routes_forum_app_api::gateway_route_manifest(),
+        sdkwork_routes_forum_backend_api::gateway_route_manifest(),
+        sdkwork_routes_forum_open_api::gateway_route_manifest(),
+    ];
+    HttpRouteManifest::from_owned_routes(
+        manifests
+            .into_iter()
+            .flat_map(|manifest| manifest.routes().to_vec())
+            .collect(),
+    )
+}
+
+fn contribution_from(
+    router: Router,
+    readiness_check: Arc<dyn ReadinessCheck>,
+) -> Result<ApiAssemblyContribution, String> {
+    ApiAssemblyContribution::from_manifest(
+        "sdkwork-forum",
+        "SDKWork Forum API",
+        router,
+        combined_route_manifest(),
+        Vec::new(),
+        readiness_check,
+    )
+}
+
+fn forum_router(service_host: Arc<ForumServiceHost>) -> Router {
     let state = AppState::new(Arc::clone(&service_host));
-    let router = Router::new()
+    Router::new()
         .merge(sdkwork_routes_forum_app_api::gateway_mount())
         .merge(sdkwork_routes_forum_backend_api::gateway_mount())
         .merge(sdkwork_routes_forum_open_api::gateway_mount())
         .layer(from_fn(middleware::require_dual_token_auth))
         .layer(from_fn_with_state(state.clone(), iam::resolve_iam_context))
-        .with_state(state);
+        .with_state(state)
+}
+
+pub async fn assemble_api_router() -> ApiAssembly {
+    let service_host = Arc::new(ForumServiceHost::new().await);
+    let contribution = contribution_from(
+        forum_router(Arc::clone(&service_host)),
+        Arc::new(sdkwork_web_bootstrap::AlwaysReady),
+    )
+    .expect("forum contribution contract is valid");
 
     ApiAssembly {
-        router,
+        contribution,
         database_pool: service_host.database_pool(),
         database_module: service_host.database_module(),
         seed_locale: default_seed_locale(),
         seed_profile: default_seed_profile(),
     }
+}
+
+/// Assemble the Forum contribution against a caller-provided database pool so
+/// the platform cloud gateway can share its process-wide PostgreSQL pool.
+pub async fn assemble_api_router_with_pool(pool: DatabasePool) -> Result<ApiAssembly, String> {
+    let service_host = Arc::new(ForumServiceHost::from_database_pool(pool.clone()).await?);
+    let contribution = contribution_from(
+        forum_router(Arc::clone(&service_host)),
+        Arc::new(DatabasePoolReadinessCheck::new(pool)),
+    )?;
+
+    Ok(ApiAssembly {
+        contribution,
+        database_pool: service_host.database_pool(),
+        database_module: service_host.database_module(),
+        seed_locale: default_seed_locale(),
+        seed_profile: default_seed_profile(),
+    })
 }

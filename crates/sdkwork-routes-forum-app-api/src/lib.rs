@@ -1,11 +1,13 @@
 pub mod error;
 pub mod handlers;
+pub mod http_route_manifest;
 pub mod manifest;
 pub mod mapper;
 pub mod paths;
 pub mod routes;
 mod runtime;
 
+pub use http_route_manifest::gateway_route_manifest;
 pub use routes::{build_sdkwork_forum_app_api_router, RouteDescriptor};
 
 pub fn gateway_mount() -> axum::Router<sdkwork_forum_http_support::AppState> {

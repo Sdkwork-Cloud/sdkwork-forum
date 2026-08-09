@@ -21,7 +21,7 @@ async fn main() {
         ),
     );
     let app = mount_service_routes(
-        attach_ops_routes(assembly.router, ops_state).layer(
+        attach_ops_routes(assembly.contribution.router, ops_state).layer(
             sdkwork_web_bootstrap::application_cors_layer_from_env(
                 &["SDKWORK_FORUM_ENVIRONMENT"],
                 &["SDKWORK_CORS_ALLOWED_ORIGINS"],

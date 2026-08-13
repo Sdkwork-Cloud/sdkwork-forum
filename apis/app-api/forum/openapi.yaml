@@ -709,43 +709,6 @@ paths:
                 $ref: '#/components/schemas/SdkWorkResourceResponse'
         default:
           $ref: '#/components/responses/Problem'
-  /forum/feed:
-    get:
-      tags:
-      - communication
-      summary: List personalized forum feed.
-      operationId: feed.list
-      security:
-      - AuthToken: []
-        AccessToken: []
-      x-sdkwork-owner: sdkwork-forum
-      x-sdkwork-api-authority: sdkwork-forum-app-api
-      x-sdkwork-domain: communication
-      x-sdkwork-resource: forum_feed_item
-      x-sdkwork-permission: forum.feed.read
-      x-sdkwork-tenant-scope: tenant
-      x-sdkwork-auth-mode: dual-token
-      parameters:
-      - $ref: '#/components/parameters/Cursor'
-      - $ref: '#/components/parameters/Limit'
-      - name: feed_type
-        in: query
-        schema:
-          type: string
-          enum:
-          - home
-          - board
-          - tag
-          - member
-      responses:
-        '200':
-          description: Feed page.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SdkWorkListResponse'
-        default:
-          $ref: '#/components/responses/Problem'
   /forum/search:
     get:
       tags:

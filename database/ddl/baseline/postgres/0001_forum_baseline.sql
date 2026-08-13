@@ -1158,71 +1158,13 @@ CREATE INDEX IF NOT EXISTS idx_forum_appeal_tenant_appellant
 -- GROUP: projection
 -- ============================================================================
 
-CREATE TABLE IF NOT EXISTS forum_feed_item (
-    id                 BIGINT        NOT NULL,
-    uuid               UUID          NOT NULL,
-    tenant_id          BIGINT        NOT NULL,
-    organization_id    BIGINT        NOT NULL DEFAULT 0,
-    data_scope         VARCHAR(32)   NOT NULL,
-    status             VARCHAR(32)   NOT NULL,
-    version            BIGINT        NOT NULL,
-    created_at         TIMESTAMPTZ   NOT NULL,
-    updated_at         TIMESTAMPTZ   NOT NULL,
-    deleted_at         TIMESTAMPTZ,
-    deleted_by         BIGINT,
-    feed_type          VARCHAR(32)   NOT NULL,
-    feed_owner_id      VARCHAR(128),
-    topic_id           BIGINT        NOT NULL,
-    reply_id           BIGINT,
-    rank_score         NUMERIC(18,6) NOT NULL,
-    activity_at        TIMESTAMPTZ   NOT NULL,
-    projection_version BIGINT        NOT NULL,
-    CONSTRAINT pk_forum_feed_item PRIMARY KEY (id),
-    CONSTRAINT uk_forum_feed_item_uuid UNIQUE (uuid),
-    CONSTRAINT uk_forum_feed_item_scope_topic UNIQUE (tenant_id, feed_type, feed_owner_id, topic_id)
-);
 
-CREATE INDEX IF NOT EXISTS idx_forum_feed_item_tenant_scope_rank
-    ON forum_feed_item (tenant_id, feed_type, feed_owner_id, status, rank_score, id);
 
-CREATE INDEX IF NOT EXISTS idx_forum_feed_item_tenant_activity
-    ON forum_feed_item (tenant_id, activity_at, id);
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS forum_public_topic_projection (
-    id                   BIGINT        NOT NULL,
-    uuid                 UUID          NOT NULL,
-    tenant_id            BIGINT        NOT NULL,
-    organization_id      BIGINT        NOT NULL DEFAULT 0,
-    data_scope           VARCHAR(32)   NOT NULL,
-    status               VARCHAR(32)   NOT NULL,
-    version              BIGINT        NOT NULL,
-    created_at           TIMESTAMPTZ   NOT NULL,
-    updated_at           TIMESTAMPTZ   NOT NULL,
-    deleted_at           TIMESTAMPTZ,
-    deleted_by           BIGINT,
-    site_slug            VARCHAR(120)  NOT NULL,
-    topic_id             BIGINT        NOT NULL,
-    board_id             BIGINT        NOT NULL,
-    topic_slug           VARCHAR(180),
-    title                VARCHAR(240)  NOT NULL,
-    excerpt              VARCHAR(500),
-    author_display_name  VARCHAR(120)  NOT NULL,
-    tag_slugs            JSONB         NOT NULL,
-    stats_json           JSONB         NOT NULL,
-    source_version       BIGINT        NOT NULL,
-    projected_at         TIMESTAMPTZ   NOT NULL,
-    CONSTRAINT pk_forum_public_topic_projection PRIMARY KEY (id),
-    CONSTRAINT uk_forum_public_topic_projection_uuid UNIQUE (uuid),
-    CONSTRAINT uk_forum_public_topic_projection_site_topic UNIQUE (tenant_id, site_slug, topic_id)
-);
 
-CREATE INDEX IF NOT EXISTS idx_forum_public_topic_projection_site_updated
-    ON forum_public_topic_projection (tenant_id, site_slug, status, updated_at, id);
 
-CREATE INDEX IF NOT EXISTS idx_forum_public_topic_projection_board_updated
-    ON forum_public_topic_projection (tenant_id, site_slug, board_id, updated_at, id);
 
 -- --------------------------------------------------------------------------
 

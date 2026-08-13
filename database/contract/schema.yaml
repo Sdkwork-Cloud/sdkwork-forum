@@ -117,12 +117,6 @@ tables:
   - name: forum_appeal
     lifecycle_status: active
     owner: forum-platform
-  - name: forum_feed_item
-    lifecycle_status: active
-    owner: forum-platform
-  - name: forum_public_topic_projection
-    lifecycle_status: active
-    owner: forum-platform
   - name: forum_topic_stats
     lifecycle_status: active
     owner: forum-platform

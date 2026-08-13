@@ -10,7 +10,7 @@ name = "sdkwork-api-forum-standalone-gateway"
 path = "src/main.rs"
 
 [dependencies]
-sdkwork_api_forum_assembly = { package = "sdkwork-api-forum-assembly", path = "../sdkwork-api-forum-assembly" }
+sdkwork-api-forum-assembly = { workspace = true }
 sdkwork-database-ops-http = { workspace = true }
 axum = { workspace = true }
 tokio = { workspace = true }

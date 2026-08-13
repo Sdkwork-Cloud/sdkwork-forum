@@ -77,6 +77,5 @@ pub const ROUTES: &[(&str, &str, &str)] = &[
         "readState.topics.update",
     ),
     ("POST", "/app/v3/api/forum/reports", "reports.create"),
-    ("GET", "/app/v3/api/forum/feed", "feed.list"),
     ("GET", "/app/v3/api/forum/search", "search.query"),
 ];

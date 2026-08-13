@@ -170,13 +170,6 @@ pub const APP_ROUTES: &[RouteDescriptor] = &[
     ),
     RouteDescriptor::new(
         "GET",
-        "/app/v3/api/forum/feed",
-        "feed.list",
-        "dual-token",
-        &["communication"],
-    ),
-    RouteDescriptor::new(
-        "GET",
         "/app/v3/api/forum/search",
         "search.query",
         "dual-token",

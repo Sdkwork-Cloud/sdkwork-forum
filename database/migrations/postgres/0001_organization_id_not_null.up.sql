@@ -198,15 +198,7 @@ UPDATE forum_appeal SET organization_id = 0 WHERE organization_id IS NULL;
 ALTER TABLE forum_appeal ALTER COLUMN organization_id SET DEFAULT 0;
 ALTER TABLE forum_appeal ALTER COLUMN organization_id SET NOT NULL;
 
-ALTER TABLE forum_feed_item ADD COLUMN IF NOT EXISTS organization_id BIGINT NOT NULL DEFAULT 0;
-UPDATE forum_feed_item SET organization_id = 0 WHERE organization_id IS NULL;
-ALTER TABLE forum_feed_item ALTER COLUMN organization_id SET DEFAULT 0;
-ALTER TABLE forum_feed_item ALTER COLUMN organization_id SET NOT NULL;
 
-ALTER TABLE forum_public_topic_projection ADD COLUMN IF NOT EXISTS organization_id BIGINT NOT NULL DEFAULT 0;
-UPDATE forum_public_topic_projection SET organization_id = 0 WHERE organization_id IS NULL;
-ALTER TABLE forum_public_topic_projection ALTER COLUMN organization_id SET DEFAULT 0;
-ALTER TABLE forum_public_topic_projection ALTER COLUMN organization_id SET NOT NULL;
 
 ALTER TABLE forum_topic_stats ADD COLUMN IF NOT EXISTS organization_id BIGINT NOT NULL DEFAULT 0;
 UPDATE forum_topic_stats SET organization_id = 0 WHERE organization_id IS NULL;

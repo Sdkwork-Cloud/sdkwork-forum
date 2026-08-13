@@ -86,10 +86,6 @@ pub fn handle_reports_create(_path: &str, _body: &[u8]) -> HandlerResult {
     Err(ForumRouteError::not_implemented("reports.create"))
 }
 
-pub fn handle_feed_list(_path: &str, _query: &str) -> HandlerResult {
-    Err(ForumRouteError::not_implemented("feed.list"))
-}
-
 pub fn handle_search_query(_path: &str, _query: &str) -> HandlerResult {
     Err(ForumRouteError::not_implemented("search.query"))
 }

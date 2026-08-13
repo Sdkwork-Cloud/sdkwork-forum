@@ -6,5 +6,4 @@ pub const ROUTE_CRATE_COUNT: usize = 3;
 pub const ROUTE_CRATE_PACKAGES: &[&str] = &[
     "sdkwork-routes-forum-app-api",
     "sdkwork-routes-forum-backend-api",
-    "sdkwork-routes-forum-open-api",
 ];

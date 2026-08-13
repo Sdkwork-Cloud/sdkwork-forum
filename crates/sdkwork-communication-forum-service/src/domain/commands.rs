@@ -91,14 +91,6 @@ pub struct CreateReportCommand {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ListFeedCommand {
-    pub feed_type: Option<String>,
-    pub feed_owner_id: Option<String>,
-    pub cursor: Option<String>,
-    pub limit: u16,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct QuerySearchCommand {
     pub query: String,
     pub board_id: Option<i64>,

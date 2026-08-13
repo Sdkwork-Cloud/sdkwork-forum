@@ -32,7 +32,6 @@ fn combined_route_manifest() -> HttpRouteManifest {
     let manifests = [
         sdkwork_routes_forum_app_api::gateway_route_manifest(),
         sdkwork_routes_forum_backend_api::gateway_route_manifest(),
-        sdkwork_routes_forum_open_api::gateway_route_manifest(),
     ];
     HttpRouteManifest::from_owned_routes(
         manifests
@@ -61,7 +60,6 @@ fn forum_router(service_host: Arc<ForumServiceHost>) -> Router {
     Router::new()
         .merge(sdkwork_routes_forum_app_api::gateway_mount())
         .merge(sdkwork_routes_forum_backend_api::gateway_mount())
-        .merge(sdkwork_routes_forum_open_api::gateway_mount())
         .layer(from_fn(middleware::require_dual_token_auth))
         .layer(from_fn_with_state(state.clone(), iam::resolve_iam_context))
         .with_state(state)

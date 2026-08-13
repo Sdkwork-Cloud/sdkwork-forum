@@ -63,7 +63,6 @@ impl CommandResult {
 pub type NodeTreeResult = Vec<ForumNode>;
 pub type TopicPageResult = CursorPage<ForumTopic>;
 pub type ReplyPageResult = CursorPage<ForumReply>;
-pub type FeedPageResult = CursorPage<ForumFeedItem>;
 pub type SearchResult = CursorPage<ForumSearchDocument>;
 pub type ModerationQueueResult = CursorPage<ForumModerationCase>;
 pub type ModerationDecisionResult = ForumModerationDecision;

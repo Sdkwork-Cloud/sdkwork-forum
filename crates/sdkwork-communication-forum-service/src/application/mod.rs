@@ -330,22 +330,7 @@ impl<R: ForumRepository> ForumService<R> {
         self.repository.create_report(ctx, &command)
     }
 
-    pub fn list_feed(&self, ctx: &ForumRequestContext, command: ListFeedCommand) -> Result<FeedPageResult, ForumServiceError> {
-        if let Some(ref feed_type) = command.feed_type {
-            let valid_types = ["home", "board", "tag", "member"];
-            if !valid_types.contains(&feed_type.as_str()) {
-                return Err(ForumServiceError::validation(format!("invalid feed_type: {feed_type}")));
-            }
-        }
-        let mut cmd = command;
-        if cmd.limit == 0 {
-            cmd.limit = 20;
-        }
-        if cmd.limit > 100 {
-            cmd.limit = 100;
-        }
-        self.repository.list_feed(ctx, &cmd)
-    }
+
 
     pub fn query_search(&self, ctx: &ForumRequestContext, command: QuerySearchCommand) -> Result<SearchResult, ForumServiceError> {
         if command.query.trim().is_empty() {

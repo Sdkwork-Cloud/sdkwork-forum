@@ -378,27 +378,6 @@ fn row_to_moderation_decision(row: &sqlx::postgres::PgRow) -> ForumModerationDec
     }
 }
 
-fn row_to_feed_item(row: &sqlx::postgres::PgRow) -> ForumFeedItem {
-    let rank_score: sqlx::types::BigDecimal = row.get("rank_score");
-    ForumFeedItem {
-        id: row.get("id"),
-        uuid: row.get("uuid"),
-        feed_type: row.get("feed_type"),
-        feed_owner_id: row.get("feed_owner_id"),
-        topic_id: row.get("topic_id"),
-        reply_id: row.get("reply_id"),
-        rank_score: rank_score.to_string(),
-        activity_at: fmt_ts(row.get("activity_at")),
-        projection_version: row.get("projection_version"),
-        status: row.get("status"),
-        created_at: fmt_ts(row.get("created_at")),
-        updated_at: fmt_ts(row.get("updated_at")),
-        tenant_id: row.get("tenant_id"),
-        organization_id: row.get("organization_id"),
-        data_scope: row.get("data_scope"),
-        version: row.get("version"),
-    }
-}
 
 fn row_to_search_document(row: &sqlx::postgres::PgRow) -> ForumSearchDocument {
     ForumSearchDocument {
@@ -1061,36 +1040,7 @@ impl ForumRepository for SqlxForumRepository {
         Ok(CommandResult::success(row.get("id"), row.get::<String, _>("uuid")))
     }
 
-    fn list_feed(&self, ctx: &ForumRequestContext, command: &ListFeedCommand) -> Result<FeedPageResult, ForumServiceError> {
-        let offset = parse_cursor(&command.cursor);
-        let limit = command.limit.max(1) as i64;
-        let tenant_id = ctx.tenant_id_value();
 
-        let rows = run_db!(async {
-            sqlx::query(
-                "SELECT * FROM forum_feed_item
-                 WHERE tenant_id = $1
-                   AND deleted_at IS NULL
-                   AND status = 'active'
-                   AND ($2::text IS NULL OR feed_type = $2)
-                   AND ($3::text IS NULL OR feed_owner_id = $3)
-                 ORDER BY rank_score DESC, id DESC
-                 LIMIT $4 OFFSET $5"
-            )
-            .bind(tenant_id)
-            .bind(command.feed_type.as_deref())
-            .bind(command.feed_owner_id.as_deref())
-            .bind(limit + 1)
-            .bind(offset)
-            .fetch_all(&self.pool)
-            .await
-        }).map_err(|e| ForumServiceError::internal(e.to_string()))?;
-
-        let has_more = rows.len() as i64 > limit;
-        let items: Vec<ForumFeedItem> = rows.iter().take(limit as usize).map(row_to_feed_item).collect();
-        let next_cursor = if has_more { Some((offset + limit).to_string()) } else { None };
-        Ok(CursorPage::new(items, next_cursor, has_more))
-    }
 
     fn query_search(&self, ctx: &ForumRequestContext, command: &QuerySearchCommand) -> Result<SearchResult, ForumServiceError> {
         let offset = parse_cursor(&command.cursor);

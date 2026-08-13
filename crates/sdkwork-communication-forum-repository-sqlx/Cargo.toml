@@ -6,7 +6,7 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
-sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
+sdkwork-communication-forum-service = { workspace = true }
 sdkwork-forum-database-host = { workspace = true }
 sdkwork-database-id = { workspace = true }
 sdkwork-database-config = { workspace = true }

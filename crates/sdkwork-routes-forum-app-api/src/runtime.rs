@@ -87,7 +87,6 @@ pub fn router() -> Router<AppState> {
             patch(update_read_state),
         )
         .route("/app/v3/api/forum/reports", post(create_report))
-        .route("/app/v3/api/forum/feed", get(list_feed))
         .route("/app/v3/api/forum/search", get(search))
 }
 
@@ -561,25 +560,6 @@ async fn create_report(
         },
     ) {
         Ok(result) => Json(ApiResponse::ok(json!(result))),
-        Err(error) => Json(ApiResponse::err(error.to_string())),
-    }
-}
-
-async fn list_feed(
-    State(state): State<AppState>,
-    ForumCtx(ctx): ForumCtx,
-    Query(query): Query<FeedQuery>,
-) -> Json<ApiResponse<Value>> {
-    match state.service_host.service().list_feed(
-        &ctx,
-        ListFeedCommand {
-            feed_type: query.feed_type,
-            feed_owner_id: query.feed_owner_id,
-            cursor: query.cursor,
-            limit: query.page_size.unwrap_or(20),
-        },
-    ) {
-        Ok(page) => Json(ApiResponse::ok(page_json(&page))),
         Err(error) => Json(ApiResponse::err(error.to_string())),
     }
 }

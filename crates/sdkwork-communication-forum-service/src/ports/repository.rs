@@ -20,7 +20,7 @@ pub trait ForumRepository {
     fn accept_reply(&self, ctx: &ForumRequestContext, command: &AcceptReplyCommand) -> Result<ForumTopic, ForumServiceError>;
     fn clear_accepted_reply(&self, ctx: &ForumRequestContext, command: &ClearAcceptedReplyCommand) -> Result<CommandResult, ForumServiceError>;
     fn create_report(&self, ctx: &ForumRequestContext, command: &CreateReportCommand) -> Result<CommandResult, ForumServiceError>;
-    fn list_feed(&self, ctx: &ForumRequestContext, command: &ListFeedCommand) -> Result<FeedPageResult, ForumServiceError>;
+
     fn query_search(&self, ctx: &ForumRequestContext, command: &QuerySearchCommand) -> Result<SearchResult, ForumServiceError>;
     fn list_moderation_queue(&self, ctx: &ForumRequestContext, command: &ListModerationQueueCommand) -> Result<ModerationQueueResult, ForumServiceError>;
     fn create_moderation_decision(&self, ctx: &ForumRequestContext, command: &CreateModerationDecisionCommand) -> Result<ModerationDecisionResult, ForumServiceError>;

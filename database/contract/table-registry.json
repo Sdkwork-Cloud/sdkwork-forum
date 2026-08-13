@@ -219,18 +219,6 @@
       "lifecycle_status": "active"
     },
     {
-      "table_name": "forum_feed_item",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
-      "table_name": "forum_public_topic_projection",
-      "owner": "forum-platform",
-      "compliance_level": "L2",
-      "lifecycle_status": "active"
-    },
-    {
       "table_name": "forum_topic_stats",
       "owner": "forum-platform",
       "compliance_level": "L2",

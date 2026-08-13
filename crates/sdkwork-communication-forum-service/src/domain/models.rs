@@ -283,26 +283,6 @@ pub struct ForumReport {
     pub data_scope: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct ForumFeedItem {
-    pub id: i64,
-    pub uuid: String,
-    pub feed_type: String,
-    pub feed_owner_id: Option<String>,
-    pub topic_id: i64,
-    pub reply_id: Option<i64>,
-    pub rank_score: String,
-    pub activity_at: String,
-    pub projection_version: i64,
-    pub status: String,
-    pub created_at: String,
-    pub updated_at: String,
-    pub tenant_id: i64,
-    pub organization_id: i64,
-    pub data_scope: String,
-    pub version: i64,
-}
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForumOutboxEvent {
     pub id: i64,

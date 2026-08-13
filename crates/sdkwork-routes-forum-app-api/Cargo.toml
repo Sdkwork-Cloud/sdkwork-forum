@@ -12,6 +12,6 @@ path = "src/lib.rs"
 axum.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-sdkwork-communication-forum-service = { path = "../sdkwork-communication-forum-service" }
+sdkwork-communication-forum-service = { workspace = true }
 sdkwork-forum-http-support.workspace = true
 sdkwork-web-core.workspace = true

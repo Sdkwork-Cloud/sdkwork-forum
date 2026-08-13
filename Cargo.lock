@@ -1807,7 +1807,6 @@ dependencies = [
  "sdkwork-forum-service-host",
  "sdkwork-routes-forum-app-api",
  "sdkwork-routes-forum-backend-api",
- "sdkwork-routes-forum-open-api",
  "sdkwork-web-bootstrap",
  "sdkwork-web-core",
  "tokio",
@@ -2149,21 +2148,6 @@ dependencies = [
  "axum",
  "sdkwork-communication-forum-service",
  "sdkwork-forum-http-support",
- "sdkwork-web-core",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "sdkwork-routes-forum-open-api"
-version = "0.1.0"
-dependencies = [
- "axum",
- "sdkwork-communication-forum-service",
- "sdkwork-forum-http-support",
- "sdkwork-iam-web-adapter",
- "sdkwork-web-axum",
- "sdkwork-web-bootstrap",
  "sdkwork-web-core",
  "serde",
  "serde_json",

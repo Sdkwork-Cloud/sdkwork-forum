@@ -20,42 +20,55 @@
   },
   "canonicalSpecs": [
     {
-      "file": "WEB_BACKEND_SPEC.md",
-      "path": "../../sdkwork-specs/WEB_BACKEND_SPEC.md",
-      "purpose": "Web backend implementation."
+      "file": "API_ASSEMBLY_SPEC.md",
+      "path": "../../../sdkwork-specs/API_ASSEMBLY_SPEC.md",
+      "purpose": "Owner assembly contribution and standalone parity."
     },
     {
-      "file": "API_SPEC.md",
-      "path": "../../sdkwork-specs/API_SPEC.md",
-      "purpose": "HTTP API surfaces."
+      "file": "APPLICATION_GATEWAY_SPEC.md",
+      "path": "../../../sdkwork-specs/APPLICATION_GATEWAY_SPEC.md",
+      "purpose": "Standalone gateway host ownership."
     },
     {
-      "file": "RUST_CODE_SPEC.md",
-      "path": "../../sdkwork-specs/RUST_CODE_SPEC.md",
-      "purpose": "Rust code structure."
-    },
-    {
-      "file": "DEPLOYMENT_SPEC.md",
-      "path": "../../sdkwork-specs/DEPLOYMENT_SPEC.md",
-      "purpose": "Deployment rules."
+      "file": "WEB_FRAMEWORK_SPEC.md",
+      "path": "../../../sdkwork-specs/WEB_FRAMEWORK_SPEC.md",
+      "purpose": "Process-level HTTP framework composition."
     },
     {
       "file": "TEST_SPEC.md",
-      "path": "../../sdkwork-specs/TEST_SPEC.md",
+      "path": "../../../sdkwork-specs/TEST_SPEC.md",
       "purpose": "Verification tests."
     }
   ],
   "contracts": {
-    "runtimeEntrypoints": [
-      "compose_forum_api_routes"
+    "publicExports": [],
+    "providedPorts": [],
+    "requiredPorts": [
+      {
+        "name": "forumApiAssembly",
+        "export": "sdkwork_api_forum_assembly::assemble_api_router",
+        "provider": "sdkwork-api-forum-assembly"
+      }
     ],
+    "runtimeEntrypoints": ["src/main.rs"],
+    "routeManifest": null,
+    "sdkClients": [],
     "sdkDependencies": [],
     "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [],
+    "configKeys": [
+      "SDKWORK_FORUM_APPLICATION_PUBLIC_INGRESS_BIND",
+      "SDKWORK_FORUM_ENVIRONMENT",
+      "SDKWORK_CORS_ALLOWED_ORIGINS",
+      "SDKWORK_DATABASE_URL"
+    ],
     "layerRole": "runtime-gateway"
   },
   "verification": {
     "commands": [
-      "cargo check -p sdkwork-api-forum-standalone-gateway"
+      "cargo check -p sdkwork-api-forum-standalone-gateway",
+      "cargo test -p sdkwork-api-forum-standalone-gateway"
     ]
   }
 }

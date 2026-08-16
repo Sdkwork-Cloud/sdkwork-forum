@@ -7,15 +7,12 @@
 
 use std::sync::Arc;
 
-use axum::middleware::{from_fn, from_fn_with_state};
 use axum::Router;
 use sdkwork_database_spi::{DefaultDatabaseModule, LocaleTag, SeedProfile};
 use sdkwork_database_sqlx::DatabasePool;
-use sdkwork_forum_http_support::{iam, middleware, AppState};
+use sdkwork_forum_http_support::{context::ForumContextInjector, AppState};
 use sdkwork_forum_service_host::{default_seed_locale, default_seed_profile, ForumServiceHost};
-use sdkwork_web_bootstrap::{
-    ApiAssemblyContribution, DatabasePoolReadinessCheck, ReadinessCheck,
-};
+use sdkwork_web_bootstrap::{ApiAssemblyContribution, DatabasePoolReadinessCheck, ReadinessCheck};
 use sdkwork_web_core::HttpRouteManifest;
 
 /// Host-neutral API assembly bundle: the indivisible contribution plus the
@@ -50,7 +47,7 @@ fn contribution_from(
         "SDKWork Forum API",
         router,
         combined_route_manifest(),
-        Vec::new(),
+        vec![Arc::new(ForumContextInjector)],
         readiness_check,
     )
 }
@@ -60,8 +57,6 @@ fn forum_router(service_host: Arc<ForumServiceHost>) -> Router {
     Router::new()
         .merge(sdkwork_routes_forum_app_api::gateway_mount())
         .merge(sdkwork_routes_forum_backend_api::gateway_mount())
-        .layer(from_fn(middleware::require_dual_token_auth))
-        .layer(from_fn_with_state(state.clone(), iam::resolve_iam_context))
         .with_state(state)
 }
 

@@ -1819,11 +1819,10 @@ dependencies = [
  "axum",
  "sdkwork-api-forum-assembly",
  "sdkwork-database-ops-http",
+ "sdkwork-iam-web-adapter",
  "sdkwork-web-bootstrap",
  "tokio",
- "tower-http 0.6.11",
  "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -2026,8 +2025,7 @@ dependencies = [
  "base64",
  "sdkwork-communication-forum-service",
  "sdkwork-forum-service-host",
- "sdkwork-iam-context-service",
- "sdkwork-iam-web-adapter",
+ "sdkwork-web-core",
  "serde",
  "serde_json",
 ]
@@ -2908,7 +2906,6 @@ dependencies = [
  "tower",
  "tower-layer",
  "tower-service",
- "tracing",
  "url",
 ]
 

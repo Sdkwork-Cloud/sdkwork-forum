@@ -12,5 +12,4 @@ serde.workspace = true
 serde_json.workspace = true
 sdkwork-communication-forum-service = { workspace = true }
 sdkwork-forum-service-host = { workspace = true }
-sdkwork-iam-context-service.workspace = true
-sdkwork-iam-web-adapter.workspace = true
+sdkwork-web-core.workspace = true

@@ -3,8 +3,6 @@
 pub mod auth;
 pub mod context;
 pub mod dto;
-pub mod iam;
-pub mod middleware;
 
 use std::sync::Arc;
 
